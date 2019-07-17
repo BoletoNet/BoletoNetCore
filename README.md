@@ -5,6 +5,7 @@
 
 # BoletoNetCore
 Esta é uma versão baseado no Boleto2Net, mas para funcionar com .NET Core
+
 Foi criado um novo projeto para não quebrar a compatibilidade com aplicações que usam .NET inferior ao 4.6.1
 
 ### Carteiras Homologadas
