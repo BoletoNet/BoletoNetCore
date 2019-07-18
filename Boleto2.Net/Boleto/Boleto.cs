@@ -111,6 +111,7 @@ namespace Boleto2Net
         public string ComplementoInstrucao3 { get; set; } = string.Empty;
 
         public string MensagemInstrucoesCaixa { get; set; } = string.Empty;
+        public string MensagemInstrucoesCaixaFormatado { get; set; } = string.Empty;
         public string MensagemArquivoRemessa { get; set; } = string.Empty;
         public string RegistroArquivoRetorno { get; set; } = string.Empty;
 
@@ -147,13 +148,15 @@ namespace Boleto2Net
                 DataEmissao = DateTime.Now;
 
             // Aceite
-            if ((Aceite != "A") & (Aceite != "N"))
-                throw new Exception("Aceite do Boleto deve ser definido com A ou N");
+            if ((Aceite != "A") & (Aceite != "N") & (Aceite != "S"))
+                throw new Exception("Aceite do Boleto deve ser definido com A, S ou N");
 
             Banco.ValidaBoleto(this);
             Banco.FormataNossoNumero(this);
             Boleto2Net.Banco.FormataCodigoBarra(this);
             Boleto2Net.Banco.FormataLinhaDigitavel(this);
+            Boleto2Net.Banco.FormataMensagemInstrucao(this);
+
         }
     }
 }

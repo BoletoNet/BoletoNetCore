@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Web.UI;
 using Boleto2Net.Exceptions;
 using Boleto2Net.Extensions;
 using static System.String;
-
-[assembly: WebResource("BoletoNet.Imagens.237.jpg", "image/jpg")]
 
 namespace Boleto2Net
 {

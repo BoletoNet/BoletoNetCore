@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using NReco.PdfGenerator;
 using NUnit.Framework;
+using Wkhtmltopdf.NetCore;
 
 namespace Boleto2Net.Testes
 {
@@ -193,31 +193,33 @@ namespace Boleto2Net.Testes
 
             if (gerarBoletoPdfHtml)
             {
+                RotativaConfiguration.RotativaPath = "Rotativa";
+                RotativaConfiguration.IsWindows = true;
+
                 // Gera arquivo PDF
                 try
                 {
                     var html = new StringBuilder();
                     foreach (var boletoTmp in boletos)
                     {
-                        using (var boletoParaImpressao = new BoletoBancario
+                        var boletoParaImpressao = new BoletoBancario
                         {
                             Boleto = boletoTmp,
                             OcultarInstrucoes = false,
                             MostrarComprovanteEntrega = false,
                             MostrarEnderecoCedente = true,
                             ExibirDemonstrativo = true
-                        })
-                        {
-                            html.Append("<div style=\"page-break-after: always;\">");
-                            html.Append(boletoParaImpressao.MontaHtml());
-                            html.Append("</div>");
-                        }
+                        };
+
+                        html.Append("<div style=\"page-break-after: always;\">");
+                        html.Append(boletoParaImpressao.MontaHtmlEmbedded());
+                        html.Append("</div>");
                         var boletoHtml = html.ToString();
                         File.WriteAllText(nomeArquivoHTML, boletoHtml);
 
-                        var pdf = new HtmlToPdfConverter().GeneratePdf(boletoHtml);
+                        var pdf = new Wkhtmltopdf.NetCore.HtmlAsPdf().GetPDF(boletoHtml);
                         using (var fs = new FileStream(nomeArquivoPDF, FileMode.Create))
-                            fs.Write(pdf, 0, pdf.Length);
+                            fs.Write( pdf, 0, pdf.Length);
                         if (!File.Exists(nomeArquivoPDF))
                             Assert.Fail("Arquivo Boletos (PDF) não encontrado: " + nomeArquivoPDF);
 

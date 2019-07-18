@@ -1,6 +1,5 @@
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Boleto2Net
@@ -138,7 +137,7 @@ namespace Boleto2Net
             if (tipoRegistro == "3" & tipoSegmento == "U")
             {
                 // Segmento U - Continuação do segmento T anterior (localiza o último boleto da lista)
-                var boleto = Boletos.LastOrDefault();
+                Boleto boleto = Boletos.LastOrDefault();
                 // Se não encontrou um boleto válido, ocorreu algum problema, pois deveria ter criado um novo objeto no registro que foi analisado anteriormente.
                 if (boleto == null)
                     throw new Exception("Objeto boleto não identificado");
@@ -175,17 +174,18 @@ namespace Boleto2Net
             if (tipoRegistro == Banco.IdsRetornoCnab400RegistroDetalhe.First())
                 novoBoleto = true;
 
-
             // Se for um novo boleto, cria um novo objeto, caso contrário, seleciona o último boleto
             // Estamos considerando que, quando houver mais de um registro para o mesmo boleto, no arquivo retorno, os registros serão apresentados na sequencia.
-            Boleto boleto;
+            Boleto boleto = null;
             if (novoBoleto)
             {
                 boleto = new Boleto(this.Banco, _ignorarCarteiraBoleto);
             }
             else
             {
-                boleto = Boletos.Last();
+                if (Boletos.Count > 0)
+                    boleto = Boletos[Boletos.Count-1];
+
                 // Se não encontrou um boleto válido, ocorreu algum problema, pois deveria ter criado um novo objeto no registro que foi analisado anteriormente.
                 if (boleto == null)
                     throw new Exception("Objeto boleto não identificado");

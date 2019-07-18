@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
 using Boleto2Net.Exceptions;
-using System.Web.UI;
 using System;
 
-[assembly: WebResource("Boleto2Net.Imagens.748.jpg", "image/jpg")]
 namespace Boleto2Net
 {
     internal sealed class BancoSicredi : IBanco

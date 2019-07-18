@@ -208,13 +208,14 @@ namespace Boleto2Net
                 return null;
 
             byte[] bytes;
-            if (image.GetType().ToString() == "System.Drawing.Image")
-            {
-                ImageConverter converter = new ImageConverter();
-                bytes = (byte[])converter.ConvertTo(image, typeof(byte[]));
-                return bytes;
-            }
-            else if (image.GetType().ToString() == "System.Drawing.Bitmap")
+            //if (image.GetType().ToString() == "System.Drawing.Image")
+            //{
+            //    ImageConverter converter = new ImageConverter();
+            //    bytes = (byte[])converter.ConvertTo(image, typeof(byte[]));
+            //    return bytes;
+            //}
+            //else 
+            if (image.GetType().ToString() == "System.Drawing.Bitmap")
             {
                 bytes = (byte[])TypeDescriptor.GetConverter(image).ConvertTo(image, typeof(byte[]));
                 return bytes;

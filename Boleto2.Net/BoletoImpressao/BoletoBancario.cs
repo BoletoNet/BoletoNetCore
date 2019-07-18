@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 //Envio por email
 using System.IO;
@@ -8,20 +7,17 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text;
-using System.Web.UI;
 
-[assembly: WebResource("Boleto2Net.BoletoImpressao.BoletoNet.css", "text/css", PerformSubstitution = true)]
-[assembly: WebResource("Boleto2Net.Imagens.barra.gif", "image/gif")]
+//[assembly: WebResource("Boleto2Net.BoletoImpressao.BoletoNet.css", "text/css", PerformSubstitution = true)]
+//[assembly: WebResource("Boleto2Net.Imagens.barra.gif", "image/gif")]
 
 namespace Boleto2Net
 {
+    using System.Drawing.Imaging;
     using System.Linq;
 
-    [Serializable(),
-    Designer(typeof(BoletoBancarioDesigner)),
-    ToolboxBitmap(typeof(BoletoBancario)),
-    ToolboxData("<{0}:BoletoBancario Runat=\"server\"></{0}:BoletoBancario>")]
-    public class BoletoBancario : Control
+    [Serializable()]
+    public class BoletoBancario 
     {
         String _vLocalLogoCedente = String.Empty;
 
@@ -37,129 +33,104 @@ namespace Boleto2Net
         /// <summary>
         /// Mostra o código da carteira
         /// </summary>
-        [Browsable(true), Description("Mostra a descrição da carteira")]
         public bool MostrarCodigoCarteira
         {
             get { return _mostrarCodigoCarteira; }
             set { _mostrarCodigoCarteira = value; }
         }
 
-        [Browsable(true), Description("Gera um relatório com os valores que deram origem ao boleto")]
         public bool ExibirDemonstrativo { get; set; }
 
         /// <summary>
         /// Mostra o código da carteira
         /// </summary>
-        [Browsable(true), Description("Formata o boleto no layout de carnê")]
         public bool FormatoCarne
         {
             get { return _formatoCarne; }
             set { _formatoCarne = value; }
         }
 
-        [Browsable(false)]
         public Boleto Boleto { get; set; }
 
-        [Browsable(false)]
         public IBanco Banco { get; set; }
 
         #region Propriedades
-        [Browsable(true), Description("Mostra o comprovante de entrega sem dados para marcar")]
-        public bool MostrarComprovanteEntregaLivre
-        {
-            get { return Utils.ToBool(ViewState["1"]); }
-            set { ViewState["1"] = value; }
-        }
+        public bool MostrarComprovanteEntregaLivre { get; set; }
 
-        [Browsable(true), Description("Mostra o comprovante de entrega")]
-        public bool MostrarComprovanteEntrega
-        {
-            get { return Utils.ToBool(ViewState["2"]); }
-            set { ViewState["2"] = value; }
-        }
+        public bool MostrarComprovanteEntrega { get; set; }
 
-        [Browsable(true), Description("Oculta as intruções do boleto")]
-        public bool OcultarEnderecoSacado
-        {
-            get { return Utils.ToBool(ViewState["3"]); }
-            set { ViewState["3"] = value; }
-        }
+        public bool OcultarEnderecoSacado { get; set; }
 
-        [Browsable(true), Description("Oculta as intruções do boleto")]
-        public bool OcultarInstrucoes
-        {
-            get { return Utils.ToBool(ViewState["4"]); }
-            set { ViewState["4"] = value; }
-        }
+        public bool OcultarInstrucoes { get; set; }
 
-        [Browsable(true), Description("Oculta o recibo do sacado do boleto")]
-        public bool OcultarReciboSacado
-        {
-            get { return Utils.ToBool(ViewState["5"]); }
-            set { ViewState["5"] = value; }
-        }
+        public bool OcultarReciboSacado { get; set; }
 
-        [Browsable(true), Description("Gerar arquivo de remessa")]
-        public bool GerarArquivoRemessa
-        {
-            get { return Utils.ToBool(ViewState["6"]); }
-            set { ViewState["6"] = value; }
-        }
+        public bool GerarArquivoRemessa { get; set; }
         /// <summary> 
         /// Mostra o termo "Contra Apresentação" na data de vencimento do boleto
         /// </summary>
-        public bool MostrarContraApresentacaoNaDataVencimento
-        {
-            get { return Utils.ToBool(ViewState["7"]); }
-            set { ViewState["7"] = value; }
-        }
+        public bool MostrarContraApresentacaoNaDataVencimento { get; set; }
 
-        [Browsable(true), Description("Mostra o endereço do Cedente")]
-        public bool MostrarEnderecoCedente
-        {
-            get { return Utils.ToBool(ViewState["8"]); }
-            set { ViewState["8"] = value; }
-        }
+        public bool MostrarEnderecoCedente { get; set; }
         #endregion Propriedades
 
         #endregion Propriedades
 
-        public static string UrlLogo(int banco)
-        {
-            var page = System.Web.HttpContext.Current.CurrentHandler as Page;
-            return page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), "Boleto2Net.Imagens." + Utils.FormatCode(banco.ToString(), 3) + ".jpg");
-        }
+       
 
         #region Override
-        protected override void OnPreRender(EventArgs e)
+
+        private string GetResourceImage(string resourcePath)
         {
-            var alias = "Boleto2Net.BoletoImpressao.BoletoNet.css";
-            var csslink = "<link rel=\"stylesheet\" type=\"text/css\" href=\"" +
-                Page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), alias) + "\" />";
-
-            var include = new LiteralControl(csslink);
-            Page.Header.Controls.Add(include);
-
-            base.OnPreRender(e);
+            var assembly = Assembly.GetExecutingAssembly();
+            using (var str = new BinaryReader( assembly.GetManifestResourceStream(resourcePath)))
+            {
+                return Convert.ToBase64String(str.ReadBytes((int)str.BaseStream.Length));
+            }
         }
 
-        protected override void OnLoad(EventArgs e)
+        private string GetResourceHypertext(string resourcePath)
         {
+            var assembly = Assembly.GetExecutingAssembly();
+            using (var str = new StreamReader(assembly.GetManifestResourceStream(resourcePath)))
+            {
+                return str.ReadToEnd();
+            }
         }
 
-        [System.Security.Permissions.PermissionSet(System.Security.Permissions.SecurityAction.Demand, Name = "Execution")]
-        protected override void Render(HtmlTextWriter output)
+        private string GetCodBarraCode(string code)
         {
-            var urlImagemLogo = Page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), "Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
-            var urlImagemBarra = Page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), "Boleto2Net.Imagens.barra.gif");
+            //System.Drawing.Bitmap img = new BarCode2of5i(code, 1, 50, code.Length).ToBitmap();
+
+            ////img = img.GetThumbnailImage(460, 61, null, new IntPtr()) as System.Drawing.Bitmap;
+            //using (MemoryStream s = new MemoryStream(10000))
+            //{
+            //    img.Save(s, ImageFormat.Jpeg);
+            //    s.Position = 0;
+            //    using (BinaryReader reader = new BinaryReader(s))
+            //    {
+            //        return Convert.ToBase64String(reader.ReadBytes((int)s.Length));
+            //    }
+            //}
+
+            //img = img.GetThumbnailImage(460, 61, null, new IntPtr()) as System.Drawing.Bitmap;
+            return Convert.ToBase64String(new BarCode2of5i(code, 1, 50, code.Length).ToByte());
+        }
+
+        protected string Render()
+        {
+            var urlImagemLogo = "data:image/jpg;base64," + GetResourceImage("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
+            var urlImagemBarra = "data:image/jpg;base64," + GetResourceImage("Boleto2Net.Imagens.barra.gif");
             //string urlImagemBarraInterna = Page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), "BoletoNet.Imagens.barrainterna.gif");
             //string urlImagemCorte = Page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), "BoletoNet.Imagens.corte.gif");
             //string urlImagemPonto = Page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), "BoletoNet.Imagens.ponto.gif");
 
             //Atribui os valores ao html do boleto bancário
+
+
             //output.Write(MontaHtml(urlImagemCorte, urlImagemLogo, urlImagemBarra, urlImagemPonto, urlImagemBarraInterna,
             //    "<img src=\"ImagemCodigoBarra.ashx?code=" + Boleto.CodigoBarra.Codigo + "\" alt=\"Código de Barras\" />"));
-            output.Write(MontaHtml(urlImagemLogo, urlImagemBarra, "<img src=\"ImagemCodigoBarra.ashx?code=" + Boleto.CodigoBarra.CodigoDeBarras + "\" alt=\"Código de Barras\" />"));
+            return MontaHtml(urlImagemLogo, urlImagemBarra, "<img src=\"data:image/jpg;base64," + GetCodBarraCode(Boleto.CodigoBarra.CodigoDeBarras) + "\" alt=\"Código de Barras\" />");
         }
         #endregion Override
 
@@ -173,7 +144,8 @@ namespace Boleto2Net
                 var titulo = "Instruções de Impressão";
                 var instrucoes = "Imprimir em impressora jato de tinta (ink jet) ou laser em qualidade normal. (Não use modo econômico).<br>Utilize folha A4 (210 x 297 mm) ou Carta (216 x 279 mm) - Corte na linha indicada<br>";
 
-                html.Append(Html.Instrucoes);
+                var htmlInstrucao = GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.Instrucoes.html");
+                html.Append(htmlInstrucao); //HTML.instrucoes
                 html.Append("<br />");
 
                 return html.ToString()
@@ -190,7 +162,7 @@ namespace Boleto2Net
         {
             var html = new StringBuilder();
 
-            html.Append(Html.Carne);
+            html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.Carne"));
 
             return html.ToString()
                 .Replace("@TELEFONE", telefone)
@@ -201,19 +173,19 @@ namespace Boleto2Net
             try
             {
                 var html = new StringBuilder();
-                html.Append(Html.ReciboSacadoParte1);
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte1.html"));
                 html.Append("<br />");
-                html.Append(Html.ReciboSacadoParte2);
-                html.Append(Html.ReciboSacadoParte3);
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte2.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte3.html"));
                 if (MostrarEnderecoCedente)
                 {
-                    html.Append(Html.ReciboSacadoParte10);
+                    html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte10.html"));
                 }
-                html.Append(Html.ReciboSacadoParte4);
-                html.Append(Html.ReciboSacadoParte5);
-                html.Append(Html.ReciboSacadoParte6);
-                html.Append(Html.ReciboSacadoParte7);
-                html.Append(Html.ReciboSacadoParte8);
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte4.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte5.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte6.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte7.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte8.html"));
                 return html.ToString();
             }
             catch (Exception ex)
@@ -227,18 +199,18 @@ namespace Boleto2Net
             try
             {
                 var html = new StringBuilder();
-                html.Append(Html.ReciboCedenteParte1);
-                html.Append(Html.ReciboCedenteParte2);
-                html.Append(Html.ReciboCedenteParte3);
-                html.Append(Html.ReciboCedenteParte4);
-                html.Append(Html.ReciboCedenteParte5);
-                html.Append(Html.ReciboCedenteParte6);
-                html.Append(Html.ReciboCedenteParte7);
-                html.Append(Html.ReciboCedenteParte8);
-                html.Append(Html.ReciboCedenteParte9);
-                html.Append(Html.ReciboCedenteParte10);
-                html.Append(Html.ReciboCedenteParte11);
-                html.Append(Html.ReciboCedenteParte12);
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte1.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte2.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte3.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte4.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte5.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte6.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte7.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte8.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte9.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte10.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte11.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte12.html"));
                 return html.ToString();
             }
             catch (Exception ex)
@@ -253,14 +225,14 @@ namespace Boleto2Net
             {
                 var html = new StringBuilder();
 
-                html.Append(Html.ComprovanteEntrega1);
-                html.Append(Html.ComprovanteEntrega2);
-                html.Append(Html.ComprovanteEntrega3);
-                html.Append(Html.ComprovanteEntrega4);
-                html.Append(Html.ComprovanteEntrega5);
-                html.Append(Html.ComprovanteEntrega6);
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega1.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega2.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega3.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega4.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega5.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega6.html"));
 
-                html.Append(MostrarComprovanteEntregaLivre ? Html.ComprovanteEntrega71 : Html.ComprovanteEntrega7);
+                html.Append(MostrarComprovanteEntregaLivre ? GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega71.html") : GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega7.html") );
 
                 html.Append("<br />");
                 return html.ToString();
@@ -279,10 +251,10 @@ namespace Boleto2Net
 
             if (ExibirDemonstrativo && Boleto.Demonstrativos.Any())
             {
-                html.Append(Html.ReciboCedenteRelatorioValores);
-                html.Append(Html.ReciboCedenteParte5);
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteRelatorioValores.html"));
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte5.html"));
 
-                html.Append(Html.CabecalhoTabelaDemonstrativo);
+                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.CabecalhoTabelaDemonstrativo.html"));
 
                 var grupoDemonstrativo = new StringBuilder();
 
@@ -292,7 +264,7 @@ namespace Boleto2Net
 
                     foreach (var item in relatorio.Itens)
                     {
-                        grupoDemonstrativo.Append(Html.GrupoDemonstrativo);
+                        grupoDemonstrativo.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.GrupoDemonstrativo.html"));
 
                         if (first)
                         {
@@ -310,7 +282,7 @@ namespace Boleto2Net
                         grupoDemonstrativo = grupoDemonstrativo.Replace("@VALORITEM", item.Valor.ToString("R$ ##,##0.00"));
                     }
 
-                    grupoDemonstrativo.Append(Html.TotalDemonstrativo);
+                    grupoDemonstrativo.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.TotalDemonstrativo.html"));
                     grupoDemonstrativo = grupoDemonstrativo.Replace(
                         "@VALORTOTALGRUPO",
                         relatorio.Itens.Sum(c => c.Valor).ToString("R$ ##,##0.00"));
@@ -327,7 +299,7 @@ namespace Boleto2Net
                     html.Append(HtmlComprovanteEntrega);
                     //Html da linha pontilhada
                     if (OcultarReciboSacado)
-                        html.Append(Html.ReciboSacadoParte8);
+                        html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte8.html"));
                 }
 
                 //Oculta o recibo do sacabo do boleto
@@ -450,7 +422,7 @@ namespace Boleto2Net
                 .Replace("@ACEITE", Boleto.Aceite).ToString()
                 .Replace("@ENDERECOCEDENTE_BOLETO", MostrarEnderecoCedente ? string.Format(" - {0}", enderecoCedenteCompacto) : "")
                 .Replace("@ENDERECOCEDENTE", MostrarEnderecoCedente ? enderecoCedente : "")
-                .Replace("@INSTRUCOES", Boleto.MensagemInstrucoesCaixa);
+                .Replace("@INSTRUCOES", Boleto.MensagemInstrucoesCaixaFormatado.Replace(Environment.NewLine, "<br/>"));
         }
 
         #endregion Html
@@ -466,7 +438,7 @@ namespace Boleto2Net
         /// <returns>StringBuilder conténdo o código html do boleto bancário.</returns>
         protected StringBuilder HtmlOffLine(string textoNoComecoDoEmail, string srcLogo, string srcBarra, string srcCodigoBarra, bool usaCsspdf = false)
         {//protected StringBuilder HtmlOffLine(string srcCorte, string srcLogo, string srcBarra, string srcPonto, string srcBarraInterna, string srcCodigoBarra)
-            OnLoad(EventArgs.Empty);
+            //OnLoad(EventArgs.Empty);
 
             var html = new StringBuilder();
             HtmlOfflineHeader(html, usaCsspdf);
@@ -497,7 +469,7 @@ namespace Boleto2Net
 
             #region Css
             {
-                var arquivoCss = usaCsspdf ? "Boleto2Net.BoletoImpressao.BoletoNetPDF.css" : "Boleto2Net.BoletoImpressao.BoletoNet.css";
+                var arquivoCss = usaCsspdf ? "Boleto2.Net.BoletoImpressao.BoletoNetPDF.css" : "Boleto2.Net.BoletoImpressao.BoletoNet.css";
                 var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(arquivoCss);
 
                 using (var sr = new StreamReader(stream))
@@ -629,7 +601,7 @@ namespace Boleto2Net
         /// <param name="lrImagemCodigoBarra">O Código de Barras</param>
         void GeraGraficosParaEmailOffLine(out LinkedResource lrImagemLogo, out LinkedResource lrImagemBarra, out LinkedResource lrImagemCodigoBarra)
         {
-            OnLoad(EventArgs.Empty);
+            //OnLoad(EventArgs.Empty);
 
             var randomSufix = new Random().Next().ToString(); // para podermos colocar no mesmo email varios boletos diferentes
 
@@ -639,8 +611,9 @@ namespace Boleto2Net
                 ContentId = "logo" + randomSufix
             };
 
-            var ms = new MemoryStream(Utils.ConvertImageToByte(Html.barra));
-            lrImagemBarra = new LinkedResource(ms, MediaTypeNames.Image.Gif)
+            var assembly = Assembly.GetExecutingAssembly();
+            var ms = assembly.GetManifestResourceStream("Boleto2.Net.Imagens.barra.jpg");
+            lrImagemBarra = new LinkedResource(ms, MediaTypeNames.Image.Jpeg)
             {
                 ContentId = "barra" + randomSufix
             };
@@ -660,25 +633,25 @@ namespace Boleto2Net
         /// Função utilizada para gravar em um arquivo local o conteúdo do boleto. Este arquivo pode ser aberto em um browser sem que o site esteja no ar.
         /// </summary>
         /// <param name="fileName">Path do arquivo que deve conter o código html.</param>
-        public void MontaHtmlNoArquivoLocal(string fileName)
-        {
-            using (var f = new FileStream(fileName, FileMode.Create))
-            {
-                var w = new StreamWriter(f, Encoding.Default);
-                w.Write(MontaHtml());
-                w.Close();
-                f.Close();
-            }
-        }
+        //public void MontaHtmlNoArquivoLocal(string fileName)
+        //{
+        //    using (var f = new FileStream(fileName, FileMode.Create))
+        //    {
+        //        var w = new StreamWriter(f, Encoding.Default);
+        //        w.Write(MontaHtml());
+        //        w.Close();
+        //        f.Close();
+        //    }
+        //}
 
         /// <summary>
         /// Monta o Html do boleto bancário
         /// </summary>
         /// <returns>string</returns>
-        public string MontaHtml()
-        {
-            return MontaHtml(null, null);
-        }
+        //public string MontaHtml()
+        //{
+        //    return MontaHtml(null, null);
+        //}
 
 
         /// <summary>
@@ -687,49 +660,49 @@ namespace Boleto2Net
         /// <param name="fileName">Caminho do arquivo</param>
         /// <param name="fileName">Caminho do logo do cedente</param>
         /// <returns>Html do boleto gerado</returns>
-        public string MontaHtml(string fileName, string logoCedente)
-        {
-            if (fileName == null)
-                fileName = Path.GetTempPath();
+        //public string MontaHtml(string fileName, string logoCedente)
+        //{
+        //    if (fileName == null)
+        //        fileName = Path.GetTempPath();
 
-            if (logoCedente != null)
-                _vLocalLogoCedente = logoCedente;
+        //    if (logoCedente != null)
+        //        _vLocalLogoCedente = logoCedente;
 
-            OnLoad(EventArgs.Empty);
+        //    //OnLoad(EventArgs.Empty);
 
-            var fnLogo = fileName + @"BoletoNet" + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg";
+        //    var fnLogo = fileName + @"BoletoNet" + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg";
 
-            if (!File.Exists(fnLogo))
-            {
-                var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
-                using (Stream file = File.Create(fnLogo))
-                {
-                    CopiarStream(stream, file);
-                }
-            }
+        //    if (!File.Exists(fnLogo))
+        //    {
+        //        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
+        //        using (Stream file = File.Create(fnLogo))
+        //        {
+        //            CopiarStream(stream, file);
+        //        }
+        //    }
 
-            var fnBarra = fileName + @"BoletoNetBarra.gif";
-            if (!File.Exists(fnBarra))
-            {
-                var imgConverter = new ImageConverter();
-                var imgBuffer = (byte[])imgConverter.ConvertTo(Html.barra, typeof(byte[]));
-                var ms = new MemoryStream(imgBuffer);
+        //    var fnBarra = fileName + @"BoletoNetBarra.gif";
+        //    if (!File.Exists(fnBarra))
+        //    {
+        //        var imgConverter = new ImageConverter();
+        //        var imgBuffer = (byte[])imgConverter.ConvertTo(Html.barra, typeof(byte[]));
+        //        var ms = new MemoryStream(imgBuffer);
 
-                using (Stream stream = File.Create(fnBarra))
-                {
-                    CopiarStream(ms, stream);
-                    ms.Flush();
-                    ms.Dispose();
-                }
-            }
+        //        using (Stream stream = File.Create(fnBarra))
+        //        {
+        //            CopiarStream(ms, stream);
+        //            ms.Flush();
+        //            ms.Dispose();
+        //        }
+        //    }
 
-            var fnCodigoBarras = Path.GetTempFileName();
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
-            cb.ToBitmap().Save(fnCodigoBarras);
+        //    var fnCodigoBarras = Path.GetTempFileName();
+        //    var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+        //    cb.ToBitmap().Save(fnCodigoBarras);
 
-            //return HtmlOffLine(fnCorte, fnLogo, fnBarra, fnPonto, fnBarraInterna, fnCodigoBarras).ToString();
-            return HtmlOffLine(null, fnLogo, fnBarra, fnCodigoBarras).ToString();
-        }
+        //    //return HtmlOffLine(fnCorte, fnLogo, fnBarra, fnPonto, fnBarraInterna, fnCodigoBarras).ToString();
+        //    return HtmlOffLine(null, fnLogo, fnBarra, fnCodigoBarras).ToString();
+        //}
 
         /// <summary>
         /// Monta o Html do boleto bancário para View ASP.Net MVC
@@ -751,121 +724,122 @@ namespace Boleto2Net
         /// <returns>Html do boleto gerado</returns>
         /// <desenvolvedor>Sandro Ribeiro</desenvolvedor>
         /// <criacao>16/11/2012</criacao>
-        public string MontaHtml(string url, string fileName, bool useMapPathSecure = true)
-        {
-            //Variável para o caminho físico do servidor
-            var pathServer = "";
+        //public string MontaHtml(string url, string fileName, bool useMapPathSecure = true)
+        //{
+        //    //Variável para o caminho físico do servidor
+        //    var pathServer = "";
 
-            //Verifica se o usuário informou uma url válida
-            if (url == null)
-            {
-                //Obriga o usuário a especificar uma url válida
-                throw new ArgumentException("Você precisa informar uma pasta padrão.");
-            }
-            else
-            {
-                if (useMapPathSecure)
-                {
-                    //Verifica se o usuário usou barras no início e no final da url
-                    if (url.Substring(url.Length - 1, 1) != "/")
-                        url = url + "/";
-                    if (url.Substring(0, 1) != "/")
-                        url = url + "/";
-                    //Mapeia o caminho físico dos arquivos
-                    pathServer = MapPathSecure(string.Format("~{0}", url));
-                }
+        //    //Verifica se o usuário informou uma url válida
+        //    if (url == null)
+        //    {
+        //        //Obriga o usuário a especificar uma url válida
+        //        throw new ArgumentException("Você precisa informar uma pasta padrão.");
+        //    }
+        //    else
+        //    {
+        //        if (useMapPathSecure)
+        //        {
+        //            //Verifica se o usuário usou barras no início e no final da url
+        //            if (url.Substring(url.Length - 1, 1) != "/")
+        //                url = url + "/";
+        //            if (url.Substring(0, 1) != "/")
+        //                url = url + "/";
+        //            //Mapeia o caminho físico dos arquivos
+        //            pathServer = MapPathSecure(string.Format("~{0}", url));
+        //        }
 
-                //Verifica se o caminho existe
-                if (!Directory.Exists(pathServer))
-                    throw new ArgumentException("A o caminho físico '{0}' não existe.", pathServer);
-            }
-            //Verifica o nome do arquivo
-            if (fileName == null)
-            {
-                fileName = DateTime.Now.Ticks.ToString();
-            }
-            else
-            {
-                if (fileName == "")
-                    fileName = DateTime.Now.Ticks.ToString();
-            }
+        //        //Verifica se o caminho existe
+        //        if (!Directory.Exists(pathServer))
+        //            throw new ArgumentException("A o caminho físico '{0}' não existe.", pathServer);
+        //    }
+        //    //Verifica o nome do arquivo
+        //    if (fileName == null)
+        //    {
+        //        fileName = DateTime.Now.Ticks.ToString();
+        //    }
+        //    else
+        //    {
+        //        if (fileName == "")
+        //            fileName = DateTime.Now.Ticks.ToString();
+        //    }
 
-            //Mantive o padrão 
-            OnLoad(EventArgs.Empty);
+        //    //Mantive o padrão 
+        //    //OnLoad(EventArgs.Empty);
 
-            //Prepara o arquivo da logo para ser salvo
-            var fnLogo = pathServer + @"BoletoNet" + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg";
-            //Prepara o arquivo da logo para ser usado no html
-            var fnLogoUrl = url + @"BoletoNet" + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg";
+        //    //Prepara o arquivo da logo para ser salvo
+        //    var fnLogo = pathServer + @"BoletoNet" + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg";
+        //    //Prepara o arquivo da logo para ser usado no html
+        //    var fnLogoUrl = url + @"BoletoNet" + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg";
 
-            //Salvo a imagem apenas 1 vez com o código do banco
-            if (!File.Exists(fnLogo))
-            {
-                var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
-                using (Stream file = File.Create(fnLogo))
-                {
-                    CopiarStream(stream, file);
-                }
-            }
+        //    //Salvo a imagem apenas 1 vez com o código do banco
+        //    if (!File.Exists(fnLogo))
+        //    {
+        //        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
+        //        using (Stream file = File.Create(fnLogo))
+        //        {
+        //            CopiarStream(stream, file);
+        //        }
+        //    }
 
-            //Prepara o arquivo da barra para ser salvo
-            var fnBarra = pathServer + @"BoletoNetBarra.gif";
-            //Prepara o arquivo da barra para ser usado no html
-            var fnBarraUrl = url + @"BoletoNetBarra.gif";
+        //    //Prepara o arquivo da barra para ser salvo
+        //    var fnBarra = pathServer + @"BoletoNetBarra.gif";
+        //    //Prepara o arquivo da barra para ser usado no html
+        //    var fnBarraUrl = url + @"BoletoNetBarra.gif";
 
-            //Salvo a imagem apenas 1 vez
-            if (!File.Exists(fnBarra))
-            {
-                var imgConverter = new ImageConverter();
-                var imgBuffer = (byte[])imgConverter.ConvertTo(Html.barra, typeof(byte[]));
-                var ms = new MemoryStream(imgBuffer);
+        //    //Salvo a imagem apenas 1 vez
+        //    if (!File.Exists(fnBarra))
+        //    {
+        //        var imgConverter = new ImageConverter();
+        //        var imgBuffer = (byte[])imgConverter.ConvertTo(Html.barra, typeof(byte[]));
+        //        var ms = new MemoryStream(imgBuffer);
 
-                using (Stream stream = File.Create(fnBarra))
-                {
-                    CopiarStream(ms, stream);
-                    ms.Flush();
-                    ms.Dispose();
-                }
-            }
+        //        using (Stream stream = File.Create(fnBarra))
+        //        {
+        //            CopiarStream(ms, stream);
+        //            ms.Flush();
+        //            ms.Dispose();
+        //        }
+        //    }
 
-            //Prepara o arquivo do código de barras para ser salvo
-            var fnCodigoBarras = string.Format("{0}{1}_codigoBarras.jpg", pathServer, fileName);
-            //Prepara o arquivo do código de barras para ser usado no html
-            var fnCodigoBarrasUrl = string.Format("{0}{1}_codigoBarras.jpg", url, fileName);
+        //    //Prepara o arquivo do código de barras para ser salvo
+        //    var fnCodigoBarras = string.Format("{0}{1}_codigoBarras.jpg", pathServer, fileName);
+        //    //Prepara o arquivo do código de barras para ser usado no html
+        //    var fnCodigoBarrasUrl = string.Format("{0}{1}_codigoBarras.jpg", url, fileName);
 
-            var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
+        //    var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
 
-            //Salva o arquivo conforme o fileName
-            cb.ToBitmap().Save(fnCodigoBarras);
+        //    //Salva o arquivo conforme o fileName
+        //    cb.ToBitmap().Save(fnCodigoBarras);
 
-            //Retorna o Html para ser usado na view
-            return HtmlOffLine(null, fnLogoUrl, fnBarraUrl, fnCodigoBarrasUrl).ToString();
-        }
+        //    //Retorna o Html para ser usado na view
+        //    return HtmlOffLine(null, fnLogoUrl, fnBarraUrl, fnCodigoBarrasUrl).ToString();
+        //}
 
         /// <summary>
         /// Monta o Html do boleto bancário com as imagens embutidas no conteúdo, sem necessidade de links externos
         /// de acordo com o padrão http://en.wikipedia.org/wiki/Data_URI_scheme
+        /// 
+        /// Alterado por Olavo Rocha @ Exodus para utilizar arquivos dentro da própria DLL para .net core 2.2
         /// </summary>
         /// <param name="convertLinhaDigitavelToImage">Converte a Linha Digitável para imagem, com o objetivo de evitar malwares.</param>
         /// <param name="urlImagemLogoCedente">Url/Imagem Base64 da Logo do Cedente</param>
         /// <returns>Html do boleto gerado</returns>
-        /// <desenvolvedor>Iuri André Stona</desenvolvedor>
+        /// <desenvolvedor>Iuri André Stona, Olavo Rocha Neto</desenvolvedor>
         /// <criacao>23/01/2014</criacao>
-        /// <alteracao>08/08/2014</alteracao>
-
+        /// <alteracao>07/07/2019</alteracao>
         public string MontaHtmlEmbedded(bool convertLinhaDigitavelToImage = false, bool usaCsspdf = false, string urlImagemLogoCedente = null)
         {
-            OnLoad(EventArgs.Empty);
+            //OnLoad(EventArgs.Empty);
 
             var assembly = Assembly.GetExecutingAssembly();
 
-            var streamLogo = assembly.GetManifestResourceStream("Boleto2Net.Imagens." + Boleto.Banco.Codigo.ToString("000") + ".jpg");
+            var streamLogo = assembly.GetManifestResourceStream("Boleto2.Net.Imagens." + Boleto.Banco.Codigo.ToString("000") + ".jpg");
             var base64Logo = Convert.ToBase64String(new BinaryReader(streamLogo).ReadBytes((int)streamLogo.Length));
-            var fnLogo = string.Format("data:image/gif;base64,{0}", base64Logo);
+            var fnLogo = string.Format("data:image/jpg;base64,{0}", base64Logo);
 
-            var streamBarra = assembly.GetManifestResourceStream("Boleto2Net.Imagens.barra.gif");
+            var streamBarra = assembly.GetManifestResourceStream("Boleto2.Net.Imagens.barra.jpg");
             var base64Barra = Convert.ToBase64String(new BinaryReader(streamBarra).ReadBytes((int)streamBarra.Length));
-            var fnBarra = string.Format("data:image/gif;base64,{0}", base64Barra);
+            var fnBarra = string.Format("data:image/jpg;base64,{0}", base64Barra);
 
             var cb = new BarCode2of5i(Boleto.CodigoBarra.CodigoDeBarras, 1, 50, Boleto.CodigoBarra.CodigoDeBarras.Length);
             var base64CodigoBarras = Convert.ToBase64String(cb.ToByte());
@@ -899,11 +873,7 @@ namespace Boleto2Net
             return s;
         }
 
-        public byte[] MontaBytesPDF(bool convertLinhaDigitavelToImage = false, string urlImagemLogoCedente = null)
-        {
-
-            return (new NReco.PdfGenerator.HtmlToPdfConverter()).GeneratePdf(MontaHtmlEmbedded(convertLinhaDigitavelToImage, true, urlImagemLogoCedente));
-        }
+        
         #endregion Geração do Html OffLine
 
         public Image GeraImagemCodigoBarras(Boleto boleto)

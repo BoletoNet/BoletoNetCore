@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boleto2.Net", "Boleto2.Net\Boleto2.Net.csproj", "{F173E80B-E36B-48AD-B483-A27F8CA86F3C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Boleto2.Net", "Boleto2.Net\Boleto2.Net.csproj", "{F173E80B-E36B-48AD-B483-A27F8CA86F3C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boleto2.Net.Testes", "Boleto2.Net.Testes\Boleto2.Net.Testes.csproj", "{92951948-996F-4F22-AB35-74B06C45E1D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Boleto2.Net.Pdf", "Boleto2.Net.Pdf\Boleto2.Net.Pdf.csproj", "{17C2A467-051B-4DE4-BAAE-9D713EB8EFD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +23,15 @@ Global
 		{92951948-996F-4F22-AB35-74B06C45E1D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92951948-996F-4F22-AB35-74B06C45E1D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92951948-996F-4F22-AB35-74B06C45E1D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17C2A467-051B-4DE4-BAAE-9D713EB8EFD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17C2A467-051B-4DE4-BAAE-9D713EB8EFD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17C2A467-051B-4DE4-BAAE-9D713EB8EFD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17C2A467-051B-4DE4-BAAE-9D713EB8EFD6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8B7409D3-BDC3-4F81-99D1-268CF562FCC3}
 	EndGlobalSection
 EndGlobal
