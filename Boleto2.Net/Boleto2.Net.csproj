@@ -18,103 +18,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Imagens\*" />
-  </ItemGroup>
-
-  <ItemGroup>
     <EmbeddedResource Include="Imagens\*" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="BoletoImpressao\BoletoBancarioDesigner.cs" />
-    <Compile Remove="BoletoImpressao\ImagemCodigoBarraHandler.cs" />
-    <Compile Remove="Html.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Remove="Html.resx" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="BoletoImpressao\BoletoNet.css" />
-    <None Remove="BoletoImpressao\BoletoNetPDF.css" />
-    <None Remove="BoletoImpressao\Parts\CabecalhoTabelaDemonstrativo.html" />
-    <None Remove="BoletoImpressao\Parts\Carne.html" />
-    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega1.html" />
-    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega2.html" />
-    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega3.html" />
-    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega4.html" />
-    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega5.html" />
-    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega6.html" />
-    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega7.html" />
-    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega71.html" />
-    <None Remove="BoletoImpressao\Parts\GrupoDemonstrativo.html" />
-    <None Remove="BoletoImpressao\Parts\Instrucoes.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte0.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte1.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte10.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte11.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte12.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte2.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte3.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte4.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte5.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte6.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte7.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte8.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte9.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboCedenteRelatorioValores.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte1.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte10.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte2.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte3.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte4.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte5.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte6.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte7.html" />
-    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte8.html" />
-    <None Remove="BoletoImpressao\Parts\TotalDemonstrativo.html" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="BoletoImpressao\BoletoNet.css" />
-    <EmbeddedResource Include="BoletoImpressao\BoletoNetPDF.css" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\CabecalhoTabelaDemonstrativo.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\Carne.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega1.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega2.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega3.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega4.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega5.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega6.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega7.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega71.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\GrupoDemonstrativo.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\Instrucoes.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte0.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte1.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte10.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte11.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte12.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte2.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte3.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte4.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte5.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte6.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte7.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte8.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte9.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteRelatorioValores.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte1.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte10.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte2.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte3.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte4.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte5.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte6.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte7.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte8.html" />
-    <EmbeddedResource Include="BoletoImpressao\Parts\TotalDemonstrativo.html" />
+    <EmbeddedResource Include="BoletoImpressao\**\*.css" />
+    <EmbeddedResource Include="BoletoImpressao\**\*.jpg" />
+    <EmbeddedResource Include="BoletoImpressao\**\*.jpeg" />
+    <EmbeddedResource Include="BoletoImpressao\**\*.html" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
