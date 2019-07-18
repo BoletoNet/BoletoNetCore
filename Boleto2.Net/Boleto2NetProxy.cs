@@ -5,7 +5,6 @@ using System.Text;
 
 namespace Boleto2Net
 {
-    [ClassInterface(ClassInterfaceType.AutoDual)]
     [ProgId(nameof(Boleto2NetProxy))]
     [ComVisible(true)]
     public class Boleto2NetProxy
@@ -15,10 +14,10 @@ namespace Boleto2Net
 
         readonly public string Versao = "1.76";
 
-        private Boletos boletos = new Boletos();
+        protected Boletos boletos = new Boletos();
         public int quantidadeBoletos { get { return boletos.Count; } }
         public Boleto boleto { get; set; }
-        private bool setupOk { get; set; } = false;
+        protected bool setupOk { get; set; } = false;
 
         public bool SetupCobranca(string cnpj, string razaoSocial,
                                     string enderecoLogradouro, string enderecoNumero, string enderecoComplemento, string enderecoBairro, string enderecoCidade, string enderecoEstado, string enderecoCep, string observacoes,
@@ -108,7 +107,7 @@ namespace Boleto2Net
                         Bairro = enderecoBairro,
                         Cidade = enderecoCidade,
                         UF = enderecoEstado,
-                        CEP = enderecoCep
+                        CEP = enderecoCep?.Replace(".", "")
                     }
                 };
                 boletos.Banco.FormataCedente();
@@ -238,7 +237,7 @@ namespace Boleto2Net
                         Bairro = bairro,
                         Cidade = cidade,
                         UF = uf,
-                        CEP = cep
+                        CEP = cep?.Replace(".", "")
                     }
                 };
                 boleto.Sacado = sacado;
@@ -512,7 +511,7 @@ namespace Boleto2Net
                 return false;
             }
         }
-        public bool GerarBoletos(string nomeArquivo, ref string mensagemErro)
+        public virtual bool GerarBoletos(string nomeArquivo, ref string mensagemErro)
         {
             mensagemErro = "";
             try
@@ -541,16 +540,16 @@ namespace Boleto2Net
                 var html = new StringBuilder();
                 foreach (Boleto boletoTmp in boletos)
                 {
-                    using (BoletoBancario imprimeBoleto = new BoletoBancario
+                    BoletoBancario imprimeBoleto = new BoletoBancario
                     {
                         Boleto = boletoTmp,
                         OcultarInstrucoes = false,
                         MostrarComprovanteEntrega = true,
                         MostrarEnderecoCedente = true
-                    })
+                    };
                     {
                         html.Append("<div style=\"page-break-after: always;\">");
-                        html.Append(imprimeBoleto.MontaHtml());
+                        html.Append(imprimeBoleto.MontaHtmlEmbedded());
                         html.Append("</div>");
                     }
                 }
@@ -558,9 +557,6 @@ namespace Boleto2Net
                 {
                     case "HTM":
                         GerarArquivoTexto(html.ToString(), nomeArquivo);
-                        break;
-                    case "PDF":
-                        GerarArquivoPDF(html.ToString(), nomeArquivo);
                         break;
                     default:
                         break;
@@ -645,7 +641,40 @@ namespace Boleto2Net
             }
         }
 
-        private void GerarArquivoTexto(string texto, string nomeArquivo)
+        public bool LerRetorno(int formatoArquivo, Stream nomeArquivo, ref string mensagemErro)
+        {
+            try
+            {
+                if (boletos.Banco == null)
+                {
+                    mensagemErro = "Banco não definido.";
+                    return false;
+                }
+                if (formatoArquivo != 0 & formatoArquivo != 1)
+                {
+                    // Formato do Arquivo - CNAB240 = 0 / CNAB400 = 1
+                    mensagemErro = "Tipo do arquivo inválido: 0-CNAB240, 1-CNAB400";
+                    return false;
+                }
+                boletos.Clear();
+
+                var arquivoRetorno = new ArquivoRetorno(boletos.Banco, (TipoArquivo)formatoArquivo);
+                
+                boletos = arquivoRetorno.LerArquivoRetorno(nomeArquivo);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                while (ex != null)
+                {
+                    mensagemErro += ex.Message + Environment.NewLine;
+                    ex = ex.InnerException;
+                }
+                return false;
+            }
+        }
+
+        protected void GerarArquivoTexto(string texto, string nomeArquivo)
         {
             using (FileStream fs = new FileStream(nomeArquivo, FileMode.Create))
             {
@@ -657,15 +686,7 @@ namespace Boleto2Net
                 }
             }
         }
-        private void GerarArquivoPDF(string html, string nomeArquivo)
-        {
-            var pdf = new NReco.PdfGenerator.HtmlToPdfConverter().GeneratePdf(html);
-            using (FileStream fs = new FileStream(nomeArquivo, FileMode.Create))
-            {
-                fs.Write(pdf, 0, pdf.Length);
-                fs.Close();
-            }
-        }
+        
     }
 
 }

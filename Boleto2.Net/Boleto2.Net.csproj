@@ -1,230 +1,129 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F173E80B-E36B-48AD-B483-A27F8CA86F3C}</ProjectGuid>
+    <TargetFrameworks>netstandard2.0;net40;</TargetFrameworks>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <ApplicationIcon />
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Boleto2Net</RootNamespace>
-    <AssemblyName>Boleto2Net</AssemblyName>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile />
-    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
+    <StartupObject />
+    <Version>3.0.0</Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\..\Recursos\Referencias\Boleto2.Net\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETSTANDARD2</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net40'">
+    <DefineConstants>NET4_0</DefineConstants>
   </PropertyGroup>
+
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="NReco.PdfGenerator, Version=1.1.15.0, Culture=neutral, PublicKeyToken=231663d50a41b451, processorArchitecture=MSIL">
-      <HintPath>..\packages\NReco.PdfGenerator.1.1.15\lib\net20\NReco.PdfGenerator.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
+    <None Remove="Imagens\*" />
   </ItemGroup>
+
   <ItemGroup>
-    <Compile Include="Arquivo\ArquivoRetorno.cs" />
-    <Compile Include="Arquivo\ArquivoRemessa.cs" />
-    <Compile Include="Banco\BancoBanrisul.cs" />
-    <Compile Include="Banco\BancoBrasil.cs" />
-    <Compile Include="Banco\BancoCaixa.cs" />
-    <Compile Include="Banco\Banco.cs" />
-    <Compile Include="Banco\BancoItau.cs" />
-    <Compile Include="Banco\Bancos.cs" />
-    <Compile Include="Banco\BancoSafra.cs" />
-    <Compile Include="Banco\BancoSantander.cs" />
-    <Compile Include="Banco\BancoSicoob.cs" />
-    <Compile Include="Banco\BancoSicredi.cs" />
-    <Compile Include="Banco\Carteiras\BancoBanrisul\BancoBanrisulCarteira1.cs" />
-    <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira11.cs" />
-    <Compile Include="Banco\Carteiras\BancoBrasil\BancoBrasilCarteira17.cs" />
-    <Compile Include="Banco\Carteiras\BancoBradesco\BancoBradescoCarteira09.cs" />
-    <Compile Include="Banco\Carteiras\BancoCaixa\BancoCaixaCarteiraSIG14.cs" />
-    <Compile Include="Banco\Carteiras\BancoItau\BancoItauCarteira109.cs" />
-    <Compile Include="Banco\Carteiras\BancoItau\BancoItauCarteira112.cs" />
-    <Compile Include="Banco\Carteiras\BancoSafra\BancoSafraCarteira1.cs" />
-    <Compile Include="Banco\Carteiras\BancoSantander\BancoSantanderCarteira101.cs" />
-    <Compile Include="Banco\Carteiras\BancoSicoob\BancoSincoobCarteira1.cs" />
-    <Compile Include="Banco\Carteiras\BancoSicredi\BancoSicrediCarteira1.cs" />
-    <Compile Include="Banco\Carteiras\CarteiraCodigoAttribute.cs" />
-    <Compile Include="Banco\Carteiras\CarteiraFactory.cs" />
-    <Compile Include="Banco\Carteiras\ICarteira.cs" />
-    <Compile Include="BoletoImpressao\BoletoBancarioDesigner.cs" />
-    <Compile Include="Boleto\Boleto.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Boleto\DemonstrativoValoresBoleto\GrupoDemonstrativo.cs" />
-    <Compile Include="Boleto\DemonstrativoValoresBoleto\ItemDemonstrativo.cs" />
-    <Compile Include="Enums\TipoDistribuicaoBoleto.cs" />
-    <Compile Include="Enums\TipoDocumento.cs" />
-    <Compile Include="Enums\Modulo11Algoritmo.cs" />
-    <Compile Include="Enums\TipoCodigoBaixaDevolucao.cs" />
-    <Compile Include="Enums\TipoCodigoProtesto.cs" />
-    <Compile Include="Enums\TipoEspecieDocumento.cs" />
-    <Compile Include="Exceptions\Boleto2NetException.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Extensions\DateTimeExtensions.cs" />
-    <Compile Include="Util\OrdenacaoPorPosEDI.cs" />
-    <Compile Include="Enums\TipoCarteira.cs" />
-    <Compile Include="Enums\TipoFormaCadastramento.cs" />
-    <Compile Include="Enums\TipoImpressaoBoleto.cs" />
-    <Compile Include="Boleto2NetProxy.cs" />
-    <Compile Include="Util\BarCodeBase.cs" />
-    <Compile Include="BoletoImpressao\BoletoBancario.cs" />
-    <Compile Include="Banco\BancoBradesco.cs" />
-    <Compile Include="Util\BarCode2of5i.cs" />
-    <Compile Include="Boleto\Cedente.cs" />
-    <Compile Include="Boleto\CodigoBarra.cs" />
-    <Compile Include="Boleto\ContaBancaria.cs" />
-    <Compile Include="Util\DateInterval.cs" />
-    <Compile Include="Boleto\Endereco.cs" />
-    <Compile Include="Html.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Html.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Banco\IBanco.cs" />
-    <Compile Include="BoletoImpressao\ImagemCodigoBarraHandler.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Boleto\Sacado.cs" />
-    <Compile Include="Enums\TipoArquivo.cs" />
-    <Compile Include="Boleto\Boletos.cs" />
-    <Compile Include="Util\Extensions.cs" />
-    <Compile Include="Util\Cnab.cs" />
-    <Compile Include="Util\TCampoRegistroEDI.cs" />
-    <Compile Include="Util\TRegistroEDI.cs" />
-    <Compile Include="Util\TTipoRegistroEDI.cs" />
-    <Compile Include="Util\TTiposDadoEDI.cs" />
-    <Compile Include="Util\Utils.cs" />
+    <EmbeddedResource Include="Imagens\*" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="BoletoImpressao\BoletoBancarioDesigner.cs" />
+    <Compile Remove="BoletoImpressao\ImagemCodigoBarraHandler.cs" />
+    <Compile Remove="Html.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Html.resx" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="BoletoImpressao\BoletoNet.css" />
+    <None Remove="BoletoImpressao\BoletoNetPDF.css" />
+    <None Remove="BoletoImpressao\Parts\CabecalhoTabelaDemonstrativo.html" />
+    <None Remove="BoletoImpressao\Parts\Carne.html" />
+    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega1.html" />
+    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega2.html" />
+    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega3.html" />
+    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega4.html" />
+    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega5.html" />
+    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega6.html" />
+    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega7.html" />
+    <None Remove="BoletoImpressao\Parts\ComprovanteEntrega71.html" />
+    <None Remove="BoletoImpressao\Parts\GrupoDemonstrativo.html" />
+    <None Remove="BoletoImpressao\Parts\Instrucoes.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte0.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte1.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte10.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte11.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte12.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte2.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte3.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte4.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte5.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte6.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte7.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte8.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteParte9.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboCedenteRelatorioValores.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte1.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte10.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte2.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte3.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte4.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte5.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte6.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte7.html" />
+    <None Remove="BoletoImpressao\Parts\ReciboSacadoParte8.html" />
+    <None Remove="BoletoImpressao\Parts\TotalDemonstrativo.html" />
+  </ItemGroup>
+
   <ItemGroup>
     <EmbeddedResource Include="BoletoImpressao\BoletoNet.css" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Imagens\corte.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Html.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Html.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Imagens\barra.gif" />
-    <EmbeddedResource Include="Imagens\ponto.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Imagens\001.jpg" />
-    <EmbeddedResource Include="Imagens\004.jpg" />
-    <EmbeddedResource Include="Imagens\008.jpg" />
-    <EmbeddedResource Include="Imagens\021.jpg" />
-    <EmbeddedResource Include="Imagens\024.jpg" />
-    <EmbeddedResource Include="Imagens\027.jpg" />
-    <EmbeddedResource Include="Imagens\029.jpg" />
-    <EmbeddedResource Include="Imagens\033.jpg" />
-    <EmbeddedResource Include="Imagens\041.jpg" />
-    <EmbeddedResource Include="Imagens\047.jpg" />
-    <EmbeddedResource Include="Imagens\070.jpg" />
-    <EmbeddedResource Include="Imagens\104.jpg" />
-    <EmbeddedResource Include="Imagens\151.jpg" />
-    <EmbeddedResource Include="Imagens\237.jpg" />
-    <EmbeddedResource Include="Imagens\244.jpg" />
-    <EmbeddedResource Include="Imagens\246.jpg" />
-    <EmbeddedResource Include="Imagens\263.jpg" />
-    <EmbeddedResource Include="Imagens\266.jpg" />
-    <EmbeddedResource Include="Imagens\275.jpg" />
-    <EmbeddedResource Include="Imagens\291.jpg" />
-    <EmbeddedResource Include="Imagens\320.jpg" />
-    <EmbeddedResource Include="Imagens\341.jpg" />
-    <EmbeddedResource Include="Imagens\347.jpg" />
-    <EmbeddedResource Include="Imagens\353.jpg" />
-    <EmbeddedResource Include="Imagens\356.jpg" />
-    <EmbeddedResource Include="Imagens\389.jpg" />
-    <EmbeddedResource Include="Imagens\392.jpg" />
-    <EmbeddedResource Include="Imagens\399.jpg" />
-    <EmbeddedResource Include="Imagens\409.jpg" />
-    <EmbeddedResource Include="Imagens\422.jpg" />
-    <EmbeddedResource Include="Imagens\424.jpg" />
-    <EmbeddedResource Include="Imagens\453.jpg" />
-    <EmbeddedResource Include="Imagens\479.jpg" />
-    <EmbeddedResource Include="Imagens\600.jpg" />
-    <EmbeddedResource Include="Imagens\604.jpg" />
-    <EmbeddedResource Include="Imagens\610.jpg" />
-    <EmbeddedResource Include="Imagens\623.jpg" />
-    <EmbeddedResource Include="Imagens\633.jpg" />
-    <EmbeddedResource Include="Imagens\637.jpg" />
-    <EmbeddedResource Include="Imagens\641.jpg" />
-    <EmbeddedResource Include="Imagens\643.jpg" />
-    <EmbeddedResource Include="Imagens\702.jpg" />
-    <EmbeddedResource Include="Imagens\707.jpg" />
-    <EmbeddedResource Include="Imagens\721.jpg" />
-    <EmbeddedResource Include="Imagens\738.jpg" />
-    <EmbeddedResource Include="Imagens\741.jpg" />
-    <EmbeddedResource Include="Imagens\745.jpg" />
-    <EmbeddedResource Include="Imagens\748.jpg" />
-    <EmbeddedResource Include="Imagens\749.jpg" />
-    <EmbeddedResource Include="Imagens\756.jpg" />
-    <EmbeddedResource Include="Imagens\barrainterna.gif" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Imagens\BoletoBancario.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="BoletoBancario.bmp" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Imagens\003.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="BoletoImpressao\BoletoNetPDF.css" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\CabecalhoTabelaDemonstrativo.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\Carne.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega1.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega2.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega3.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega4.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega5.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega6.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega7.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ComprovanteEntrega71.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\GrupoDemonstrativo.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\Instrucoes.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte0.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte1.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte10.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte11.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte12.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte2.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte3.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte4.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte5.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte6.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte7.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte8.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteParte9.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboCedenteRelatorioValores.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte1.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte10.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte2.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte3.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte4.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte5.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte6.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte7.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\ReciboSacadoParte8.html" />
+    <EmbeddedResource Include="BoletoImpressao\Parts\TotalDemonstrativo.html" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Boleto2.Net.nuspec" />
-    <None Include="packages.config" />
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Como Implementar um novo Banco ou Carteira.txt" />
+
+  <!-- Conditionally obtain references for the .NET Framework 4.0 target -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net40' ">
+    <Reference Include="System.Drawing" />
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>

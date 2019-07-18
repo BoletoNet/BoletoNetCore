@@ -19,7 +19,7 @@ namespace Boleto2Net
             NumeroArquivoRemessa = numeroArquivoRemessa;
         }
 
-        public void GerarArquivoRemessa(Boletos boletos, Stream arquivo)
+        public void GerarArquivoRemessa(Boletos boletos, Stream stream, bool fecharRemessa = true)
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Boleto2Net
                 else
                     tamanhoRegistro = 400;
 
-                StreamWriter arquivoRemessa = new StreamWriter(arquivo, Encoding.GetEncoding("ISO-8859-1"));
+                StreamWriter arquivoRemessa = new StreamWriter(stream, Encoding.GetEncoding("ISO-8859-1"));
                 string strline = String.Empty;
 
                 // Header do Arquivo
@@ -100,10 +100,17 @@ namespace Boleto2Net
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
                 }
+                
 
-                arquivoRemessa.Close();
-                arquivoRemessa.Dispose();
-                arquivoRemessa = null;
+                if (fecharRemessa)
+                {
+                    arquivoRemessa.Close();
+                    arquivoRemessa.Dispose();
+                    arquivoRemessa = null;
+                }
+                else {
+                    arquivoRemessa.Flush();
+                }
             }
             catch (Exception ex)
             {
