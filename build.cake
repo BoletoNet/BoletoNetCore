@@ -43,7 +43,7 @@ Task("RestorePackages").Does(() =>
 
 Task("Build").IsDependentOn("RestorePackages").Does(() =>
 {
-    MSBuild("BoletoNetCore.sln", config => config.SetVerbosity(Verbosity.Minimal).SetConfiguration(configuration));
+    MSBuild("xBoletoNetCore.sln", config => config.SetVerbosity(Verbosity.Minimal).SetConfiguration(configuration));
 });
 
 Task("Default").IsDependentOn("Build").Does(() => {});
