@@ -1,4 +1,4 @@
-﻿[![Build status](https://ci.appveyor.com/api/projects/status/r9ovipu6yu7numn6?svg=true)](https://ci.appveyor.com/project/carloscds/boleto2net)
+﻿[![Build status](https://ci.appveyor.com/api/projects/status/fv9cin5fmpaqri7o?svg=true)](https://ci.appveyor.com/project/carloscds/boletonetcore)
 [![Nuget count](http://img.shields.io/nuget/v/BoletoNetCore.Net.svg)](http://www.nuget.org/packages/BoletoNetCore.Net/)
 [![Issues open](https://img.shields.io/github/issues/BoletoNet/boletonetCore.svg)](https://huboard.com/BoletoNet/boletonetcore/)
 [![Coverage Status](https://coveralls.io/repos/github/BoletoNet/boletonetcore/badge.svg?branch=master)](https://coveralls.io/github/BoletoNet/boletonetcore?branch=master)

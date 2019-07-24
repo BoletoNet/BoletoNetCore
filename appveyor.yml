@@ -1,5 +1,5 @@
-version: 2.1.0.{build}
-image: Visual Studio 2017
+version: 3.0.0.{build}
+image: Visual Studio 2019
 environment:
   $msbuildPath: $(cmd /c where msbuild)
   COVERALLS_REPO_TOKEN: 6Q3DHopayUJ6xtDuAXO9S9Q8GknjKpYUe
@@ -17,7 +17,7 @@ artifacts:
 
 deploy:
 - provider: NuGet
-  server: https://www.myget.org/F/boleto2netbuild/
+  server: https://www.myget.org/F/boletonetcorebuild/
   api_key:
     secure: rH9VFKFXJsR5D07BF9PayFm7mRo7acVANtfgYkGa3S9ybX0RCWBiSM153yhLaorG
   skip_symbols: true
@@ -28,7 +28,7 @@ notifications:
 - provider: Email
   to:
   - cds@cds-software.com.br
-  subject: Boleto2Net Build
+  subject: BoletoNetCore Build
   on_build_success: false
   on_build_failure: true
   on_build_status_changed: true
