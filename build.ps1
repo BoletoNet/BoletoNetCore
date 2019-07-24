@@ -1,7 +1,5 @@
-# $rootDir = $env:APPVEYOR_BUILD_FOLDER
-# $buildNumber = $env:APPVEYOR_BUILD_NUMBER
-$rootdir = "D:\cds\git\GitHub\boletonet\BoletoNetCore"
-$buildNumber = "9"
+$rootDir = $env:APPVEYOR_BUILD_FOLDER
+$buildNumber = $env:APPVEYOR_BUILD_NUMBER
 
 $solutionFile = "$rootDir\BoletoNetCore\BoletoNetCore.csproj"
 $solutionTest = "$rootDir\BoletoNetCore.Testes\BoletoNetCore.Testes.csproj"
@@ -14,4 +12,4 @@ $xml.Save($nuspecPath)
 
 <#dotnet test $solutionTest#>
 dotnet pack -c Release $solutionFile /p:NuspecFile=$nuspecPath -o $nupkgPath
-# appveyor PushArtifact $nupkgPath
+appveyor PushArtifact $nupkgPath
