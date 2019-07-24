@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 
 namespace BoletoNetCore
 {
@@ -8,6 +10,10 @@ namespace BoletoNetCore
     [Browsable(false)]
     public class Boleto
     {
+        /// <summary>
+        /// Construtor da Classe Boleto
+        /// </summary>
+        /// <param name="banco"></param>
         public Boleto(IBanco banco)
         {
             Banco = banco;
@@ -17,6 +23,11 @@ namespace BoletoNetCore
             TipoCarteira = banco.Cedente.ContaBancaria.TipoCarteiraPadrao;
         }
 
+        /// <summary>
+        /// Construtor da Classe Boleto com parâmetro para viabilizar várias carteiras
+        /// </summary>
+        /// <param name="banco"></param>
+        /// <param name="ignorarCarteira"></param>
         public Boleto(IBanco banco, Boolean ignorarCarteira)
         {
             Banco = banco;
@@ -94,9 +105,42 @@ namespace BoletoNetCore
         /// </summary>
         public string AgenciaCobradoraRecebedora { get; set; }
 
-        public string CodigoOcorrencia { get; set; } = "01";
-        public string DescricaoOcorrencia { get; set; } = string.Empty;
-        public string CodigoOcorrenciaAuxiliar { get; set; } = string.Empty;
+        /// <summary>
+        /// C044 - Código de Movimento Retorno
+        /// Código adotado pela FEBRABAN, para identificar o tipo de movimentação enviado nos
+        /// registros do arquivo de retorno.        /// </summary>
+        public string CodigoMovimentoRetorno { get; set; } = "01";
+
+        /// <summary>
+        /// C044 - Descrição do Movimento Retorno
+        /// Descrição do Código adotado pela FEBRABAN, para identificar o tipo de movimentação enviado nos
+        /// registros do arquivo de retorno. 
+        /// </summary>
+        public string DescricaoMovimentoRetorno { get; set; } = string.Empty;
+
+        /// <summary>
+        /// C047 - Motivo da Ocorrência
+        /// Código adotado pela FEBRABAN para identificar as ocorrências (rejeições, tarifas,
+        /// custas, liquidação e baixas) em registros detalhe de títulos de cobrança.Poderão ser
+        /// informados até cinco ocorrências distintas, incidente sobre o título.
+        /// </summary>
+        public string CodigoMotivoOcorrencia { get; set; } = string.Empty;
+
+        /// <summary>
+        /// C047 - Descrição do Motivo da Ocorrência
+        /// Descrição do Código adotado pela FEBRABAN para identificar as ocorrências (rejeições, tarifas,
+        /// custas, liquidação e baixas) em registros detalhe de títulos de cobrança.Poderão ser
+        /// informados até cinco ocorrências distintas, incidente sobre o título.
+        /// </summary>
+        public string DescricaoMotivoOcorrencia { get => string.Join(", ", ListMotivosOcorrencia); }
+
+        /// <summary>
+        /// C047 - Descrição do Motivo da Ocorrência
+        /// Descrição do Código adotado pela FEBRABAN para identificar as ocorrências (rejeições, tarifas,
+        /// custas, liquidação e baixas) em registros detalhe de títulos de cobrança.Poderão ser
+        /// informados até cinco ocorrências distintas, incidente sobre o título.
+        /// </summary>
+        public IEnumerable<string> ListMotivosOcorrencia { get; set; } = Enumerable.Empty<string>();
 
         public TipoCodigoProtesto CodigoProtesto { get; set; } = TipoCodigoProtesto.NaoProtestar;
         public int DiasProtesto { get; set; } = 0;

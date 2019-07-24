@@ -296,7 +296,7 @@ namespace BoletoNetCore
                     default:
                         throw new Exception("Tipo de carteira não suportada: (" + boleto.TipoCarteira + ").");
                 }
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 002, 0, boleto.CodigoOcorrencia, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 002, 0, boleto.CodigoMovimentoRetorno, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NumeroDocumento, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0121, 006, 0, boleto.DataVencimento, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 013, 2, boleto.ValorTitulo, '0');
@@ -463,8 +463,8 @@ namespace BoletoNetCore
                 boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 // Identificação de Ocorrência
-                boleto.CodigoOcorrencia = registro.Substring(108, 2);
-                boleto.DescricaoOcorrencia = DescricaoOcorrenciaCnab400(boleto.CodigoOcorrencia);
+                boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
+                boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
 
                 // Data Ocorrência no Banco
                 boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
@@ -496,7 +496,7 @@ namespace BoletoNetCore
                 boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
 
                 // Identificação de Ocorrência - Código Auxiliar
-                boleto.CodigoOcorrenciaAuxiliar = registro.Substring(382, 10);
+                boleto.CodigoMotivoOcorrencia = registro.Substring(382, 10);
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;

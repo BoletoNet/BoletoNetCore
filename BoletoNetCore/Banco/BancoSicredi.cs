@@ -368,8 +368,8 @@ namespace BoletoNetCore
                 boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.NossoNumero.Substring(0, 2), boleto.NossoNumero.Substring(2, 6), boleto.NossoNumeroDV);
 
                 // Identificação de Ocorrência
-                boleto.CodigoOcorrencia = registro.Substring(108, 2);
-                boleto.DescricaoOcorrencia = DescricaoOcorrenciaCnab400(boleto.CodigoOcorrencia);
+                boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
+                boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
 
                 // Data Ocorrência no Banco
                 boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
@@ -394,7 +394,7 @@ namespace BoletoNetCore
                 boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(294, 6)).ToString("##-##-##"));
 
                 // Identificação de Ocorrência - Código Auxiliar
-                boleto.CodigoOcorrenciaAuxiliar = registro.Substring(381, 10);
+                boleto.CodigoMotivoOcorrencia = registro.Substring(381, 10);
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
