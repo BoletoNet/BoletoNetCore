@@ -3,7 +3,7 @@ $buildNumber = $env:APPVEYOR_BUILD_NUMBER
 $solutionFile = "$rootDir\BoletoNetCore\BoletoNetCore.csproj"
 $solutionTest = "$rootDir\BoletoNetCore.Testes\BoletoNetCore.Testes.csproj"
 $nuspecPath = "$rootDir\BoletoNetCore\BoletoNetCore.nuspec"
-$nupkgPath = "$rootDir\NuGet\BoletoNetCore.{0}.nupkg"
+$nupkgPath = "$rootDir\NuGet"
 
 [xml]$xml = cat $nuspecPath
 $xml.package.metadata.version="3.0.0."+"$buildNumber"
