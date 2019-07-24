@@ -2,7 +2,7 @@
 [![Nuget count](http://img.shields.io/nuget/v/BoletoNetCore.Net.svg)](http://www.nuget.org/packages/BoletoNetCore.Net/)
 [![Issues open](https://img.shields.io/github/issues/BoletoNet/boletonetCore.svg)](https://huboard.com/BoletoNet/boletonetcore/)
 [![Coverage Status](https://coveralls.io/repos/github/BoletoNet/boletonetcore/badge.svg?branch=master)](https://coveralls.io/github/BoletoNet/boletonetcore?branch=master)
-[![MyGet Ultimo PR](https://img.shields.io/myget/boletonetcorebuild/v/boleto.net.core.svg)](https://www.myget.org/gallery/boletonetcorebuild)
+[![MyGet Ultimo PR](https://img.shields.io/myget/boletonetcorebuild/v/boletonetcore.svg)](https://www.myget.org/gallery/boletonetcorebuild)
 
 # BoletoNetCore
 Esta é uma versão baseado no Boleto2Net, mas para funcionar com .NET Core
