@@ -489,7 +489,7 @@ namespace BoletoNetCore
                 // Conforme a página 21 (nota 1) do manual CobrancaEletronicaBanrisul_pdr400_vrs15072015_ed06.pdf:
                 // O padrão do "Valor Pago" considera apenas Valor do título – Descontos + Outros recebimentos – Abatimentos – Outras despesas
                 // O valor dos juros não é somado, apesar de ser destacado na posição 267 a 279.
-                // Para seguir o padrão dos outros bancos implementados no Boleto2Net, e não precisar tratar isso na aplicação, o valor dos juros está sendo somado ao ValorPago
+                // Para seguir o padrão dos outros bancos implementados no BoletoNetCore, e não precisar tratar isso na aplicação, o valor dos juros está sendo somado ao ValorPago
                 boleto.ValorPago += boleto.ValorJurosDia;
 
                 // Data do Crédito

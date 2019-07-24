@@ -8,9 +8,6 @@ using System.Net.Mime;
 using System.Reflection;
 using System.Text;
 
-//[assembly: WebResource("Boleto2Net.BoletoImpressao.BoletoNet.css", "text/css", PerformSubstitution = true)]
-//[assembly: WebResource("Boleto2Net.Imagens.barra.gif", "image/gif")]
-
 namespace BoletoNetCore
 {
     using System.Drawing.Imaging;
@@ -119,19 +116,13 @@ namespace BoletoNetCore
 
         protected string Render()
         {
-            var urlImagemLogo = "data:image/jpg;base64," + GetResourceImage("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
-            var urlImagemBarra = "data:image/jpg;base64," + GetResourceImage("Boleto2Net.Imagens.barra.gif");
-            //string urlImagemBarraInterna = Page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), "BoletoNet.Imagens.barrainterna.gif");
-            //string urlImagemCorte = Page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), "BoletoNet.Imagens.corte.gif");
-            //string urlImagemPonto = Page.ClientScript.GetWebResourceUrl(typeof(BoletoBancario), "BoletoNet.Imagens.ponto.gif");
+            var urlImagemLogo = "data:image/jpg;base64," + GetResourceImage("BoletoNetCore.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
+            var urlImagemBarra = "data:image/jpg;base64," + GetResourceImage("BoletoNetCore.Imagens.barra.gif");
 
             //Atribui os valores ao html do boleto bancário
-
-
-            //output.Write(MontaHtml(urlImagemCorte, urlImagemLogo, urlImagemBarra, urlImagemPonto, urlImagemBarraInterna,
-            //    "<img src=\"ImagemCodigoBarra.ashx?code=" + Boleto.CodigoBarra.Codigo + "\" alt=\"Código de Barras\" />"));
             return MontaHtml(urlImagemLogo, urlImagemBarra, "<img src=\"data:image/jpg;base64," + GetCodBarraCode(Boleto.CodigoBarra.CodigoDeBarras) + "\" alt=\"Código de Barras\" />");
         }
+
         #endregion Override
 
         #region Html
@@ -144,7 +135,7 @@ namespace BoletoNetCore
                 var titulo = "Instruções de Impressão";
                 var instrucoes = "Imprimir em impressora jato de tinta (ink jet) ou laser em qualidade normal. (Não use modo econômico).<br>Utilize folha A4 (210 x 297 mm) ou Carta (216 x 279 mm) - Corte na linha indicada<br>";
 
-                var htmlInstrucao = GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.Instrucoes.html");
+                var htmlInstrucao = GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.Instrucoes.html");
                 html.Append(htmlInstrucao); //HTML.instrucoes
                 html.Append("<br />");
 
@@ -162,7 +153,7 @@ namespace BoletoNetCore
         {
             var html = new StringBuilder();
 
-            html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.Carne"));
+            html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.Carne"));
 
             return html.ToString()
                 .Replace("@TELEFONE", telefone)
@@ -173,19 +164,19 @@ namespace BoletoNetCore
             try
             {
                 var html = new StringBuilder();
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte1.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte1.html"));
                 html.Append("<br />");
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte2.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte3.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte2.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte3.html"));
                 if (MostrarEnderecoCedente)
                 {
-                    html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte10.html"));
+                    html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte10.html"));
                 }
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte4.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte5.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte6.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte7.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte8.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte4.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte5.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte6.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte7.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte8.html"));
                 return html.ToString();
             }
             catch (Exception ex)
@@ -199,18 +190,18 @@ namespace BoletoNetCore
             try
             {
                 var html = new StringBuilder();
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte1.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte2.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte3.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte4.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte5.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte6.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte7.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte8.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte9.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte10.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte11.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte12.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte1.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte2.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte3.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte4.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte5.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte6.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte7.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte8.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte9.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte10.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte11.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte12.html"));
                 return html.ToString();
             }
             catch (Exception ex)
@@ -225,14 +216,14 @@ namespace BoletoNetCore
             {
                 var html = new StringBuilder();
 
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega1.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega2.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega3.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega4.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega5.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega6.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega1.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega2.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega3.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega4.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega5.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega6.html"));
 
-                html.Append(MostrarComprovanteEntregaLivre ? GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega71.html") : GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ComprovanteEntrega7.html") );
+                html.Append(MostrarComprovanteEntregaLivre ? GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega71.html") : GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega7.html") );
 
                 html.Append("<br />");
                 return html.ToString();
@@ -251,10 +242,10 @@ namespace BoletoNetCore
 
             if (ExibirDemonstrativo && Boleto.Demonstrativos.Any())
             {
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteRelatorioValores.html"));
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboCedenteParte5.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteRelatorioValores.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte5.html"));
 
-                html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.CabecalhoTabelaDemonstrativo.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.CabecalhoTabelaDemonstrativo.html"));
 
                 var grupoDemonstrativo = new StringBuilder();
 
@@ -264,7 +255,7 @@ namespace BoletoNetCore
 
                     foreach (var item in relatorio.Itens)
                     {
-                        grupoDemonstrativo.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.GrupoDemonstrativo.html"));
+                        grupoDemonstrativo.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.GrupoDemonstrativo.html"));
 
                         if (first)
                         {
@@ -282,7 +273,7 @@ namespace BoletoNetCore
                         grupoDemonstrativo = grupoDemonstrativo.Replace("@VALORITEM", item.Valor.ToString("R$ ##,##0.00"));
                     }
 
-                    grupoDemonstrativo.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.TotalDemonstrativo.html"));
+                    grupoDemonstrativo.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.TotalDemonstrativo.html"));
                     grupoDemonstrativo = grupoDemonstrativo.Replace(
                         "@VALORTOTALGRUPO",
                         relatorio.Itens.Sum(c => c.Valor).ToString("R$ ##,##0.00"));
@@ -299,7 +290,7 @@ namespace BoletoNetCore
                     html.Append(HtmlComprovanteEntrega);
                     //Html da linha pontilhada
                     if (OcultarReciboSacado)
-                        html.Append(GetResourceHypertext("Boleto2.Net.BoletoImpressao.Parts.ReciboSacadoParte8.html"));
+                        html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte8.html"));
                 }
 
                 //Oculta o recibo do sacabo do boleto
@@ -469,7 +460,7 @@ namespace BoletoNetCore
 
             #region Css
             {
-                var arquivoCss = usaCsspdf ? "Boleto2.Net.BoletoImpressao.BoletoNetPDF.css" : "Boleto2.Net.BoletoImpressao.BoletoNet.css";
+                var arquivoCss = usaCsspdf ? "BoletoNetCore.BoletoImpressao.BoletoNetPDF.css" : "BoletoNetCore.BoletoImpressao.BoletoNet.css";
                 var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(arquivoCss);
 
                 using (var sr = new StreamReader(stream))
@@ -605,14 +596,14 @@ namespace BoletoNetCore
 
             var randomSufix = new Random().Next().ToString(); // para podermos colocar no mesmo email varios boletos diferentes
 
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BoletoNetCore.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
             lrImagemLogo = new LinkedResource(stream, MediaTypeNames.Image.Jpeg)
             {
                 ContentId = "logo" + randomSufix
             };
 
             var assembly = Assembly.GetExecutingAssembly();
-            var ms = assembly.GetManifestResourceStream("Boleto2.Net.Imagens.barra.jpg");
+            var ms = assembly.GetManifestResourceStream("BoletoNetCore.Imagens.barra.jpg");
             lrImagemBarra = new LinkedResource(ms, MediaTypeNames.Image.Jpeg)
             {
                 ContentId = "barra" + randomSufix
@@ -674,7 +665,7 @@ namespace BoletoNetCore
 
         //    if (!File.Exists(fnLogo))
         //    {
-        //        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
+        //        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BoletoNetCore.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
         //        using (Stream file = File.Create(fnLogo))
         //        {
         //            CopiarStream(stream, file);
@@ -774,7 +765,7 @@ namespace BoletoNetCore
         //    //Salvo a imagem apenas 1 vez com o código do banco
         //    if (!File.Exists(fnLogo))
         //    {
-        //        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("Boleto2Net.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
+        //        var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BoletoNetCore.Imagens." + Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3) + ".jpg");
         //        using (Stream file = File.Create(fnLogo))
         //        {
         //            CopiarStream(stream, file);
@@ -833,11 +824,11 @@ namespace BoletoNetCore
 
             var assembly = Assembly.GetExecutingAssembly();
 
-            var streamLogo = assembly.GetManifestResourceStream("Boleto2.Net.Imagens." + Boleto.Banco.Codigo.ToString("000") + ".jpg");
+            var streamLogo = assembly.GetManifestResourceStream("BoletoNetCore.Imagens." + Boleto.Banco.Codigo.ToString("000") + ".jpg");
             var base64Logo = Convert.ToBase64String(new BinaryReader(streamLogo).ReadBytes((int)streamLogo.Length));
             var fnLogo = string.Format("data:image/jpg;base64,{0}", base64Logo);
 
-            var streamBarra = assembly.GetManifestResourceStream("Boleto2.Net.Imagens.barra.jpg");
+            var streamBarra = assembly.GetManifestResourceStream("BoletoNetCore.Imagens.barra.jpg");
             var base64Barra = Convert.ToBase64String(new BinaryReader(streamBarra).ReadBytes((int)streamBarra.Length));
             var fnBarra = string.Format("data:image/jpg;base64,{0}", base64Barra);
 

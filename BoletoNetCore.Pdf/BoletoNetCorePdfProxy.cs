@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BoletoNetCore.Pdf
 {
-    public class Boleto2NetPdfProxy : Boleto2NetProxy
+    public class BoletoNetCorePdfProxy : BoletoNetCoreProxy
     {
         public override bool GerarBoletos(string nomeArquivo, ref string mensagemErro)
         {

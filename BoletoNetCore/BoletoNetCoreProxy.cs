@@ -5,9 +5,9 @@ using System.Text;
 
 namespace BoletoNetCore
 {
-    [ProgId(nameof(Boleto2NetProxy))]
+    [ProgId(nameof(BoletoNetCoreProxy))]
     [ComVisible(true)]
-    public class Boleto2NetProxy
+    public class BoletoNetCoreProxy
     {
         // Esta classe é para permitir que essa DLL seja utilizada
         // via COM, em linguagens que como Visual Fox Pro.

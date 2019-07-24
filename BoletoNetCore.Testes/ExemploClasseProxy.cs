@@ -6,14 +6,14 @@ namespace BoletoNetCore.Testes
 {
     [TestFixture]
     [Category("Outros Testes")]
-    public class Boleto2NetExemploClasseProxy
+    public class BoletoNetCoreExemploClasseProxy
     {
         [Test]
-        public void Boleto2Net_ExemploProxy()
+        public void BoletoNetCore_ExemploProxy()
         {
             var mensagemErro = "";
             var retorno = false;
-            var classeProxy = new Boleto2NetProxy();
+            var classeProxy = new BoletoNetCoreProxy();
 
             // Define os dados do Cedente, Conta Bancária e Carteira de Cobrança
             retorno = classeProxy.SetupCobranca("12.123.123/1234-46", "Cedente Teste Classe Proxy",
