@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using BoletoNetCore.Extensions;
 using NUnit.Framework;
 
@@ -40,5 +41,6 @@ namespace BoletoNetCore.Testes
             var vencimentoFator1000 = new DateTime(2025, 02, 22, 0, 0, 0);
             Assert.AreEqual(1000, vencimentoFator1000.FatorVencimento());
         }
+
     }
 }

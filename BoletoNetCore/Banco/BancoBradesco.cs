@@ -591,9 +591,10 @@ namespace BoletoNetCore
                 boleto.NossoNumeroDV = tmp.Substring(19, 1);
 
                 //Identificação de Ocorrência
-                boleto.CodigoOcorrencia = registro.Substring(15, 2);
-                boleto.DescricaoOcorrencia = Cnab.OcorrenciaCnab240(boleto.CodigoOcorrencia);
-                boleto.CodigoOcorrenciaAuxiliar = registro.Substring(213, 10);
+                boleto.CodigoMovimentoRetorno = registro.Substring(15, 2);
+                boleto.DescricaoMovimentoRetorno = Cnab.MovimentoRetornoCnab240(boleto.CodigoMovimentoRetorno);
+                boleto.CodigoMotivoOcorrencia = registro.Substring(213, 10);
+                boleto.ListMotivosOcorrencia = Cnab.MotivoOcorrenciaCnab240( boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
 
                 //Número do Documento
                 boleto.NumeroDocumento = registro.Substring(58, 15);
@@ -687,9 +688,9 @@ namespace BoletoNetCore
                 boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
 
                 //Identificação de Ocorrência
-                boleto.CodigoOcorrencia = registro.Substring(108, 2);
-                boleto.DescricaoOcorrencia = DescricaoOcorrenciaCnab400(boleto.CodigoOcorrencia);
-                boleto.CodigoOcorrenciaAuxiliar = registro.Substring(318, 10);
+                boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
+                boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
+                boleto.CodigoMotivoOcorrencia = registro.Substring(318, 10);
 
                 //Número do Documento
                 boleto.NumeroDocumento = registro.Substring(116, 10);
@@ -821,7 +822,7 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0106, 001, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0107, 002, 0, Empty, ' ');
 
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 002, 0, boleto.CodigoOcorrencia, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 002, 0, boleto.CodigoMovimentoRetorno, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NumeroDocumento, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0121, 006, 0, boleto.DataVencimento, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 013, 2, boleto.ValorTitulo, '0');
