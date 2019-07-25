@@ -16,7 +16,7 @@ Task("RunNugetPack").WithCriteria(string.IsNullOrWhiteSpace(EnvironmentVariable(
         Version = $"{buildNumber}",
         OutputDirectory = "./"
     };
-    var nuspecFilePath = File("./Boleto2.Net/Boleto2.Net.nuspec");
+    var nuspecFilePath = File("./BoletoNetCore/BoletoNetCore.nuspec");
     NuGetPack(nuspecFilePath, nuGetPackSettings);
     var nupkg = GetFiles("*.nupkg").First();
 });
@@ -25,7 +25,7 @@ Task("RunCoverage").IsDependentOn("Build").Does(() =>
 {
     OpenCover(tool => tool.NUnit3("./**/bin/Release/*.Testes.dll"),
               new FilePath("./coverage.xml"),
-              new OpenCoverSettings().WithFilter("+[*]Boleto2Net.*").WithFilter("-[*]Boleto2Net.Testes.*")
+              new OpenCoverSettings().WithFilter("+[*]BoletoNetCore.*").WithFilter("-[*]BoletoNetCore.Testes.*")
     );
     CoverallsNet("coverage.xml", CoverallsNetReportType.OpenCover);
 });
@@ -38,12 +38,12 @@ Task("RunTests").IsDependentOn("Build").Does(() =>
 
 Task("RestorePackages").Does(() =>
 {
-     NuGetRestore(File("Boleto2.Net.sln"), new NuGetRestoreSettings { NoCache = true });
+     NuGetRestore(File("BoletoNetCore.sln"), new NuGetRestoreSettings { NoCache = true });
 });
 
 Task("Build").IsDependentOn("RestorePackages").Does(() =>
 {
-    MSBuild("Boleto2.Net.sln", config => config.SetVerbosity(Verbosity.Minimal).SetConfiguration(configuration));
+    MSBuild("BoletoNetCore.sln", config => config.SetVerbosity(Verbosity.Minimal).SetConfiguration(configuration));
 });
 
 Task("Default").IsDependentOn("Build").Does(() => {});

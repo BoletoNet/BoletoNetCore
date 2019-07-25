@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net40;</TargetFrameworks>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <ApplicationIcon />
     <OutputType>Library</OutputType>
     <StartupObject />
+    <IsPackable>true</IsPackable>
     <Version>3.0.0</Version>
   </PropertyGroup>
 
