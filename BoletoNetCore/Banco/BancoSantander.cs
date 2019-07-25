@@ -132,7 +132,7 @@ namespace BoletoNetCore
                 {
                     case TipoArquivo.CNAB240:
                         // Trailler do Lote
-                        trailler += GerarTrailerLoteRemessaCNAC240(ref numeroRegistroGeral,
+                        trailler += GerarTrailerLoteRemessaCNAB240(ref numeroRegistroGeral,
                             numeroRegistroCobrancaSimples, valorCobrancaSimples,
                             numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
                             numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
@@ -621,7 +621,7 @@ namespace BoletoNetCore
             }
         }
 
-        private string GerarTrailerLoteRemessaCNAC240(ref int numeroRegistroGeral,
+        private string GerarTrailerLoteRemessaCNAB240(ref int numeroRegistroGeral,
             int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
             int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
             int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)

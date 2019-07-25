@@ -6,16 +6,16 @@ using static System.String;
 
 namespace BoletoNetCore
 {
-    internal sealed class BancoBradesco : IBanco
+    internal sealed class BancoBradesco : BancoFebraban<BancoBradesco> , IBanco
     {
-        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoBradesco());
-
-        public Cedente Cedente { get; set; }
-        public int Codigo { get; } = 237;
-        public string Nome { get; } = "Bradesco";
-        public string Digito { get; } = "2";
-        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
-        public bool RemoveAcentosArquivoRemessa { get; } = true;
+        public BancoBradesco()
+        {
+            Codigo = 237;
+            Nome = "Bradesco";
+            Digito = "2";
+            IdsRetornoCnab400RegistroDetalhe = new List<string> { "1" };
+            RemoveAcentosArquivoRemessa = true;
+        }
 
         public void FormataCedente()
         {
@@ -30,50 +30,6 @@ namespace BoletoNetCore
             Cedente.Codigo = codigoCedente.Length <= 20 ? codigoCedente.PadLeft(20, '0') : throw BoletoNetCoreException.CodigoCedenteInvalido(codigoCedente, 20);
 
             Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
-        }
-
-        public void ValidaBoleto(Boleto boleto)
-        {
-        }
-
-        public void FormataNossoNumero(Boleto boleto)
-        {
-            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.CarteiraComVariacao);
-            carteira.FormataNossoNumero(boleto);
-        }
-
-        public string FormataCodigoBarraCampoLivre(Boleto boleto)
-        {
-            var carteira = CarteiraFactory<BancoBradesco>.ObterCarteira(boleto.CarteiraComVariacao);
-            return carteira.FormataCodigoBarraCampoLivre(boleto);
-        }
-
-        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
-        {
-            try
-            {
-                var header = Empty;
-                switch (tipoArquivo)
-                {
-                    case TipoArquivo.CNAB240:
-                        // Cabeçalho do Arquivo
-                        header += GerarHeaderRemessaCNAB240(numeroArquivoRemessa, ref numeroRegistroGeral);
-                        // Cabeçalho do Lote
-                        header += Environment.NewLine;
-                        header += GerarHeaderLoteRemessaCNAB240(numeroArquivoRemessa, ref numeroRegistroGeral);
-                        break;
-                    case TipoArquivo.CNAB400:
-                        header += GerarHeaderRemessaCNAB400(numeroArquivoRemessa, ref numeroRegistroGeral);
-                        break;
-                    default:
-                        throw new Exception("Tipo de arquivo inexistente.");
-                }
-                return header;
-            }
-            catch (Exception ex)
-            {
-                throw BoletoNetCoreException.ErroAoGerarRegistroHeaderDoArquivoRemessa(ex);
-            }
         }
 
         public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
@@ -127,49 +83,10 @@ namespace BoletoNetCore
             }
         }
 
-        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
-            ref int numeroRegistroGeral, decimal valorBoletoGeral,
-            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
-            int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
-            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
-            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
-        {
-            try
-            {
-                var trailer = Empty;
-                switch (tipoArquivo)
-                {
-                    case TipoArquivo.CNAB240:
-                        // Trailler do Lote
-                        trailer += GerarTrailerLoteRemessaCNAC240(ref numeroRegistroGeral,
-                            numeroRegistroCobrancaSimples, valorCobrancaSimples,
-                            numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
-                            numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
-                        // Trailler do Arquivo
-                        trailer += Environment.NewLine;
-                        trailer += GerarTrailerRemessaCNAB240(ref numeroRegistroGeral);
-                        break;
-
-                    case TipoArquivo.CNAB400:
-                        trailer = GerarTrailerRemessaCNAB400(ref numeroRegistroGeral);
-                        break;
-                    default:
-                        throw new Exception("Tipo de arquivo inexistente.");
-                }
-                return trailer;
-            }
-            catch (Exception ex)
-            {
-                throw BoletoNetCoreException.ErroAoGerrarRegistroTrailerDoArquivoRemessa(ex);
-            }
-        }
-
-
-
         #region CNAB240
 
         #region RemessaCNAB240
-        private string GerarHeaderRemessaCNAB240(int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        protected override string GerarHeaderRemessaCNAB240(int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
@@ -208,7 +125,7 @@ namespace BoletoNetCore
             }
         }
 
-        private string GerarHeaderLoteRemessaCNAB240(int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        protected override string GerarHeaderLoteRemessaCNAB240(int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
@@ -464,7 +381,7 @@ namespace BoletoNetCore
             }
         }
 
-        private string GerarTrailerLoteRemessaCNAC240(ref int numeroRegistroGeral,
+        protected override string GerarTrailerLoteRemessaCNAB240(ref int numeroRegistroGeral,
             int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
             int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
             int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
@@ -496,7 +413,7 @@ namespace BoletoNetCore
             }
         }
 
-        private string GerarTrailerRemessaCNAB240(ref int numeroRegistroGeral)
+        protected override string GerarTrailerRemessaCNAB240(ref int numeroRegistroGeral)
         {
             try
             {
@@ -521,155 +438,9 @@ namespace BoletoNetCore
         }
         #endregion
 
-        #region RetornoCNAB240
-        public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
-        {
-            //Manual de Procedimentos Nº 4008.524.0339 - Versão 04 - Elaborado em: 12 / 08 / 2015
-
-            arquivoRetorno.Banco.Cedente = new Cedente();
-            //05.0 Tipo de inscrição da empresa 18 - 18 (1)
-            //06.0 Número de incrição da empresa 19 - 32 (14)
-            arquivoRetorno.Banco.Cedente.CPFCNPJ = registro.Substring(17, 1) == "1" ? registro.Substring(21, 11) : registro.Substring(18, 14);
-            //07.0 Código do convênio no banco 33 - 52 (20)
-            arquivoRetorno.Banco.Cedente.Codigo = registro.Substring(32, 20).Trim();
-            //13.0 Nome da Empresa 73 - 102 (30)
-            arquivoRetorno.Banco.Cedente.Nome = registro.Substring(72, 30).Trim();
-
-            ////14.0 Nome do Banco 103 - 132 (30)
-            //arquivoRetorno.Banco.Nome = registro.Substring(102, 30);
-
-            arquivoRetorno.Banco.Cedente.ContaBancaria = new ContaBancaria();
-            //08.0 Agência mantenedora da conta 53 - 57 (5)
-            arquivoRetorno.Banco.Cedente.ContaBancaria.Agencia = registro.Substring(52, 5);
-            //09.0 Dígito verificador da agência 58 - 58 (1)
-            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoAgencia = registro.Substring(57, 1);
-            //10.0 Número da conta corrente 59 - 70 (12)
-            arquivoRetorno.Banco.Cedente.ContaBancaria.Conta = registro.Substring(58, 12);
-            //11.0 Dígito verificador da conta 71 - 71 (1)
-            arquivoRetorno.Banco.Cedente.ContaBancaria.DigitoConta = registro.Substring(70, 1);
-
-            //17.0 Data de geração do arquivo 144 - 151 (8)
-            arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
-            //19.0 Número seqüencial do arquivo NSA 158 - 163 (6)
-            arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
-        }
-
-        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
-        {
-            try
-            {
-                //Nº Controle do Participante
-                boleto.NumeroControleParticipante = registro.Substring(105, 25);
-
-                //Carteira
-                boleto.Carteira = registro.Substring(57, 1);
-                switch (boleto.Carteira)
-                {
-                    case "1":
-                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
-                        break;
-                    case "2":
-                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaVinculada;
-                        break;
-                    case "3":
-                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
-                        break;
-                    case "4":
-                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaDescontada;
-                        break;
-                    case "5":
-                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaVendor;
-                        break;
-                    default:
-                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
-                        break;
-                }
-
-                //Identificação do Título no Banco
-                string tmp = registro.Substring(37,20);
-                boleto.NossoNumero = tmp.Substring(8, 11);
-                boleto.NossoNumeroDV = tmp.Substring(19, 1);
-
-                //Identificação de Ocorrência
-                boleto.CodigoMovimentoRetorno = registro.Substring(15, 2);
-                boleto.DescricaoMovimentoRetorno = Cnab.MovimentoRetornoCnab240(boleto.CodigoMovimentoRetorno);
-                boleto.CodigoMotivoOcorrencia = registro.Substring(213, 10);
-                boleto.ListMotivosOcorrencia = Cnab.MotivoOcorrenciaCnab240( boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
-
-                //Número do Documento
-                boleto.NumeroDocumento = registro.Substring(58, 15);
-                boleto.EspecieDocumento = TipoEspecieDocumento.NaoDefinido;
-
-                //Valor do Título
-                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(81, 15)) / 100;
-                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(198, 15)) / 100;
-
-                //Data Vencimento do Título
-                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
-
-                //Dados Sacado
-                boleto.Sacado = new Sacado();
-                string str = registro.Substring(133, 15);
-                boleto.Sacado.CPFCNPJ = str.Substring(str.Length - 14, 14);
-                boleto.Sacado.Nome = registro.Substring(148, 40);
-
-
-                // Registro Retorno
-                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
-            }
-        }
-
-        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
-        {
-            try
-            {
-                //Valor do Título
-                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(17, 15)) / 100;
-                boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(32, 15)) / 100;
-                boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(47, 15)) / 100;
-                boleto.ValorIOF = Convert.ToDecimal(registro.Substring(62, 15)) / 100;
-                boleto.ValorPago = Convert.ToDecimal(registro.Substring(77, 15)) / 100;
-                boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(92, 15)) / 100;
-                boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(107, 15)) / 100;
-                boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(122, 15)) / 100;
-
-
-                //Data Ocorrência no Banco
-                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(137, 8)).ToString("##-##-####"));
-
-                // Data do Crédito
-                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(145, 8)).ToString("##-##-####"));
-
-                // Registro Retorno
-                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / U.", ex);
-            }
-        }
         #endregion
-
-        #endregion
-
 
         #region CNAB400
-        public void LerHeaderRetornoCNAB400(string registro)
-        {
-            try
-            {
-                if (registro.Substring(0, 9) != "02RETORNO")
-                    throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
-            }
-        }
 
         public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
@@ -730,16 +501,12 @@ namespace BoletoNetCore
             throw new NotImplementedException();
         }
 
-        public void LerTrailerRetornoCNAB400(string registro)
-        {
-        }
-
-        public string FormatarNomeArquivoRemessa(int numeroSequencial)
+        public override string FormatarNomeArquivoRemessa(int numeroSequencial)
         {
             return $"CB{DateTime.Now.Date.Day:00}{DateTime.Now.Date.Month:00}{numeroSequencial.ToString().PadLeft(9, '0').Right(2)}.rem";
         }
 
-        private string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        protected override string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
@@ -913,7 +680,7 @@ namespace BoletoNetCore
             }
         }
 
-        private string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral)
+        protected override string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral)
         {
             try
             {

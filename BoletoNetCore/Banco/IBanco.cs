@@ -32,6 +32,7 @@ namespace BoletoNetCore
         /// Gera o header do arquivo de remessa
         /// </summary>
         string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistro);
+
         /// <summary>
         /// Gera o Trailer do arquivo de remessa
         /// </summary>
