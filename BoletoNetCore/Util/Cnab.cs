@@ -106,6 +106,7 @@ namespace BoletoNetCore
             List<string> motivos = new List<string>(5);
             for (int posicao = 0; posicao < codigo.Length - 1; posicao = posicao + 2) {
                 var entrada = codigo.Substring(posicao, 2);
+                if (entrada.Equals("00")) continue;
                 motivos.Add(funcaoDominio(entrada)); //inclui o motivo a partir 
             }
             return motivos;
