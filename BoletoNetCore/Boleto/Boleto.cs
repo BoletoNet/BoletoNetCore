@@ -108,7 +108,8 @@ namespace BoletoNetCore
         /// <summary>
         /// C044 - Código de Movimento Retorno
         /// Código adotado pela FEBRABAN, para identificar o tipo de movimentação enviado nos
-        /// registros do arquivo de retorno.        /// </summary>
+        /// registros do arquivo de retorno.
+        /// </summary>
         public string CodigoMovimentoRetorno { get; set; } = "01";
 
         /// <summary>

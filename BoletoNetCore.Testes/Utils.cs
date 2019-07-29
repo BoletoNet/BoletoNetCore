@@ -151,9 +151,9 @@ namespace BoletoNetCore.Testes
             Assert.AreEqual(quantidadeBoletos, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletos);
 
             // Define os nomes dos arquivos, cria pasta e apaga arquivos anteriores
-            var nomeArquivoREM = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.REM");
-            var nomeArquivoPDF = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.PDF");
-            var nomeArquivoHTML = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.html");
+            var nomeArquivoREM = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nomeCarteira}_{tipoArquivo}.REM");
+            var nomeArquivoPDF = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nomeCarteira}_{tipoArquivo}.PDF");
+            var nomeArquivoHTML = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nomeCarteira}_{tipoArquivo}.html");
             if (!Directory.Exists(Path.GetDirectoryName(nomeArquivoREM)))
                 Directory.CreateDirectory(Path.GetDirectoryName(nomeArquivoREM));
             if (File.Exists(nomeArquivoREM))
