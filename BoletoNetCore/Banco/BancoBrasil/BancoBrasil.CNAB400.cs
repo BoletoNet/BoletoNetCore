@@ -178,7 +178,7 @@ namespace BoletoNetCore
             }
         }
 
-        public string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral)
+        public string GerarTrailerRemessaCNAB400(int numeroRegistroGeral, decimal valorBoletoGeral, int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples, int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada, int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada, int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
         {
             try
             {
@@ -460,5 +460,7 @@ namespace BoletoNetCore
         {
             
         }
+
+        
     }
 }

@@ -464,11 +464,7 @@ namespace BoletoNetCore
             }
         }
 
-        public string GerarTrailerRemessaCNAB240(int numeroRegistroGeral, 
-                        int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
-                        int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
-                        int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada, 
-                        int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
+        public string GerarTrailerRemessaCNAB240(int numeroRegistroGeral, decimal valorBoletoGeral, int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples, int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada, int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada, int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
         {
             try
             {
@@ -491,8 +487,6 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
             }
         }
-
-        
 
         #endregion
 

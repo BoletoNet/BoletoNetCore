@@ -118,14 +118,19 @@ namespace BoletoNetCore
                 {
                     case TipoArquivo.CNAB240:
                         return ((IBancoCNAB240)this).GerarTrailerRemessaCNAB240(
-                                             numeroRegistroGeral,  
+                                             numeroRegistroGeral, valorBoletoGeral,
                                              numeroRegistroCobrancaSimples,  valorCobrancaSimples,
                                              numeroRegistroCobrancaVinculada,  valorCobrancaVinculada,
                                              numeroRegistroCobrancaCaucionada,  valorCobrancaCaucionada,
                                              numeroRegistroCobrancaDescontada,  valorCobrancaDescontada);
 
                     case TipoArquivo.CNAB400:
-                        return ((IBancoCNAB400)this).GerarTrailerRemessaCNAB400(ref numeroRegistroGeral);
+                        return ((IBancoCNAB400)this).GerarTrailerRemessaCNAB400(
+                                             numeroRegistroGeral, valorBoletoGeral,
+                                             numeroRegistroCobrancaSimples, valorCobrancaSimples,
+                                             numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
+                                             numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
+                                             numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
                     default:
                         throw new Exception("Tipo de arquivo inexistente.");
                 }

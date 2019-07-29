@@ -62,7 +62,11 @@ namespace BoletoNetCore
         //remessa
         string GerarHeaderRemessaCNAB400(ref int numeroArquivoRemessa, ref int numeroRegistroGeral);
         string GerarDetalheRemessaCNAB400(Boleto boleto, ref int registro);
-        string GerarTrailerRemessaCNAB400(ref int numeroArquivoRemessa);
+        string GerarTrailerRemessaCNAB400(int numeroRegistroGeral, decimal valorBoletoGeral,
+            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
+            int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
+            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
+            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada);
 
         //retorno
         void LerHeaderRetornoCNAB400(string registro);
@@ -91,7 +95,7 @@ namespace BoletoNetCore
             int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
             int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada);
 
-        string GerarTrailerRemessaCNAB240(int numeroRegistroGeral,
+        string GerarTrailerRemessaCNAB240(int numeroRegistroGeral, decimal valorBoletoGeral,
             int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
             int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
             int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
