@@ -5,250 +5,24 @@ using static System.String;
 
 namespace BoletoNetCore
 {
-    internal sealed class BancoItau : IBanco
+    partial class BancoItau : IBancoCNAB400
     {
-        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoItau());
-
-        public Cedente Cedente { get; set; }
-        public int Codigo { get; } = 341;
-        public string Nome { get; } = "Itaú";
-        public string Digito { get; } = "7";
-        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
-        public bool RemoveAcentosArquivoRemessa { get; } = true;
-
-        public void FormataCedente()
+        public string GerarDetalheRemessaCNAB400(Boleto boleto, ref int registro)
         {
-            var contaBancaria = Cedente.ContaBancaria;
-
-            if (!CarteiraFactory<BancoItau>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
-                throw BoletoNetCoreException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
-
-            contaBancaria.FormatarDados("ATÉ O VENCIMENTO EM QUALQUER BANCO. APÓS O VENCIMENTO SOMENTE NO ITAÚ.", "", "", 5);
-
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
-        }
-
-        public void ValidaBoleto(Boleto boleto)
-        {
-        }
-
-        public void FormataNossoNumero(Boleto boleto)
-        {
-            var carteira = CarteiraFactory<BancoItau>.ObterCarteira(boleto.CarteiraComVariacao);
-            carteira.FormataNossoNumero(boleto);
-        }
-
-        public string FormataCodigoBarraCampoLivre(Boleto boleto)
-        {
-            var carteira = CarteiraFactory<BancoItau>.ObterCarteira(boleto.CarteiraComVariacao);
-            return carteira.FormataCodigoBarraCampoLivre(boleto);
-        }
-
-        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
-        {
-            try
+            var detalhe = GerarDetalheRemessaCNAB400Registro1(boleto, ref registro);
+            var strline = GerarDetalheRemessaCNAB400Registro2(boleto, ref registro);
+            if (!IsNullOrWhiteSpace(strline))
             {
-                var header = Empty;
-                switch (tipoArquivo)
-                {
-                    case TipoArquivo.CNAB400:
-                        header += GerarHeaderRemessaCNAB400(numeroArquivoRemessa, ref numeroRegistroGeral);
-                        break;
-                    default:
-                        throw new Exception("Tipo de arquivo inexistente.");
-                }
-                return header;
+                detalhe += Environment.NewLine;
+                detalhe += strline;
             }
-            catch (Exception ex)
+            strline = GerarDetalheRemessaCNAB400Registro5(boleto, ref registro);
+            if (!IsNullOrWhiteSpace(strline))
             {
-                throw BoletoNetCoreException.ErroAoGerarRegistroHeaderDoArquivoRemessa(ex);
+                detalhe += Environment.NewLine;
+                detalhe += strline;
             }
-        }
-
-        public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
-        {
-            try
-            {
-                string detalhe = Empty, strline = Empty;
-                switch (tipoArquivo)
-                {
-                    case TipoArquivo.CNAB400:
-                        detalhe += GerarDetalheRemessaCNAB400Registro1(boleto, ref numeroRegistro);
-                        strline = GerarDetalheRemessaCNAB400Registro2(boleto, ref numeroRegistro);
-                        if (!IsNullOrWhiteSpace(strline))
-                        {
-                            detalhe += Environment.NewLine;
-                            detalhe += strline;
-                        }
-                        strline = GerarDetalheRemessaCNAB400Registro5(boleto, ref numeroRegistro);
-                        if (!IsNullOrWhiteSpace(strline))
-                        {
-                            detalhe += Environment.NewLine;
-                            detalhe += strline;
-                        }
-                        break;
-                    default:
-                        throw new Exception("Tipo de arquivo inexistente.");
-                }
-                return detalhe;
-            }
-            catch (Exception ex)
-            {
-                throw BoletoNetCoreException.ErroAoGerarRegistroDetalheDoArquivoRemessa(ex);
-            }
-        }
-
-        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
-            ref int numeroRegistroGeral, decimal valorBoletoGeral,
-            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
-            int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
-            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
-            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
-        {
-            try
-            {
-                var trailer = Empty;
-                switch (tipoArquivo)
-                {
-                    case TipoArquivo.CNAB400:
-                        trailer = GerarTrailerRemessaCNAB400(ref numeroRegistroGeral);
-                        break;
-                    default:
-                        throw new Exception("Tipo de arquivo inexistente.");
-                }
-                return trailer;
-            }
-            catch (Exception ex)
-            {
-                throw BoletoNetCoreException.ErroAoGerrarRegistroTrailerDoArquivoRemessa(ex);
-            }
-        }
-
-        public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LerHeaderRetornoCNAB400(string registro)
-        {
-            try
-            {
-                if (registro.Substring(0, 9) != "02RETORNO")
-                    throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
-            }
-        }
-
-        public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
-        {
-            try
-            {
-                //Nº Controle do Participante
-                boleto.NumeroControleParticipante = registro.Substring(37, 25);
-
-                //Carteira
-                boleto.Carteira = registro.Substring(82, 3);
-                boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
-
-                //Identificação do Título no Banco
-                boleto.NossoNumero = registro.Substring(85, 8);
-                boleto.NossoNumeroDV = registro.Substring(93, 1); //DV
-                boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
-
-                //Identificação de Ocorrência
-                boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
-                boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
-                boleto.CodigoMotivoOcorrencia = registro.Substring(377, 8);
-
-                //Número do Documento
-                boleto.NumeroDocumento = registro.Substring(116, 10);
-                boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
-
-                //Valores do Título
-                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
-                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
-                boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(188, 13)) / 100;
-                boleto.ValorIOF = Convert.ToDecimal(registro.Substring(214, 13)) / 100;
-                boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
-                boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
-                boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
-                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
-                boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
-
-                //Data Ocorrência no Banco
-                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
-
-                //Data Vencimento do Título
-                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
-
-                // Data do Crédito
-                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
-
-                // Registro Retorno
-                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
-            }
-        }
-
-        public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LerTrailerRetornoCNAB400(string registro)
-        {
-        }
-
-        public string FormatarNomeArquivoRemessa(int numeroSequencial)
-        {
-            return "";
-        }
-
-        private string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)
-        {
-            try
-            {
-                numeroRegistroGeral++;
-                var reg = new TRegistroEDI();
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0002, 001, 0, "1", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0003, 007, 0, "REMESSA", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0010, 002, 0, "01", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0012, 015, 0, "COBRANCA", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0027, 004, 0, Cedente.ContaBancaria.Agencia, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0031, 002, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0033, 005, 0, Cedente.ContaBancaria.Conta, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0038, 001, 0, Cedente.ContaBancaria.DigitoConta, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0039, 008, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0047, 030, 0, Cedente.Nome, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0077, 003, 0, "341", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0080, 015, 0, "BANCO ITAU SA", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0095, 006, 0, DateTime.Now, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0101, 294, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
-                reg.CodificarLinha();
-                return reg.LinhaRegistro;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
-            }
+            return detalhe;
         }
 
         private string GerarDetalheRemessaCNAB400Registro1(Boleto boleto, ref int numeroRegistroGeral)
@@ -405,7 +179,38 @@ namespace BoletoNetCore
             }
         }
 
-        private string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral)
+        public string GerarHeaderRemessaCNAB400(ref int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        {
+            try
+            {
+                numeroRegistroGeral++;
+                var reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0002, 001, 0, "1", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0003, 007, 0, "REMESSA", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0010, 002, 0, "01", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0012, 015, 0, "COBRANCA", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0027, 004, 0, Cedente.ContaBancaria.Agencia, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0031, 002, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0033, 005, 0, Cedente.ContaBancaria.Conta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0038, 001, 0, Cedente.ContaBancaria.DigitoConta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0039, 008, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0047, 030, 0, Cedente.Nome, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0077, 003, 0, "341", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0080, 015, 0, "BANCO ITAU SA", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0095, 006, 0, DateTime.Now, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0101, 294, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
+            }
+        }
+
+        public string GerarTrailerRemessaCNAB400(int numeroRegistroGeral, decimal valorBoletoGeral, int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples, int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada, int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada, int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
         {
             try
             {
@@ -421,6 +226,78 @@ namespace BoletoNetCore
             {
                 throw new Exception("Erro durante a geração do registro TRAILER do arquivo de REMESSA.", ex);
             }
+        }
+
+        public override void LerHeaderRetornoCNAB400(string registro)
+        {
+            try
+            {
+                if (registro.Substring(0, 9) != "02RETORNO")
+                    throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
+            }
+        }
+
+        public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
+        {
+            try
+            {
+                //Nº Controle do Participante
+                boleto.NumeroControleParticipante = registro.Substring(37, 25);
+
+                //Carteira
+                boleto.Carteira = registro.Substring(82, 3);
+                boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+
+                //Identificação do Título no Banco
+                boleto.NossoNumero = registro.Substring(85, 8);
+                boleto.NossoNumeroDV = registro.Substring(93, 1); //DV
+                boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+
+                //Identificação de Ocorrência
+                boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
+                boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
+                boleto.CodigoMotivoOcorrencia = registro.Substring(377, 8);
+
+                //Número do Documento
+                boleto.NumeroDocumento = registro.Substring(116, 10);
+                boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
+
+                //Valores do Título
+                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
+                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
+                boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(188, 13)) / 100;
+                boleto.ValorIOF = Convert.ToDecimal(registro.Substring(214, 13)) / 100;
+                boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
+                boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
+                boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
+                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
+                boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
+
+                //Data Ocorrência no Banco
+                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
+
+                //Data Vencimento do Título
+                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
+
+                // Data do Crédito
+                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
+
+                // Registro Retorno
+                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
+            }
+        }
+
+        public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
         }
 
         private string DescricaoOcorrenciaCnab400(string codigo)
@@ -529,6 +406,13 @@ namespace BoletoNetCore
                     return "99";
             }
         }
+
+        public void LerTrailerRetornoCNAB400(string registro)
+        {
+            
+        }
+
+        
     }
 }
 

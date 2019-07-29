@@ -60,7 +60,7 @@ namespace BoletoNetCore.Testes
             // Após preencher a coleção com os boletos, siga com os exemplos abaixo...
 
             // Verifica se existe a pasta temporaria para receber os arquivos do teste:
-            var nomePasta = Path.GetTempPath() + "Boleto2Net\\";
+            var nomePasta = Path.GetTempPath() + "BoletoNetCore\\";
             if (Directory.Exists(nomePasta) == false)
                 Directory.CreateDirectory(nomePasta);
 
