@@ -5,140 +5,76 @@ using BoletoNetCore.Extensions;
 
 namespace BoletoNetCore
 {
-    internal sealed class BancoBanrisul : IBanco
+    partial class BancoBanrisul : IBancoCNAB400
     {
-        internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new BancoBanrisul());
+        #region Remessa - CNAB400
 
-        public Cedente Cedente { get; set; }
-        public int Codigo { get; } = 41;
-        public string Nome { get; } = "Banrisul";
-        public string Digito { get; } = "8";
-        public List<string> IdsRetornoCnab400RegistroDetalhe { get; } = new List<string> { "1" };
-        public bool RemoveAcentosArquivoRemessa { get; } = true;
-
-        public void FormataCedente()
+        public string GerarDetalheRemessaCNAB400(Boleto boleto, ref int registro)
         {
-            var contaBancaria = Cedente.ContaBancaria;
+            // Registro 1 - Obrigatório
+            var detalhe = GerarDetalheRemessaCNAB400Registro1(boleto, ref registro);
 
-            if (!CarteiraFactory<BancoBanrisul>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
-                throw BoletoNetCoreException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
-
-            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO.", "SAC BANRISUL: 0800 646 1515<br>OUVIDORIA BANRISUL: 0800 644 2200", "", 8);
-
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia} {contaBancaria.Conta}{contaBancaria.DigitoConta}";
-
+            // Registro 1 Adicional - Registro Opcional
+            var strline = GerarDetalheRemessaCNAB400Registro1Mensagem(boleto, ref registro);
+            if (!string.IsNullOrWhiteSpace(strline))
+            {
+                detalhe += Environment.NewLine;
+                detalhe += strline;
+            }
+            return detalhe;
         }
 
-        public void ValidaBoleto(Boleto boleto)
-        {
-        }
-
-        public void FormataNossoNumero(Boleto boleto)
-        {
-            var carteira = CarteiraFactory<BancoBanrisul>.ObterCarteira(boleto.CarteiraComVariacao);
-            carteira.FormataNossoNumero(boleto);
-        }
-
-        public string FormataCodigoBarraCampoLivre(Boleto boleto)
-        {
-            var carteira = CarteiraFactory<BancoBanrisul>.ObterCarteira(boleto.CarteiraComVariacao);
-            return carteira.FormataCodigoBarraCampoLivre(boleto);
-        }
-
-
-        public string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistroGeral)
+        public string GerarHeaderRemessaCNAB400(ref int numeroArquivoRemessa, ref int numeroRegistroGeral)
         {
             try
             {
-                var header = string.Empty;
-                switch (tipoArquivo)
-                {
-                    case TipoArquivo.CNAB400:
-                        header += GerarHeaderRemessaCNAB400(numeroArquivoRemessa, ref numeroRegistroGeral);
-                        break;
-                    default:
-                        throw new Exception("Header - Tipo de arquivo inexistente.");
-                }
-                return header;
+                numeroRegistroGeral++;
+                var reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 009, 0, "01REMESSA", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0010, 017, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0027, 004, 0, Cedente.ContaBancaria.Agencia, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0031, 008, 0, Cedente.ContaBancaria.Conta, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0039, 001, 0, Cedente.ContaBancaria.DigitoConta, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0040, 007, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0047, 030, 0, Cedente.Nome, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0077, 011, 0, "041BANRISUL", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0088, 007, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0095, 006, 0, DateTime.Now, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0101, 009, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0110, 004, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0114, 001, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0115, 001, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0116, 001, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0117, 010, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0127, 268, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
             }
             catch (Exception ex)
             {
-                throw BoletoNetCoreException.ErroAoGerarRegistroHeaderDoArquivoRemessa(ex);
+                throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
             }
         }
 
-        public string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        public string GerarTrailerRemessaCNAB400(int numeroRegistroGeral, decimal valorBoletoGeral, int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples, int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada, int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada, int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
         {
             try
             {
-                var detalhe = string.Empty;
-                var strline = string.Empty;
-                switch (tipoArquivo)
-                {
-                    case TipoArquivo.CNAB400:
-
-                        // Registro 1 - Obrigatório
-                        detalhe += GerarDetalheRemessaCNAB400Registro1(boleto, ref numeroRegistro);
-
-                        // Registro 1 Adicional - Registro Opcional
-                        strline = GerarDetalheRemessaCNAB400Registro1Mensagem(boleto, ref numeroRegistro);
-                        if (!string.IsNullOrWhiteSpace(strline))
-                        {
-                            detalhe += Environment.NewLine;
-                            detalhe += strline;
-                        }
-
-                        break;
-                    default:
-                        throw new Exception("Tipo de arquivo inexistente.");
-                }
-                return detalhe;
+                numeroRegistroGeral++;
+                var reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "9", ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 026, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0028, 013, 2, valorBoletoGeral, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0041, 354, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
             }
             catch (Exception ex)
             {
-                throw BoletoNetCoreException.ErroAoGerarRegistroDetalheDoArquivoRemessa(ex);
+                throw new Exception("Erro durante a geração do registro TRAILER do arquivo de REMESSA.", ex);
             }
-        }
-
-        public string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,
-            ref int numeroRegistroGeral, decimal valorBoletoGeral,
-            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
-            int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
-            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
-            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
-        {
-            try
-            {
-                var trailer = string.Empty;
-                switch (tipoArquivo)
-                {
-                    case TipoArquivo.CNAB400:
-                        trailer += GerarTrailerRemessaCNAB400(ref numeroRegistroGeral, valorBoletoGeral);
-                        break;
-                    default:
-                        throw new Exception("Tipo de arquivo inexistente.");
-                }
-                return trailer;
-            }
-            catch (Exception ex)
-            {
-                throw BoletoNetCoreException.ErroAoGerrarRegistroTrailerDoArquivoRemessa(ex);
-            }
-        }
-
-        public void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
-        {
-            throw new NotImplementedException();
         }
 
         private string DescricaoOcorrenciaCnab400(string codigo)
@@ -225,40 +161,7 @@ namespace BoletoNetCore
         }
 
 
-        #region Remessa - CNAB400
-
-        private string GerarHeaderRemessaCNAB400(int numeroArquivoRemessa, ref int numeroRegistroGeral)
-        {
-            try
-            {
-                numeroRegistroGeral++;
-                var reg = new TRegistroEDI();
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 009, 0, "01REMESSA", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0010, 017, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0027, 004, 0, Cedente.ContaBancaria.Agencia, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0031, 008, 0, Cedente.ContaBancaria.Conta, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0039, 001, 0, Cedente.ContaBancaria.DigitoConta, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0040, 007, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0047, 030, 0, Cedente.Nome, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0077, 011, 0, "041BANRISUL", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0088, 007, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0095, 006, 0, DateTime.Now, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0101, 009, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0110, 004, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0114, 001, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0115, 001, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0116, 001, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0117, 010, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0127, 268, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
-                reg.CodificarLinha();
-                return reg.LinhaRegistro;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
-            }
-        }
+        
 
         private string GerarDetalheRemessaCNAB400Registro1(Boleto boleto, ref int numeroRegistroGeral)
         {
@@ -407,31 +310,11 @@ namespace BoletoNetCore
             }
         }
 
-        private string GerarTrailerRemessaCNAB400(ref int numeroRegistroGeral, decimal valorBoletoGeral)
-        {
-            try
-            {
-                numeroRegistroGeral++;
-                var reg = new TRegistroEDI();
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "9", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 026, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0028, 013, 2, valorBoletoGeral, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0041, 354, 0, string.Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
-                reg.CodificarLinha();
-                return reg.LinhaRegistro;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro durante a geração do registro TRAILER do arquivo de REMESSA.", ex);
-            }
-        }
-
         #endregion
 
         #region Retorno - CNAB400
 
-        public void LerHeaderRetornoCNAB400(string registro)
+        public override void LerHeaderRetornoCNAB400(string registro)
         {
             try
             {
@@ -516,11 +399,7 @@ namespace BoletoNetCore
         {
         }
 
-        public string FormatarNomeArquivoRemessa(int numeroSequencial)
-        {
-            return "";
-        }
-
         #endregion
+
     }
 }
