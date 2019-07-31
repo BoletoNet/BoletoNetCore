@@ -1,4 +1,7 @@
 version: 3.0.1.{build}
+branches:
+  only:
+  - master
 image: Visual Studio 2019
 environment:
   $msbuildPath: $(cmd /c where msbuild)
