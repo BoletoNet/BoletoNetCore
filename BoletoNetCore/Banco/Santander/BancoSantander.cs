@@ -16,19 +16,19 @@ namespace BoletoNetCore
             RemoveAcentosArquivoRemessa = true;
         }
 
-        public void FormataCedente()
+        public void FormataBeneficiario()
         {
-            var contaBancaria = Cedente.ContaBancaria;
+            var contaBancaria = Beneficiario.ContaBancaria;
 
             if (!CarteiraFactory<BancoSantander>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
                 throw BoletoNetCoreException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
             contaBancaria.FormatarDados("PAGÁVEL PREFERENCIALMENTE NO BANCO SANTANDER.", "", "", digitosConta: 9);
 
-            var codigoCedente = Cedente.Codigo;
-            Cedente.Codigo = codigoCedente.Length <= 7 ? codigoCedente.PadLeft(7, '0') : throw BoletoNetCoreException.CodigoCedenteInvalido(codigoCedente, 7);
+            var codigoBeneficiario = Beneficiario.Codigo;
+            Beneficiario.Codigo = codigoBeneficiario.Length <= 7 ? codigoBeneficiario.PadLeft(7, '0') : throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, 7);
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia} / {Cedente.Codigo}";
+            Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {Beneficiario.Codigo}";
         }
 
         public override string FormatarNomeArquivoRemessa(int numeroSequencial)

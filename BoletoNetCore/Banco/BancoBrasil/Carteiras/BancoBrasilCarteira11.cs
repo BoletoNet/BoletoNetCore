@@ -20,7 +20,7 @@ namespace BoletoNetCore
             // Ou deve estar em branco (o banco irá gerar)
             // Ou deve estar com 17 posições, iniciando com o código do convênio
 
-            if (boleto.Banco.Cedente.Codigo.Length != 7)
+            if (boleto.Banco.Beneficiario.Codigo.Length != 7)
                 throw new Exception("Não foi possível formatar o nosso número.");
 
             if (IsNullOrWhiteSpace(boleto.NossoNumero) || boleto.NossoNumero == "00000000000000000")
@@ -33,8 +33,8 @@ namespace BoletoNetCore
             else
             {
                 // Nosso Número informado pela empresa
-                if (boleto.NossoNumero.Length != 17 || !boleto.NossoNumero.StartsWith(boleto.Banco.Cedente.Codigo))
-                    throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 17 dígitos e iniciar com \"{boleto.Banco.Cedente.Codigo}\".");
+                if (boleto.NossoNumero.Length != 17 || !boleto.NossoNumero.StartsWith(boleto.Banco.Beneficiario.Codigo))
+                    throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 17 dígitos e iniciar com \"{boleto.Banco.Beneficiario.Codigo}\".");
                 boleto.NossoNumeroDV = "";
                 boleto.NossoNumeroFormatado = boleto.NossoNumero;
             }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace BoletoNetCore
 {
     [Serializable(), Browsable(false)]
-    public class Sacado
+    public class Pagador
     {
         private string _cpfcnpj = string.Empty;
 

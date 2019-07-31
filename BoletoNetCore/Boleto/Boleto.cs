@@ -17,10 +17,10 @@ namespace BoletoNetCore
         public Boleto(IBanco banco)
         {
             Banco = banco;
-            Carteira = banco.Cedente.ContaBancaria.CarteiraPadrao;
-            CarteiraImpressaoBoleto = banco.Cedente.ContaBancaria.CarteiraPadrao;
-            VariacaoCarteira = banco.Cedente.ContaBancaria.VariacaoCarteiraPadrao;
-            TipoCarteira = banco.Cedente.ContaBancaria.TipoCarteiraPadrao;
+            Carteira = banco.Beneficiario.ContaBancaria.CarteiraPadrao;
+            CarteiraImpressaoBoleto = banco.Beneficiario.ContaBancaria.CarteiraPadrao;
+            VariacaoCarteira = banco.Beneficiario.ContaBancaria.VariacaoCarteiraPadrao;
+            TipoCarteira = banco.Beneficiario.ContaBancaria.TipoCarteiraPadrao;
         }
 
         /// <summary>
@@ -34,9 +34,9 @@ namespace BoletoNetCore
             //se o arquivo de retorno for criado par multiplas carteiras, ignora a carteira (para compatibilidade)
             if (!ignorarCarteira)
             {
-                Carteira = banco.Cedente.ContaBancaria.CarteiraPadrao;
-                VariacaoCarteira = banco.Cedente.ContaBancaria.VariacaoCarteiraPadrao;
-                TipoCarteira = banco.Cedente.ContaBancaria.TipoCarteiraPadrao;
+                Carteira = banco.Beneficiario.ContaBancaria.CarteiraPadrao;
+                VariacaoCarteira = banco.Beneficiario.ContaBancaria.VariacaoCarteiraPadrao;
+                TipoCarteira = banco.Beneficiario.ContaBancaria.TipoCarteiraPadrao;
             }
         }
 
@@ -71,7 +71,7 @@ namespace BoletoNetCore
         public decimal ValorTitulo { get; set; }
 
         public bool ImprimirValoresAuxiliares { get; set; } = false;
-        public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o sacado pagou. Se não existir essa informação no arquivo retorno, deixar zerada.
+        public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o pagador pagou. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que será creditado na conta corrente. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorJurosDia { get; set; }
         public decimal ValorMulta { get; set; }
@@ -161,8 +161,8 @@ namespace BoletoNetCore
         public string RegistroArquivoRetorno { get; set; } = string.Empty;
 
         public IBanco Banco { get; set; }
-        public Sacado Sacado { get; set; } = new Sacado();
-        public Sacado Avalista { get; set; } = new Sacado();
+        public Pagador Pagador { get; set; } = new Pagador();
+        public Pagador Avalista { get; set; } = new Pagador();
         public CodigoBarra CodigoBarra { get; } = new CodigoBarra();
         public ObservableCollection<GrupoDemonstrativo> Demonstrativos { get; } = new ObservableCollection<GrupoDemonstrativo>();
 
@@ -172,17 +172,17 @@ namespace BoletoNetCore
             if (Banco == null)
                 throw new Exception("Boleto não possui Banco.");
 
-            // Cedente Obrigatório
-            if (Banco.Cedente == null)
-                throw new Exception("Boleto não possui cedente.");
+            // Beneficiario Obrigatório
+            if (Banco.Beneficiario == null)
+                throw new Exception("Boleto não possui beneficiário.");
 
             // Conta Bancária Obrigatória
-            if (Banco.Cedente.ContaBancaria == null)
+            if (Banco.Beneficiario.ContaBancaria == null)
                 throw new Exception("Boleto não possui conta bancária.");
 
-            // Sacado Obrigatório
-            if (Sacado == null)
-                throw new Exception("Boleto não possui sacado.");
+            // Pagador Obrigatório
+            if (Pagador == null)
+                throw new Exception("Boleto não possui pagador.");
 
             // Verifica se data do processamento é valida
             if (DataProcessamento == DateTime.MinValue)

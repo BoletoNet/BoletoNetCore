@@ -82,7 +82,7 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Formata o CPF ou CNPJ do Cedente ou do Sacado no formato: 000.000.000-00, 00.000.000/0001-00 respectivamente.
+        /// Formata o CPF ou CNPJ do Beneficiario ou do Pagador no formato: 000.000.000-00, 00.000.000/0001-00 respectivamente.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>

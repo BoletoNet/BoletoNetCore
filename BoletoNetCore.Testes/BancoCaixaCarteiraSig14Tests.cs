@@ -23,8 +23,8 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.Caixa);
-            _banco.Cedente = Utils.GerarCedente("123456", "0", "", contaBancaria);
-            _banco.FormataCedente();
+            _banco.Beneficiario = Utils.GerarBeneficiario("123456", "0", "", contaBancaria);
+            _banco.FormataBeneficiario();
         }
 
         [Test]
@@ -59,7 +59,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Sacado = Utils.GerarSacado()
+                Pagador = Utils.GerarPagador()
             };
 
             //Ação

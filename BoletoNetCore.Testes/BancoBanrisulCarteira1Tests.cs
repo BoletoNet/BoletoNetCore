@@ -22,20 +22,20 @@ namespace BoletoNetCore.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro
             };
             _banco = Banco.Instancia(Bancos.Banrisul);
-            _banco.Cedente = Utils.GerarCedente("0340123456063", "", "", contaBancaria);
-            _banco.FormataCedente();
+            _banco.Beneficiario = Utils.GerarBeneficiario("0340123456063", "", "", contaBancaria);
+            _banco.FormataBeneficiario();
         }
 
         [Test]
         public void Banrisul_1_REM400_BancoEmite()
         {
-            _banco.Cedente.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Banco;
+            _banco.Beneficiario.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Banco;
             Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBanrisulCarteira1Tests) + "_BancoEmite", 5, true, "?", 0);
         }
         [Test]
         public void Banrisul_1_REM400_EmpresaEmite()
         {
-            _banco.Cedente.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa;
+            _banco.Beneficiario.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa;
             Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBanrisulCarteira1Tests) + "_EmpresaEmite", 5, true, "?", 12345);
         }
 
@@ -51,7 +51,7 @@ namespace BoletoNetCore.Testes
         public void Banrisul_1_BoletoOK(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             // Ambiente - Emissão pela empresa
-            _banco.Cedente.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa;
+            _banco.Beneficiario.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa;
             var boleto = new Boleto(_banco)
             {
                 DataVencimento = new DateTime(anoMesDia[0], anoMesDia[1], anoMesDia[2]),
@@ -59,7 +59,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Sacado = Utils.GerarSacado()
+                Pagador = Utils.GerarPagador()
             };
 
             //Ação

@@ -1,7 +1,7 @@
 namespace BoletoNetCore
 {
     /// <summary>
-    /// Representa o endereço do Cedente ou Sacado.
+    /// Representa o endereço do Beneficiário ou Pagador.
     /// </summary>
     public class Endereco
     {
