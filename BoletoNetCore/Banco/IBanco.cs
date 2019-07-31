@@ -7,7 +7,7 @@ namespace BoletoNetCore
         /// <summary>
         /// Beneficiário de uma Cobrança
         /// </summary>
-        Cedente Cedente { get; set; }
+        Beneficiario Beneficiario { get; set; }
         int Codigo { get; }
         string Nome { get; }
         string Digito { get; }
@@ -15,9 +15,9 @@ namespace BoletoNetCore
         bool RemoveAcentosArquivoRemessa { get; }
 
         /// <summary>
-        /// Formata o cedente (Agência, Conta, Código)
+        /// Formata o beneficiário (Agência, Conta, Código)
         /// </summary>
-        void FormataCedente();
+        void FormataBeneficiario();
         /// <summary>
         /// Formata o campo livre do código de barras
         /// </summary>

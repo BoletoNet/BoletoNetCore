@@ -41,7 +41,7 @@ namespace BoletoNetCore.Pdf
                         Boleto = boletoTmp,
                         OcultarInstrucoes = false,
                         MostrarComprovanteEntrega = true,
-                        MostrarEnderecoCedente = true
+                        MostrarEnderecoBeneficiario = true
                     };
                     {
                         html.Append("<div style=\"page-break-after: always;\">");

@@ -33,7 +33,7 @@ namespace BoletoNetCore
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            return $"9{boleto.Banco.Cedente.Codigo}{boleto.NossoNumero}{boleto.NossoNumeroDV}0101";
+            return $"9{boleto.Banco.Beneficiario.Codigo}{boleto.NossoNumero}{boleto.NossoNumeroDV}0101";
         }
     }
 }

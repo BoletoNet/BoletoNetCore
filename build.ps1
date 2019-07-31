@@ -7,7 +7,7 @@ $nuspecPath = "$rootDir\BoletoNetCore\BoletoNetCore.nuspec"
 $nupkgPath = "$rootDir\NuGet\"
 
 [xml]$xml = cat $nuspecPath
-$xml.package.metadata.version="3.0.0."+"$buildNumber"
+$xml.package.metadata.version="3.0.1."+"$buildNumber"
 $xml.Save($nuspecPath)
 
 <#dotnet test $solutionTest#>

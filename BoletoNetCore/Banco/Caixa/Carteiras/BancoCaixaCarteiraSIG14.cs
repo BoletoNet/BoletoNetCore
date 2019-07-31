@@ -43,9 +43,9 @@ namespace BoletoNetCore
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var cedente = boleto.Banco.Cedente;
-            var contaBancaria = cedente.ContaBancaria;
-            var formataCampoLivre = $"{cedente.Codigo}{cedente.CodigoDV}{boleto.NossoNumero.Substring(2, 3)}1{boleto.NossoNumero.Substring(5, 3)}4{boleto.NossoNumero.Substring(8, 9)}";
+            var beneficiario = boleto.Banco.Beneficiario;
+            var contaBancaria = beneficiario.ContaBancaria;
+            var formataCampoLivre = $"{beneficiario.Codigo}{beneficiario.CodigoDV}{boleto.NossoNumero.Substring(2, 3)}1{boleto.NossoNumero.Substring(5, 3)}4{boleto.NossoNumero.Substring(8, 9)}";
             formataCampoLivre += formataCampoLivre.CalcularDVCaixa();
             return formataCampoLivre;
         }

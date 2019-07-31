@@ -20,16 +20,16 @@ namespace BoletoNetCore
         public TipoDocumento TipoDocumento { get; set; } = TipoDocumento.Tradicional;
         public string LocalPagamento { get; set; } = "PAGÁVEL EM QUALQUER BANCO.";
         public string MensagemFixaTopoBoleto { get; set; } = "";
-        public string MensagemFixaSacado { get; set; } = "";
+        public string MensagemFixaPagador { get; set; } = "";
         public int CodigoBancoCorrespondente { get; set; }
         public string NossoNumeroBancoCorrespondente { get; set; }
         public TipoDistribuicaoBoleto TipoDistribuicao { get; set; } = TipoDistribuicaoBoleto.ClienteDistribui;
 
-        public void FormatarDados(string localPagamento, string mensagemFixaTopoBoleto, string mensagemFixaSacado, int digitosConta)
+        public void FormatarDados(string localPagamento, string mensagemFixaTopoBoleto, string mensagemFixaPagador, int digitosConta)
         {
             LocalPagamento = localPagamento;
             MensagemFixaTopoBoleto = mensagemFixaTopoBoleto;
-            MensagemFixaSacado = mensagemFixaSacado;
+            MensagemFixaPagador = mensagemFixaPagador;
 
             var agencia = Agencia;
             Agencia = agencia.Length <= 4 ? agencia.PadLeft(4, '0') : throw BoletoNetCoreException.AgenciaInvalida(agencia, 4);

@@ -12,17 +12,17 @@ namespace BoletoNetCore.Testes
 
         private static int _proximoNossoNumero = 1;
 
-        internal static Cedente GerarCedente(string codigoCedente, string digitoCodigoCedente, string codigoTransmissao, ContaBancaria contaBancaria)
+        internal static Beneficiario GerarBeneficiario(string codigoBeneficiario, string digitoCodigoBeneficiario, string codigoTransmissao, ContaBancaria contaBancaria)
         {
-            return new Cedente
+            return new Beneficiario
             {
                 CPFCNPJ = "86.875.666/0001-09",
-                Nome = "Cedente Teste",
-                Codigo = codigoCedente,
-                CodigoDV = digitoCodigoCedente,
+                Nome = "Beneficiario Teste",
+                Codigo = codigoBeneficiario,
+                CodigoDV = digitoCodigoBeneficiario,
                 Endereco = new Endereco
                 {
-                    LogradouroEndereco = "Rua Teste do Cedente",
+                    LogradouroEndereco = "Rua Teste do Beneficiário",
                     LogradouroNumero = "789",
                     LogradouroComplemento = "Cj 333",
                     Bairro = "Bairro",
@@ -34,13 +34,13 @@ namespace BoletoNetCore.Testes
             };
         }
 
-        internal static Sacado GerarSacado()
+        internal static Pagador GerarPagador()
         {
             if (_contador % 2 == 0)
-                return new Sacado
+                return new Pagador
                 {
                     CPFCNPJ = "443.316.101-28",
-                    Nome = "Sacado Teste PF",
+                    Nome = "Pagador Teste PF",
                     Observacoes = "Matricula 678/9",
                     Endereco = new Endereco
                     {
@@ -52,10 +52,10 @@ namespace BoletoNetCore.Testes
                         CEP = "56789012"
                     }
                 };
-            return new Sacado
+            return new Pagador
             {
                 CPFCNPJ = "71.738.978/0001-01",
-                Nome = "Sacado Teste PJ",
+                Nome = "Pagador Teste PJ",
                 Observacoes = "Matricula 123/4",
                 Endereco = new Endereco
                 {
@@ -87,7 +87,7 @@ namespace BoletoNetCore.Testes
 
             var boleto = new Boleto(banco)
             {
-                Sacado = GerarSacado(),
+                Pagador = GerarPagador(),
                 DataEmissao = DateTime.Now.AddDays(-3),
                 DataProcessamento = DateTime.Now,
                 DataVencimento = DateTime.Now.AddMonths(i),
@@ -121,8 +121,8 @@ namespace BoletoNetCore.Testes
             // Avalista
             if (_contador % 3 == 0)
             {
-                boleto.Avalista = GerarSacado();
-                boleto.Avalista.Nome = boleto.Avalista.Nome.Replace("Sacado", "Avalista");
+                boleto.Avalista = GerarPagador();
+                boleto.Avalista.Nome = boleto.Avalista.Nome.Replace("Pagador", "Avalista");
             }
             // Grupo Demonstrativo do Boleto
             var grupoDemonstrativo = new GrupoDemonstrativo { Descricao = "GRUPO 1" };
@@ -207,7 +207,7 @@ namespace BoletoNetCore.Testes
                             Boleto = boletoTmp,
                             OcultarInstrucoes = false,
                             MostrarComprovanteEntrega = false,
-                            MostrarEnderecoCedente = true,
+                            MostrarEnderecoBeneficiario = true,
                             ExibirDemonstrativo = true
                         };
 

@@ -21,10 +21,10 @@
 			Esta propriedade só é necessária se for implementar o layout CNAB400, pois no CNAB240 parece existir um padrão entre todos os bancos.
 			Inclua os valores na ordem correta, pois o primeiro item da lista, identifica um novo boleto. Os demais registros, aproveitam o último boleto criado.
 
-2.2 - Método FormataCedente
+2.2 - Método FormataBeneficiario
 		O método FormatarDados, ajusta a informação de Local de Pagamento, e verifica se a agência tem 4 dígitos e se a conta respeito o tamanho de caracteres do banco.
-		Verificar os limites (Length) que o banco utiliza para cada informação: Código do Cedente (se existir)
-		CodigoFormatado = Deve estar no padrão que o banco utiliza para impressão da informação no boleto. Alguns bancos utilizam a agência/conta, outros utilizam agência/códigocedente. Fique atento!
+		Verificar os limites (Length) que o banco utiliza para cada informação: Código do Beneficiário (se existir)
+		CodigoFormatado = Deve estar no padrão que o banco utiliza para impressão da informação no boleto. Alguns bancos utilizam a agência/conta, outros utilizam agência/código_beneficiário. Fique atento!
 		
 
 
@@ -104,7 +104,7 @@
 		boleto.CodigoOcorrencia
 		boleto.DescricaoOcorrencia (Para o layout CNAB240, utilizar a função Cnab.OcorrenciaCnab240() e conferir se está de acordo com o manual do banco. Se for o layout CNAB400, criar uma função DescricaoOcorrenciaCnab400() conforme manual do banco.)
         boleto.CodigoOcorrenciaAuxiliar
-	Identificação do Título no Cedente
+	Identificação do Título no Beneficiário
         boleto.NumeroDocumento
 		boleto.EspecieDocumento (Se não houver a informação no retorno, utilizar TipoEspecieDocumento.NaoDefinido / Se houver a informação no retorno, mas não encontrar correspondente na lista do enun, utilizar TipoEspecieDocumento.OU)
 	Valores do Título

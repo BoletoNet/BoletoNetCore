@@ -24,8 +24,8 @@ namespace BoletoNetCore.Testes
 
             };
             _banco = Banco.Instancia(Bancos.Sicredi);
-            _banco.Cedente = Utils.GerarCedente("85305", "", "", contaBancaria);
-            _banco.FormataCedente();
+            _banco.Beneficiario = Utils.GerarBeneficiario("85305", "", "", contaBancaria);
+            _banco.FormataBeneficiario();
         }
 
         [Test]
@@ -53,7 +53,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DMI,
-                Sacado = Utils.GerarSacado()
+                Pagador = Utils.GerarPagador()
             };
 
             //Ação

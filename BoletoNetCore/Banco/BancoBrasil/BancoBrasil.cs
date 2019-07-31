@@ -16,19 +16,19 @@ namespace BoletoNetCore
             RemoveAcentosArquivoRemessa = true;
         }
 
-        public void FormataCedente()
+        public void FormataBeneficiario()
         {
-            var contaBancaria = Cedente.ContaBancaria;
+            var contaBancaria = Beneficiario.ContaBancaria;
 
             if (!CarteiraFactory<BancoBrasil>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
                 throw BoletoNetCoreException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
             contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO.", "", "", 8);
 
-            if (Cedente.Codigo.Length != 7)
-                throw BoletoNetCoreException.CodigoCedenteInvalido(Cedente.Codigo, 7);
+            if (Beneficiario.Codigo.Length != 7)
+                throw BoletoNetCoreException.CodigoBeneficiarioInvalido(Beneficiario.Codigo, 7);
 
-            Cedente.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
+            Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
         }
 
     }

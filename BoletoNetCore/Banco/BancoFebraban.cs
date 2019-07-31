@@ -8,7 +8,7 @@ namespace BoletoNetCore
     {
         internal static Lazy<IBanco> Instance { get; } = new Lazy<IBanco>(() => new T());
 
-        public Cedente Cedente { get; set; }
+        public Beneficiario Beneficiario { get; set; }
         public int Codigo { get; protected set; }
         public string Nome { get; protected set; }
         public string Digito { get; protected set; }

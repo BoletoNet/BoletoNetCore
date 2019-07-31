@@ -4,7 +4,7 @@ using System.ComponentModel;
 namespace BoletoNetCore
 {
     [Serializable, Browsable(false)]
-    public class Cedente
+    public class Beneficiario
     {
         private string _cpfcnpj;
         public string Codigo { get; set; } = string.Empty;

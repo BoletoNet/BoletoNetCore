@@ -1,4 +1,4 @@
-version: 3.0.0.{build}
+version: 3.0.1.{build}
 image: Visual Studio 2019
 environment:
   $msbuildPath: $(cmd /c where msbuild)
@@ -9,7 +9,8 @@ configuration: Release
 build_script:
   - ps: .\build.ps1 -Target CiBuild -Experimental
   
-test: off
+test_script:
+  - cmd: dotnet test ./BoletoNetCore.Testes
 
 artifacts:
   - path: '**\boleto*.nupkg'

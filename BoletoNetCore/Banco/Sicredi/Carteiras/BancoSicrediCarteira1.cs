@@ -16,9 +16,9 @@ namespace BoletoNetCore
         {
             string CampoLivre = boleto.Carteira + "1" +
                 boleto.NossoNumero +
-                boleto.Banco.Cedente.ContaBancaria.Agencia +
-                boleto.Banco.Cedente.ContaBancaria.OperacaoConta +
-                boleto.Banco.Cedente.Codigo + "10";
+                boleto.Banco.Beneficiario.ContaBancaria.Agencia +
+                boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta +
+                boleto.Banco.Beneficiario.Codigo + "10";
 
             CampoLivre += Mod11(CampoLivre); 
 
@@ -68,18 +68,18 @@ namespace BoletoNetCore
 
         public string Sequencial(Boleto boleto)
         {
-            string agencia = boleto.Banco.Cedente.ContaBancaria.Agencia;     //código da cooperativa de crédito/agência beneficiária (aaaa)
-            string posto = boleto.Banco.Cedente.ContaBancaria.OperacaoConta; //código do posto beneficiário (pp)
+            string agencia = boleto.Banco.Beneficiario.ContaBancaria.Agencia;     //código da cooperativa de crédito/agência beneficiária (aaaa)
+            string posto = boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta; //código do posto beneficiário (pp)
 
             if (string.IsNullOrEmpty(posto))
             {
                 throw new Exception($"Posto beneficiário não preenchido");
             }
 
-            string cedente = boleto.Banco.Cedente.Codigo;                    //código do beneficiário (ccccc)
+            string beneficiario = boleto.Banco.Beneficiario.Codigo;                    //código do beneficiário (ccccc)
             string nossoNumero = boleto.NossoNumero;                         //ano atual (yy), indicador de geração do nosso número (b) e o número seqüencial do beneficiário (nnnnn);
 
-            return string.Concat(agencia, posto, cedente, nossoNumero); // = aaaappcccccyybnnnnn
+            return string.Concat(agencia, posto, beneficiario, nossoNumero); // = aaaappcccccyybnnnnn
         }
     }
 }

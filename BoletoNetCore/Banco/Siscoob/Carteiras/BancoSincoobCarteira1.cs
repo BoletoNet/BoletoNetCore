@@ -16,8 +16,8 @@ namespace BoletoNetCore
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var cedente = boleto.Banco.Cedente;
-            if (cedente.ContaBancaria.TipoImpressaoBoleto == TipoImpressaoBoleto.Empresa & boleto.NossoNumero == Empty)
+            var beneficiario = boleto.Banco.Beneficiario;
+            if (beneficiario.ContaBancaria.TipoImpressaoBoleto == TipoImpressaoBoleto.Empresa & boleto.NossoNumero == Empty)
                 throw new Exception("Nosso Número não informado.");
             
             // Nosso número não pode ter mais de 7 dígitos
@@ -26,17 +26,17 @@ namespace BoletoNetCore
 
             boleto.NossoNumero = boleto.NossoNumero.PadLeft(7, '0');
 
-            // Base para calcular DV: Agencia (4 caracteres) Código do Cedente com dígito (10 caracteres) Nosso Número (7 caracteres)
-            var baseCalculoDV = $"{cedente.ContaBancaria.Agencia}{cedente.Codigo.PadLeft(9, '0')}{cedente.CodigoDV}{boleto.NossoNumero}";
+            // Base para calcular DV: Agencia (4 caracteres) Código do Beneficiário com dígito (10 caracteres) Nosso Número (7 caracteres)
+            var baseCalculoDV = $"{beneficiario.ContaBancaria.Agencia}{beneficiario.Codigo.PadLeft(9, '0')}{beneficiario.CodigoDV}{boleto.NossoNumero}";
             boleto.NossoNumeroDV = baseCalculoDV.CalcularDVSicoob();
             boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            var cedente = boleto.Banco.Cedente;
-            var contaBancaria = cedente.ContaBancaria;
-            return $"{boleto.Carteira}{contaBancaria.Agencia}{boleto.VariacaoCarteira}{cedente.Codigo}{cedente.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}001";
+            var beneficiario = boleto.Banco.Beneficiario;
+            var contaBancaria = beneficiario.ContaBancaria;
+            return $"{boleto.Carteira}{contaBancaria.Agencia}{boleto.VariacaoCarteira}{beneficiario.Codigo}{beneficiario.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}001";
         }
     }
 }
