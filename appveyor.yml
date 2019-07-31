@@ -10,7 +10,7 @@ build_script:
   - ps: .\build.ps1 -Target CiBuild -Experimental
   
 test_script:
-- cmd: dotnet test ./BoletoNetCore.Testes
+  - cmd: dotnet test ./BoletoNetCore.Testes
 
 artifacts:
   - path: '**\boleto*.nupkg'
