@@ -46,12 +46,16 @@ Validação e testes de toda a lógica dos boletos.
 - Procure comentar todo o código para facilitar o entendimento e motivação para outros colegas. Embora o código original não seja muito comentado, não é motivo para que se crie o hábito. 
 - Se houver a necessidade de incluir novas imagens ou recursos para impressão, abra uma issue primeiro, ou apenas use as pastas convencionadas no projeto para receber esses tipos de arquivo. /Images e /BoletoBancario
 - Nomenclaturas e termos devem estar alinhados aos padrões definidos no CNAB: [https://cmsportal.febraban.org.br/Arquivos/documentos/PDF/Layout%20padrao%20CNAB240%20%20V%2010%2005%20-%2005_11_18.pdf](url)
+- A Estrutura das classes dos Banco estão distribuídas em arquivos que representam partial classes
+- Cada uma das partial classes implementa uma interface diferente que representa um formato, existem 3 formatos implementados:
+CNAB400, CNAB240 e OnlineRest (**Procuramos Implementadores**)
 
 ## Migrando do Boleto2Net
 Este projeto possui algumas diferenças relevantes em relação ao Boleto2Net que podem quebrar o seu código:
 - Retorno de Arquivos CNAB geram **CodMovimentoRetorno** no Lugar de **CodOcorrencia**.
 - Se você quer usar a impressão em PDF, use o **BoletoNetCorePdfProxy** e não **BoletoNetCoreProxy**.
 - Este projeto não usa **System.Web** então, não existem componentes manipuláveis para WebForms para o Editor do VS. 
+- Cedente e Sacado foram substituidos em todo o projeto pelos termos atuais **Beneficiario** e **Pagador**
 
 
 
