@@ -45,7 +45,7 @@ Validação e testes de toda a lógica dos boletos.
 - Em linhas gerais, novas carteiras deverão passar por validações e apresentar comprovação de passe nos testes propostos, contendo validações conforme proposto acima.
 - Procure comentar todo o código para facilitar o entendimento e motivação para outros colegas. Embora o código original não seja muito comentado, não é motivo para que se crie o hábito. 
 - Se houver a necessidade de incluir novas imagens ou recursos para impressão, abra uma issue primeiro, ou apenas use as pastas convencionadas no projeto para receber esses tipos de arquivo. /Images e /BoletoBancario
-- Nomenclaturas e termos devem estar alinhados aos padrões definidos no CNAB: [https://cmsportal.febraban.org.br/Arquivos/documentos/PDF/Layout%20padrao%20CNAB240%20%20V%2010%2005%20-%2005_11_18.pdf](url)
+- Nomenclaturas e termos devem estar alinhados aos padrões definidos no CNAB: <https://cmsportal.febraban.org.br/Arquivos/documentos/PDF/Layout%20padrao%20CNAB240%20%20V%2010%2005%20-%2005_11_18.pdf>
 - A Estrutura das classes dos Banco estão distribuídas em arquivos que representam partial classes
 - Cada uma das partial classes implementa uma interface diferente que representa um formato, existem 3 formatos implementados:
 CNAB400, CNAB240 e OnlineRest (**Procuramos Implementadores**)
