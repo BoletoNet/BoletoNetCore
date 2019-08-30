@@ -7,6 +7,7 @@
     <StartupObject />
     <IsPackable>true</IsPackable>
     <Version>3.0.1</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
