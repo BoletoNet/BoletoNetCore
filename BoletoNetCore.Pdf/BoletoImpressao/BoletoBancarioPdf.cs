@@ -1,7 +1,4 @@
-﻿using BoletoNetCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
 
 namespace BoletoNetCore.Pdf.BoletoImpressao
 {
