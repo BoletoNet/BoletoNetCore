@@ -60,7 +60,7 @@ namespace BoletoNetCore
         public static void FormataMensagemInstrucao(Boleto boleto)
         {
             boleto.MensagemInstrucoesCaixaFormatado = "";
-            
+
             //JUROS
             if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorJurosDia > 0)
             {
@@ -89,7 +89,7 @@ namespace BoletoNetCore
 
             if (boleto.ImprimirValoresAuxiliares == true && boleto.MensagemInstrucoesCaixa?.Length > 0)
             {
-                boleto.MensagemInstrucoesCaixaFormatado += $"//////////////////////////////{Environment.NewLine}";
+                boleto.MensagemInstrucoesCaixaFormatado += Environment.NewLine;
                 boleto.MensagemInstrucoesCaixaFormatado += boleto.MensagemInstrucoesCaixa;
             }
 
