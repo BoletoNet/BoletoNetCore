@@ -32,6 +32,8 @@ Foi criado um novo projeto para não quebrar a compatibilidade com aplicações 
 
 ## Como Contribuir
 
+[Leia o arquivo contributing.md](contributing.md)
+
 Este projeto está dividido em 3 partes: 
 
 ### BoletoNetCore (Projeto Principal)
