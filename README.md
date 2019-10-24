@@ -19,7 +19,7 @@ Foi criado um novo projeto para não quebrar a compatibilidade com aplicações 
 * Safra (422) - Carteira 1
 * Santander (033) - Carteira 101
 * Sicoob (756) - Carteira 1-01
-* Sicreed (748) - Carteira 1-A
+* Sicredi (748) - Carteira 1-A
 
 ### Carteiras Implementadas (Não foi homologada. Falta teste unitário)
 * Banco do Brasil (001) - Carteira 11 (Variação 019)
