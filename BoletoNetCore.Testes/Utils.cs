@@ -106,6 +106,7 @@ namespace BoletoNetCore.Testes
                 DataJuros = DateTime.Now.AddMonths(i),
                 PercentualJurosDia = (decimal)0.2,
                 ValorJurosDia = (decimal)(100 * i * (0.2 / 100)),
+                AvisoDebitoAutomaticoContaCorrente = "2",
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
                 NumeroControleParticipante = "CHAVEPRIMARIA=" + _proximoNossoNumero
             };

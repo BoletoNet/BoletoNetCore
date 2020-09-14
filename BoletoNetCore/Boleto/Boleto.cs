@@ -96,6 +96,26 @@ namespace BoletoNetCore
         public DateTime DataDesconto { get; set; }
 
         /// <summary>
+        /// Identificação se emite Boleto para Debito Automatico
+        /// </summary>
+        public string EmiteBoletoDebitoAutomatico { get; set; } = "N";
+
+        /// <summary>
+        /// Indicador Rateio Crédito
+        /// </summary>
+        public string RateioCredito { get; set; }
+
+        /// <summary>
+        /// Endereçamento para Aviso do Débito Automático em Conta Corrente
+        /// </summary>
+        public string AvisoDebitoAutomaticoContaCorrente { get; set; }
+
+        /// <summary>
+        /// Informa a quantidade de Pagamentos
+        /// </summary>
+        public string QuantidadePagamentos { get; set; }
+
+        /// <summary>
         /// Banco no qual o boleto/título foi quitado/recolhido
         /// </summary>
         public string BancoCobradorRecebedor { get; set; }
