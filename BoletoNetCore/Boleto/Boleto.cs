@@ -118,10 +118,6 @@ namespace BoletoNetCore
         /// <summary>
         /// Banco no qual o boleto/título foi quitado/recolhido
         /// </summary>
-
-        /// <summary>
-        /// Banco no qual o boleto/título foi quitado/recolhido
-        /// </summary>
         public string BancoCobradorRecebedor { get; set; }
         
         /// <summary>
