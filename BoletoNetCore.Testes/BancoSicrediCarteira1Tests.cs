@@ -46,9 +46,11 @@ namespace BoletoNetCore.Testes
         public void Sicredi_1_01_BoletoOK(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
+            //Testes do Nosso Numero (2 primeiros digitos yy ) Fixo em 2019 -> Data Emissâo com Ano de 2019
             var boleto = new Boleto(_banco)
             {
                 DataVencimento = new DateTime(anoMesDia[0], anoMesDia[1], anoMesDia[2]),
+                DataEmissao = new DateTime(2019, DateTime.Now.Month, DateTime.Now.Day),
                 ValorTitulo = valorTitulo,
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
