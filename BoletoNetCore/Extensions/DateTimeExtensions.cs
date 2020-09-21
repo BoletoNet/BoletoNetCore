@@ -37,7 +37,7 @@ namespace BoletoNetCore.Extensions
             // Verifica se a data esta dentro do range utilizavel
             var rangeUtilizavel = DateTime.Now.Date.DateDiff(data, DateInterval.Day);
 
-            if (rangeUtilizavel > 5500 || rangeUtilizavel < -3000)
+            if (rangeUtilizavel > 5500 || rangeUtilizavel < -3500)
                 throw new Exception("Data do vencimento ("+data.ToString()+") fora do range de utilização proposto pela CENEGESC. Comunicado FEBRABAN de n° 082/2012 de 14/06/2012");
 
             while (data > dateBase.AddDays(9999))
