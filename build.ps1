@@ -12,7 +12,7 @@ $xml.package.metadata.version="3.0.1."+"$buildNumber"
 $xml.Save($nuspecPath)
 
 dotnet restore 
-dotnet publish -f=netstandard2.0 -c Release $solutionFile -o $nupkgPath
+dotnet publish -f=netstandard2 -c Release $solutionFile -o $nupkgPath
 appveyor PushArtifact $nupkgPath
 
 # <#Pacote PDF#>
