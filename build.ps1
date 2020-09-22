@@ -11,6 +11,7 @@ $nupkgPath = "$rootDir\NuGet\"
 $xml.package.metadata.version="3.0.1."+"$buildNumber"
 $xml.Save($nuspecPath)
 
+dotnet publish -f netstandard2.0 -c release
 dotnet pack -c release $solutionFile /p:NuspecFile=$nuspecPath -o $nupkgPath
 appveyor PushArtifact $nupkgPath
 
