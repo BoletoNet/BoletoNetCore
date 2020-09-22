@@ -153,7 +153,7 @@ namespace BoletoNetCore
         {
             var html = new StringBuilder();
 
-            html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.Carne"));
+            html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.Carne.html"));
 
             return html.ToString()
                 .Replace("@TELEFONE", telefone)
