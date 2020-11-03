@@ -48,6 +48,7 @@ namespace BoletoNetCore
 
                 switch (boleto.Carteira)
                 {
+                    case "153":
                     case "109":
                     case "112":
                         reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 108, 001, 0, "I", ' ');
