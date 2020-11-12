@@ -71,7 +71,7 @@ namespace BoletoNetCore
         /// <param name="numeroArquivoRemessa"></param>
         /// <param name="numeroRegistro"></param>
         /// <returns></returns>
-        public virtual string GerarHeaderRemessa( TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistro)
+        public virtual string GerarHeaderRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa, ref int numeroRegistro)
         {
             try
             {
@@ -117,12 +117,18 @@ namespace BoletoNetCore
                 switch (tipoArquivo)
                 {
                     case TipoArquivo.CNAB240:
-                        return ((IBancoCNAB240)this).GerarTrailerRemessaCNAB240(
+                        return ((IBancoCNAB240)this).GerarTrailerLoteRemessaCNAB240(
+                                             ref numeroArquivoRemessa, numeroRegistroGeral,
+                                             numeroRegistroCobrancaSimples, valorCobrancaSimples,
+                                             numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
+                                             numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
+                                             numeroRegistroCobrancaDescontada, valorCobrancaDescontada) + Environment.NewLine
+                                             + ((IBancoCNAB240)this).GerarTrailerRemessaCNAB240(
                                              numeroRegistroGeral, valorBoletoGeral,
-                                             numeroRegistroCobrancaSimples,  valorCobrancaSimples,
-                                             numeroRegistroCobrancaVinculada,  valorCobrancaVinculada,
-                                             numeroRegistroCobrancaCaucionada,  valorCobrancaCaucionada,
-                                             numeroRegistroCobrancaDescontada,  valorCobrancaDescontada);
+                                             numeroRegistroCobrancaSimples, valorCobrancaSimples,
+                                             numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
+                                             numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
+                                             numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
 
                     case TipoArquivo.CNAB400:
                         return ((IBancoCNAB400)this).GerarTrailerRemessaCNAB400(
