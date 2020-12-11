@@ -13,6 +13,7 @@ namespace BoletoNetCore
         public int? NumeroSequencial { get; set; }
 
         private bool _ignorarCarteiraBoleto = false;
+
         #region Construtores
 
         public ArquivoRetorno(IBanco banco, TipoArquivo tipoArquivo, bool variasCarteiras = false)
@@ -145,6 +146,15 @@ namespace BoletoNetCore
                 if (boleto == null)
                     throw new Exception("Objeto boleto não identificado");
                 b.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
+                return;
+            }
+
+            if(tipoRegistro == "3" & tipoSegmento == "A")
+            {
+                // Segmento A - Indica um novo boleto
+                var boleto = new Boleto(this.Banco, _ignorarCarteiraBoleto);
+                b.LerDetalheRetornoCNAB240SegmentoA(ref boleto, registro);
+                Boletos.Add(boleto);
                 return;
             }
         }
