@@ -144,5 +144,8 @@ namespace BoletoNetCore
             }
         }
 
+        public virtual void LerDetalheRetornoCNAB240SegmentoA(ref Boleto boleto, string registro)
+        {
+        }
     }
 }
