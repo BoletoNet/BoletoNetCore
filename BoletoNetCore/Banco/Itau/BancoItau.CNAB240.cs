@@ -48,12 +48,9 @@ namespace BoletoNetCore
         {
             try
             {
-
-                numeroRegistro++;
-
                 var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "341", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, numeroRegistro, '0'); 
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "1", '0'); 
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "1", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 001, 0, "D", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0010, 002, 0, "05", '0');
@@ -150,7 +147,7 @@ namespace BoletoNetCore
         private string GerarDetalheSegmentoARemessaCNAB240(Boleto boleto, ref int registro)
         {
             var reg = new TRegistroEDI();
-
+            registro++;
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "341", '0');
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "0001", '0');
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "3", '0');
@@ -184,7 +181,6 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0231, 010, 0, Empty, ' ');
             reg.CodificarLinha();
             var vLinha = reg.LinhaRegistro;
-            registro++;
             return vLinha;
 
         }
