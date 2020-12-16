@@ -117,7 +117,6 @@ namespace BoletoNetCore
                 switch (tipoArquivo)
                 {
                     case TipoArquivo.CNAB240:
-
                         return ((IBancoCNAB240)this).GerarTrailerLoteRemessaCNAB240(
                                                    ref numeroArquivoRemessa, numeroRegistroGeral,
                                                    numeroRegistroCobrancaSimples, valorCobrancaSimples,
