@@ -118,25 +118,18 @@ namespace BoletoNetCore
                 {
                     case TipoArquivo.CNAB240:
 
-                        switch ((Bancos)this.Codigo)
-                        {
-                            case Bancos.Itau:
-                                trailer += ((IBancoCNAB240)this).GerarTrailerLoteRemessaCNAB240(
-                                             ref numeroArquivoRemessa, numeroRegistroGeral, numeroRegistroCobrancaSimples,
-                                             valorCobrancaSimples, numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
-                                             numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada, numeroRegistroCobrancaDescontada,
-                                             valorCobrancaDescontada);
-                                trailer += Environment.NewLine;
-                                break;
-                        }
-                        
-                        trailer += ((IBancoCNAB240)this).GerarTrailerRemessaCNAB240(
-                                             numeroRegistroGeral, valorBoletoGeral,
-                                             numeroRegistroCobrancaSimples,  valorCobrancaSimples,
-                                             numeroRegistroCobrancaVinculada,  valorCobrancaVinculada,
-                                             numeroRegistroCobrancaCaucionada,  valorCobrancaCaucionada,
-                                             numeroRegistroCobrancaDescontada,  valorCobrancaDescontada);
-                        return trailer;
+                        return ((IBancoCNAB240)this).GerarTrailerLoteRemessaCNAB240(
+                                                   ref numeroArquivoRemessa, numeroRegistroGeral,
+                                                   numeroRegistroCobrancaSimples, valorCobrancaSimples,
+                                                   numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
+                                                   numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
+                                                   numeroRegistroCobrancaDescontada, valorCobrancaDescontada) + Environment.NewLine
+                                                   + ((IBancoCNAB240)this).GerarTrailerRemessaCNAB240(
+                                                   numeroRegistroGeral, valorBoletoGeral,
+                                                   numeroRegistroCobrancaSimples, valorCobrancaSimples,
+                                                   numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
+                                                   numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
+                                                   numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
                     case TipoArquivo.CNAB400:
                         return ((IBancoCNAB400)this).GerarTrailerRemessaCNAB400(
                                              numeroRegistroGeral, valorBoletoGeral,
