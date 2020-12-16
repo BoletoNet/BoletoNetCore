@@ -83,6 +83,11 @@ namespace BoletoNetCore
                             numeroRegistroCobrancaDescontada++;
                             valorCobrancaDescontada += boleto.ValorTitulo;
                             break;
+                        case TipoCarteira.CarteiraCobrancaDebito:
+                            numeroRegistroCobrancaSimples++;
+                            valorCobrancaSimples += boleto.ValorTitulo;
+                            valorCobrancaDescontada += boleto.ValorIOF;
+                            break;
                         default:
                             break;
                     }

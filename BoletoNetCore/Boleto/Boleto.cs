@@ -44,6 +44,7 @@ namespace BoletoNetCore
         public string EspecieMoeda { get; set; } = "R$";
         public int QuantidadeMoeda { get; set; } = 0;
         public string ValorMoeda { get; set; } = string.Empty;
+        public TipoMoeda TipoMoeda { get; set; } = TipoMoeda.REA;
 
         public TipoEspecieDocumento EspecieDocumento { get; set; } = TipoEspecieDocumento.NaoDefinido;
 
@@ -87,6 +88,8 @@ namespace BoletoNetCore
 
         public DateTime DataJuros { get; set; }
 
+        public TipoJuros TipoJuros { get; set; } = TipoJuros.Isento;
+
         // Multa
         public decimal PercentualMulta { get; set; }
 
@@ -124,6 +127,21 @@ namespace BoletoNetCore
         /// Agência na qual o boleto/título foi quitado/recolhido
         /// </summary>
         public string AgenciaCobradoraRecebedora { get; set; }
+
+        /// <summary>
+        /// Agência na qual o boleto/título a ser debitada
+        /// </summary>
+        public string AgenciaDebitada { get; set; }
+
+        /// <summary>
+        /// Número da Conta na qual o boleto/título a ser debitada
+        /// </summary>
+        public string ContaDebitada { get; set; }
+
+        /// <summary>
+        /// Digito Verificador da Agência / Conta na qual o boleto/título a ser debitada
+        /// </summary>
+        public string DigitoVerificadorAgenciaContaDebitada { get; set; }
 
         /// <summary>
         /// C044 - Código de Movimento Retorno
