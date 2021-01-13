@@ -385,7 +385,5 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar TRAILER do arquivo de remessa do CNAB240.", ex);
             }
         }
-
-
     }
 }
