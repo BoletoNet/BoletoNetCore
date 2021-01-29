@@ -9,6 +9,8 @@
         /// <summary>REAL</summary>
         REA = 2,
         /// <summary>DÓLAR AMERICANO </summary>
-        USD = 3
+        USD = 3,
+        /// <summaryREAL - Febraban </summary>
+        BRL = 4
     }
 }
