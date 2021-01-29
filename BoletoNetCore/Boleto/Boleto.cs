@@ -141,6 +141,11 @@ namespace BoletoNetCore
         /// <summary>
         /// Digito Verificador da Agência / Conta na qual o boleto/título a ser debitada
         /// </summary>
+        public string DigitoVerificadorAgenciaDebitada { get; set; }
+
+        /// <summary>
+        /// Digito Verificador da Agência / Conta na qual o boleto/título a ser debitada
+        /// </summary>
         public string DigitoVerificadorAgenciaContaDebitada { get; set; }
 
         /// <summary>
