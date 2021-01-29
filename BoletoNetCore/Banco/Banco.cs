@@ -11,6 +11,7 @@ namespace BoletoNetCore
         private static readonly Dictionary<int, Lazy<IBanco>> Bancos = new Dictionary<int, Lazy<IBanco>>
         {
             [001] = BancoBrasil.Instance,
+            [004] = BancoNordeste.Instance,
             [033] = BancoSantander.Instance,
             [041] = BancoBanrisul.Instance,
             [104] = BancoCaixa.Instance,
