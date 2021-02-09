@@ -120,7 +120,9 @@ namespace BoletoNetCore
         {
             try
             {
-                var numeroArquivoRemessa3Digitos = numeroArquivoRemessa.ToString().PadLeft(3, '0');
+                NumeroArquivoRemessaCNAB400 = numeroArquivoRemessa;
+
+                var numeroArquivoRemessa3Digitos = NumeroArquivoRemessaCNAB400.ToString().PadLeft(3, '0');
                 numeroArquivoRemessa3Digitos = numeroArquivoRemessa3Digitos.Substring(numeroArquivoRemessa3Digitos.Length - 3);
                 numeroRegistroGeral++;
                 var reg = new TRegistroEDI();
