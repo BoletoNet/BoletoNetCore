@@ -1,15 +1,28 @@
 $rootDir = $env:APPVEYOR_BUILD_FOLDER
 $buildNumber = $env:APPVEYOR_BUILD_NUMBER
 
+<#Pacote Principal#>
 $solutionFile = "$rootDir\BoletoNetCore\BoletoNetCore.csproj"
 $solutionTest = "$rootDir\BoletoNetCore.Testes\BoletoNetCore.Testes.csproj"
 $nuspecPath = "$rootDir\BoletoNetCore\BoletoNetCore.nuspec"
 $nupkgPath = "$rootDir\NuGet\"
 
 [xml]$xml = cat $nuspecPath
-$xml.package.metadata.version="3.0.0."+"$buildNumber"
+$xml.package.metadata.version="3.0.1."+"$buildNumber"
 $xml.Save($nuspecPath)
 
-<#dotnet test $solutionTest#>
-dotnet pack -c Release $solutionFile /p:NuspecFile=$nuspecPath -o $nupkgPath
+dotnet publish -f netstandard2.0 -c release
+dotnet pack -c release $solutionFile /p:NuspecFile=$nuspecPath -o $nupkgPath
 appveyor PushArtifact $nupkgPath
+
+# <#Pacote PDF#>
+# $solutionFilePDF = "$rootDir\BoletoNetCore.PDF\BoletoNetCore.PDF.csproj"
+# $nuspecPathPDF = "$rootDir\BoletoNetCore.PDF\BoletoNetCore.PDF.nuspec"
+# $nupkgPathPDF = "$rootDir\NuGet.PDF\"
+
+# [xml]$xmlPDF = cat $nuspecPathPDF
+# $xmlPDF.package.metadata.version="3.0.1."+"$buildNumber"
+# $xmlPDF.Save($nuspecPathPDF)
+
+# dotnet pack -c Release $solutionFilePDF /p:NuspecFile=$nuspecPathPDF -o $nupkgPathPDF
+# appveyor PushArtifact $nupkgPathPDF

@@ -15,9 +15,9 @@ namespace BoletoNetCore.Testes
             var retorno = false;
             var classeProxy = new BoletoNetCoreProxy();
 
-            // Define os dados do Cedente, Conta Bancária e Carteira de Cobrança
-            retorno = classeProxy.SetupCobranca("12.123.123/1234-46", "Cedente Teste Classe Proxy",
-                                                  "Av Testador", "12", "sala 30", "Centro", "Cidade", "SP", "11223-445", "Observacoes do Cedente",
+            // Define os dados do Beneficiário, Conta Bancária e Carteira de Cobrança
+            retorno = classeProxy.SetupCobranca("12.123.123/1234-46", "Beneficiario Teste Classe Proxy",
+                                                  "Av Testador", "12", "sala 30", "Centro", "Cidade", "SP", "11223-445", "Observacoes do Beneficiário",
                                                    237, "1234", "X", "", "123456", "X",
                                                    "1213141", "0", "", "09", "",
                                                    (int)TipoCarteira.CarteiraCobrancaSimples, (int)TipoFormaCadastramento.ComRegistro, (int)TipoImpressaoBoleto.Empresa, (int)TipoDocumento.Escritural,
@@ -28,9 +28,9 @@ namespace BoletoNetCore.Testes
             retorno = classeProxy.NovoBoleto(ref mensagemErro);
             Assert.AreEqual(true, retorno, "NovoBoleto: " + mensagemErro);
 
-            // Define os dados do Sacado
-            retorno = classeProxy.DefinirSacado("123.456.789-09", "Sacado Teste Classe Proxy", "Rua Testando", "456", "casa 123", "Vila Central", "Cidade", "SP", "56789012", "Observação do Sacado", ref mensagemErro);
-            Assert.AreEqual(true, retorno, "DefinirSacado: " + mensagemErro);
+            // Define os dados do Pagador
+            retorno = classeProxy.DefinirPagador("123.456.789-09", "Pagador Teste Classe Proxy", "Rua Testando", "456", "casa 123", "Vila Central", "Cidade", "SP", "56789012", "Observação do Pagador", ref mensagemErro);
+            Assert.AreEqual(true, retorno, "DefinirPagador: " + mensagemErro);
 
             // Define os dados do Boleto
             retorno = classeProxy.DefinirBoleto("DM", "DP123456AZ", "445566", DateTime.Now.AddDays(-3), DateTime.Now, DateTime.Now.AddDays(+30), (decimal)123456.78, "CHAVEPRIMARIABANCO=12345!", "N", ref mensagemErro);
@@ -56,11 +56,11 @@ namespace BoletoNetCore.Testes
             retorno = classeProxy.FecharBoleto(ref mensagemErro);
             Assert.AreEqual(true, retorno, "FecharBoleto: " + mensagemErro);
 
-            // Repita os métodos acima para adicionar novos boletos, quantos necessários: NovoBoleto, DefinirSacado, DefinirBoleto, FecharBoleto, etc.
+            // Repita os métodos acima para adicionar novos boletos, quantos necessários: NovoBoleto, DefinirPagador, DefinirBoleto, FecharBoleto, etc.
             // Após preencher a coleção com os boletos, siga com os exemplos abaixo...
 
             // Verifica se existe a pasta temporaria para receber os arquivos do teste:
-            var nomePasta = Path.GetTempPath() + "Boleto2Net\\";
+            var nomePasta = Path.GetTempPath() + "BoletoNetCore\\";
             if (Directory.Exists(nomePasta) == false)
                 Directory.CreateDirectory(nomePasta);
 

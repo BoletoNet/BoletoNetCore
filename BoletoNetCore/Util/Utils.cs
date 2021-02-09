@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 
 namespace BoletoNetCore
 {
@@ -82,7 +83,7 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Formata o CPF ou CNPJ do Cedente ou do Sacado no formato: 000.000.000-00, 00.000.000/0001-00 respectivamente.
+        /// Formata o CPF ou CNPJ do Beneficiario ou do Pagador no formato: 000.000.000-00, 00.000.000/0001-00 respectivamente.
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
@@ -150,7 +151,7 @@ namespace BoletoNetCore
         /// <summary>
         /// Formata o campo de acordo com o tipo e o tamanho 
         /// </summary>        
-        public static string FitStringLength(this string sringToBeFit, int maxLength, char fitChar) 
+        public static string FitStringLength(this string sringToBeFit, int maxLength, char fitChar)
             => sringToBeFit.Length > maxLength ? sringToBeFit.Substring(0, maxLength) : sringToBeFit.PadLeft(maxLength, fitChar);
 
         public static string SubstituiCaracteresEspeciais(string strline)
@@ -189,7 +190,7 @@ namespace BoletoNetCore
                 strline = strline.Replace('&', 'e');
                 return strline;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Exception tmpEx = new Exception("Erro ao formatar string.", ex);
                 throw tmpEx;
@@ -204,23 +205,22 @@ namespace BoletoNetCore
         public static byte[] ConvertImageToByte(Image image)
         {
             if (image == null)
+            {
                 return null;
+            }
 
-            byte[] bytes;
-            //if (image.GetType().ToString() == "System.Drawing.Image")
-            //{
-            //    ImageConverter converter = new ImageConverter();
-            //    bytes = (byte[])converter.ConvertTo(image, typeof(byte[]));
-            //    return bytes;
-            //}
-            //else 
             if (image.GetType().ToString() == "System.Drawing.Bitmap")
             {
-                bytes = (byte[])TypeDescriptor.GetConverter(image).ConvertTo(image, typeof(byte[]));
-                return bytes;
+                using (var ms = new MemoryStream())
+                {
+                    image.Save(ms, ImageFormat.Jpeg);
+                    return ms.ToArray();
+                }
             }
             else
+            {
                 throw new NotImplementedException("ConvertImageToByte invalid type " + image.GetType().ToString());
+            }
         }
 
         internal static Image DrawText(string text, Font font, Color textColor, Color backColor)

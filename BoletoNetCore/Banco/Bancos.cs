@@ -3,6 +3,7 @@ namespace BoletoNetCore
     public enum Bancos : ushort
     {
         BancoDoBrasil = 001,
+        BancoDoNordeste = 004,
         Santander = 033,
         Banrisul = 041,
         Caixa = 104,

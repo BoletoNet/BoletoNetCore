@@ -16,7 +16,7 @@ namespace BoletoNetCore
     [Serializable()]
     public class BoletoBancario 
     {
-        String _vLocalLogoCedente = String.Empty;
+        String _vLocalLogoBeneficiario = String.Empty;
 
         #region Variaveis
 
@@ -56,11 +56,11 @@ namespace BoletoNetCore
 
         public bool MostrarComprovanteEntrega { get; set; }
 
-        public bool OcultarEnderecoSacado { get; set; }
+        public bool OcultarEnderecoPagador { get; set; }
 
         public bool OcultarInstrucoes { get; set; }
 
-        public bool OcultarReciboSacado { get; set; }
+        public bool OcultarReciboPagador { get; set; }
 
         public bool GerarArquivoRemessa { get; set; }
         /// <summary> 
@@ -68,7 +68,7 @@ namespace BoletoNetCore
         /// </summary>
         public bool MostrarContraApresentacaoNaDataVencimento { get; set; }
 
-        public bool MostrarEnderecoCedente { get; set; }
+        public bool MostrarEnderecoBeneficiario { get; set; }
         #endregion Propriedades
 
         #endregion Propriedades
@@ -153,30 +153,30 @@ namespace BoletoNetCore
         {
             var html = new StringBuilder();
 
-            html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.Carne"));
+            html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.Carne.html"));
 
             return html.ToString()
                 .Replace("@TELEFONE", telefone)
                 .Replace("#BOLETO#", htmlBoleto);
         }
-        public string GeraHtmlReciboSacado()
+        public string GeraHtmlReciboPagador()
         {
             try
             {
                 var html = new StringBuilder();
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte1.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte1.html"));
                 html.Append("<br />");
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte2.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte3.html"));
-                if (MostrarEnderecoCedente)
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte2.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte3.html"));
+                if (MostrarEnderecoBeneficiario)
                 {
-                    html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte10.html"));
+                    html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte10.html"));
                 }
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte4.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte5.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte6.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte7.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte8.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte4.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte5.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte6.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte7.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte8.html"));
                 return html.ToString();
             }
             catch (Exception ex)
@@ -185,23 +185,23 @@ namespace BoletoNetCore
             }
         }
 
-        public string GeraHtmlReciboCedente()
+        public string GeraHtmlReciboBeneficiario()
         {
             try
             {
                 var html = new StringBuilder();
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte1.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte2.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte3.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte4.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte5.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte6.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte7.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte8.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte9.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte10.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte11.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte12.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte1.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte2.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte3.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte4.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte5.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte6.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte7.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte8.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte9.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte10.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte11.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte12.html"));
                 return html.ToString();
             }
             catch (Exception ex)
@@ -233,8 +233,8 @@ namespace BoletoNetCore
         private string MontaHtml(string urlImagemLogo, string urlImagemBarra, string imagemCodigoBarras)
         {
             var html = new StringBuilder();
-            var enderecoCedente = "";
-            var enderecoCedenteCompacto = "";
+            var enderecoBeneficiario = "";
+            var enderecoBeneficiarioCompacto = "";
 
             //Oculta o cabeçalho das instruções do boleto
             if (!OcultarInstrucoes)
@@ -242,8 +242,8 @@ namespace BoletoNetCore
 
             if (ExibirDemonstrativo && Boleto.Demonstrativos.Any())
             {
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteRelatorioValores.html"));
-                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboCedenteParte5.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioRelatorioValores.html"));
+                html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboBeneficiarioParte5.html"));
 
                 html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.CabecalhoTabelaDemonstrativo.html"));
 
@@ -289,54 +289,54 @@ namespace BoletoNetCore
                 {
                     html.Append(HtmlComprovanteEntrega);
                     //Html da linha pontilhada
-                    if (OcultarReciboSacado)
-                        html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboSacadoParte8.html"));
+                    if (OcultarReciboPagador)
+                        html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ReciboPagadorParte8.html"));
                 }
 
                 //Oculta o recibo do sacabo do boleto
-                if (!OcultarReciboSacado)
+                if (!OcultarReciboPagador)
                 {
-                    html.Append(GeraHtmlReciboSacado());
+                    html.Append(GeraHtmlReciboPagador());
 
-                    //Caso mostre o Endereço do Cedente
-                    if (MostrarEnderecoCedente)
+                    //Caso mostre o Endereço do Beneficiário
+                    if (MostrarEnderecoBeneficiario)
                     {
-                        if (Boleto.Banco.Cedente.Endereco == null)
-                            throw new ArgumentNullException("Endereço do Cedente");
+                        if (Boleto.Banco.Beneficiario.Endereco == null)
+                            throw new ArgumentNullException("Endereço do Beneficiário");
 
-                        enderecoCedente = string.Format("{0} - {1} - {2}/{3} - CEP: {4}",
-                                                            Boleto.Banco.Cedente.Endereco.FormataLogradouro(0),
-                                                            Boleto.Banco.Cedente.Endereco.Bairro,
-                                                            Boleto.Banco.Cedente.Endereco.Cidade,
-                                                            Boleto.Banco.Cedente.Endereco.UF,
-                                                            Utils.FormataCEP(Boleto.Banco.Cedente.Endereco.CEP));
-                        enderecoCedenteCompacto = string.Format("{0} - CEP: {1}",
-                                                            Boleto.Banco.Cedente.Endereco.FormataLogradouro(25),
-                                                            Utils.FormataCEP(Boleto.Banco.Cedente.Endereco.CEP));
+                        enderecoBeneficiario = string.Format("{0} - {1} - {2}/{3} - CEP: {4}",
+                                                            Boleto.Banco.Beneficiario.Endereco.FormataLogradouro(0),
+                                                            Boleto.Banco.Beneficiario.Endereco.Bairro,
+                                                            Boleto.Banco.Beneficiario.Endereco.Cidade,
+                                                            Boleto.Banco.Beneficiario.Endereco.UF,
+                                                            Utils.FormataCEP(Boleto.Banco.Beneficiario.Endereco.CEP));
+                        enderecoBeneficiarioCompacto = string.Format("{0} - CEP: {1}",
+                                                            Boleto.Banco.Beneficiario.Endereco.FormataLogradouro(25),
+                                                            Utils.FormataCEP(Boleto.Banco.Beneficiario.Endereco.CEP));
                     }
                 }
             }
 
-            // Dados do Sacado
-            var sacado = Boleto.Sacado.Nome;
-            switch (Boleto.Sacado.TipoCPFCNPJ("A"))
+            // Dados do Pagador
+            var pagador = Boleto.Pagador.Nome;
+            switch (Boleto.Pagador.TipoCPFCNPJ("A"))
             {
                 case "F":
-                    sacado += string.Format(" - CPF: " + Utils.FormataCPF(Boleto.Sacado.CPFCNPJ));
+                    pagador += string.Format(" - CPF: " + Utils.FormataCPF(Boleto.Pagador.CPFCNPJ));
                     break;
                 case "J":
-                    sacado += string.Format(" - CNPJ: " + Utils.FormataCNPJ(Boleto.Sacado.CPFCNPJ));
+                    pagador += string.Format(" - CNPJ: " + Utils.FormataCNPJ(Boleto.Pagador.CPFCNPJ));
                     break;
             }
-            if (Boleto.Sacado.Observacoes != string.Empty)
-                sacado += " - " + Boleto.Sacado.Observacoes;
+            if (Boleto.Pagador.Observacoes != string.Empty)
+                pagador += " - " + Boleto.Pagador.Observacoes;
 
-            var enderecoSacado = string.Empty;
-            if (!OcultarEnderecoSacado)
+            var enderecoPagador = string.Empty;
+            if (!OcultarEnderecoPagador)
             {
-                enderecoSacado = Boleto.Sacado.Endereco.FormataLogradouro(0) + "<br />" + string.Format("{0} - {1}/{2}", Boleto.Sacado.Endereco.Bairro, Boleto.Sacado.Endereco.Cidade, Boleto.Sacado.Endereco.UF);
-                if (Boleto.Sacado.Endereco.CEP != String.Empty)
-                    enderecoSacado += string.Format(" - CEP: {0}", Utils.FormataCEP(Boleto.Sacado.Endereco.CEP));
+                enderecoPagador = Boleto.Pagador.Endereco.FormataLogradouro(0) + "<br />" + string.Format("{0} - {1}/{2}", Boleto.Pagador.Endereco.Bairro, Boleto.Pagador.Endereco.Cidade, Boleto.Pagador.Endereco.UF);
+                if (Boleto.Pagador.Endereco.CEP != String.Empty)
+                    enderecoPagador += string.Format(" - CEP: {0}", Utils.FormataCEP(Boleto.Pagador.Endereco.CEP));
             }
 
             // Dados do Avalista
@@ -359,10 +359,10 @@ namespace BoletoNetCore
 
 
             if (!FormatoCarne)
-                html.Append(GeraHtmlReciboCedente());
+                html.Append(GeraHtmlReciboBeneficiario());
             else
             {
-                html.Append(GeraHtmlCarne("", GeraHtmlReciboCedente()));
+                html.Append(GeraHtmlCarne("", GeraHtmlReciboBeneficiario()));
             }
 
             var dataVencimento = Boleto.DataVencimento.ToString("dd/MM/yyyy");
@@ -370,22 +370,22 @@ namespace BoletoNetCore
             if (MostrarContraApresentacaoNaDataVencimento)
                 dataVencimento = "Contra Apresentação";
 
-            if (String.IsNullOrWhiteSpace(_vLocalLogoCedente))
-                _vLocalLogoCedente = urlImagemLogo;
+            if (String.IsNullOrWhiteSpace(_vLocalLogoBeneficiario))
+                _vLocalLogoBeneficiario = urlImagemLogo;
 
             return html
                 .Replace("@CODIGOBANCO", Utils.FormatCode(Boleto.Banco.Codigo.ToString(), 3))
                 .Replace("@DIGITOBANCO", Boleto.Banco.Digito.ToString())
                 .Replace("@URLIMAGEMLOGO", urlImagemLogo)
-                .Replace("@URLIMGCEDENTE", _vLocalLogoCedente)
+                .Replace("@URLIMGBENEFICIARIO", _vLocalLogoBeneficiario)
                 .Replace("@URLIMAGEMBARRA", urlImagemBarra)
                 .Replace("@LINHADIGITAVEL", Boleto.CodigoBarra.LinhaDigitavel)
-                .Replace("@LOCALPAGAMENTO", Boleto.Banco.Cedente.ContaBancaria.LocalPagamento)
-                .Replace("@MENSAGEMFIXATOPOBOLETO", Boleto.Banco.Cedente.ContaBancaria.MensagemFixaTopoBoleto)
-                .Replace("@MENSAGEMFIXASACADO", Boleto.Banco.Cedente.ContaBancaria.MensagemFixaSacado)
+                .Replace("@LOCALPAGAMENTO", Boleto.Banco.Beneficiario.ContaBancaria.LocalPagamento)
+                .Replace("@MENSAGEMFIXATOPOBOLETO", Boleto.Banco.Beneficiario.ContaBancaria.MensagemFixaTopoBoleto)
+                .Replace("@MENSAGEMFIXAPAGADOR", Boleto.Banco.Beneficiario.ContaBancaria.MensagemFixaPagador)
                 .Replace("@DATAVENCIMENTO", dataVencimento)
-                .Replace("@CEDENTE_BOLETO", !Boleto.Banco.Cedente.MostrarCNPJnoBoleto ? Boleto.Banco.Cedente.Nome : string.Format("{0} - {1}", Boleto.Banco.Cedente.Nome, Utils.FormataCNPJ(Boleto.Banco.Cedente.CPFCNPJ)))
-                .Replace("@CEDENTE", Boleto.Banco.Cedente.Nome)
+                .Replace("@BENEFICIARIO_BOLETO", !Boleto.Banco.Beneficiario.MostrarCNPJnoBoleto ? Boleto.Banco.Beneficiario.Nome : string.Format("{0} - {1}", Boleto.Banco.Beneficiario.Nome, Utils.FormataCNPJ(Boleto.Banco.Beneficiario.CPFCNPJ)))
+                .Replace("@BENEFICIARIO", Boleto.Banco.Beneficiario.Nome)
                 .Replace("@DATADOCUMENTO", Boleto.DataEmissao.ToString("dd/MM/yyyy"))
                 .Replace("@NUMERODOCUMENTO", Boleto.NumeroDocumento)
                 .Replace("@ESPECIEDOCUMENTO", Boleto.EspecieDocumento.ToString())
@@ -401,18 +401,18 @@ namespace BoletoNetCore
                 .Replace("@MORAMULTA", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorMulta == 0 ? "" : Boleto.ValorMulta.ToString("R$ ##,##0.00")))
                 .Replace("@OUTROSACRESCIMOS", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorOutrasDespesas == 0 ? "" : Boleto.ValorOutrasDespesas.ToString("R$ ##,##0.00")))
                 .Replace("@VALORCOBRADO", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorPago == 0 ? "" : Boleto.ValorPago.ToString("R$ ##,##0.00")))
-                .Replace("@AGENCIACONTA", Boleto.Banco.Cedente.CodigoFormatado)
-                .Replace("@SACADO", sacado)
-                .Replace("@ENDERECOSACADO", enderecoSacado)
+                .Replace("@AGENCIACONTA", Boleto.Banco.Beneficiario.CodigoFormatado)
+                .Replace("@PAGADOR", pagador)
+                .Replace("@ENDERECOPAGADOR", enderecoPagador)
                 .Replace("@AVALISTA", avalista)
-                .Replace("@AGENCIACODIGOCEDENTE", Boleto.Banco.Cedente.CodigoFormatado)
-                .Replace("@CPFCNPJ", Boleto.Banco.Cedente.CPFCNPJ)
+                .Replace("@AGENCIACODIGOBENEFICIARIO", Boleto.Banco.Beneficiario.CodigoFormatado)
+                .Replace("@CPFCNPJ", Boleto.Banco.Beneficiario.CPFCNPJ)
                 .Replace("@AUTENTICACAOMECANICA", "")
                 .Replace("@USODOBANCO", Boleto.UsoBanco)
                 .Replace("@IMAGEMCODIGOBARRA", imagemCodigoBarras)
                 .Replace("@ACEITE", Boleto.Aceite).ToString()
-                .Replace("@ENDERECOCEDENTE_BOLETO", MostrarEnderecoCedente ? string.Format(" - {0}", enderecoCedenteCompacto) : "")
-                .Replace("@ENDERECOCEDENTE", MostrarEnderecoCedente ? enderecoCedente : "")
+                .Replace("@ENDERECOBENEFICIARIO_BOLETO", MostrarEnderecoBeneficiario ? string.Format(" - {0}", enderecoBeneficiarioCompacto) : "")
+                .Replace("@ENDERECOBENEFICIARIO", MostrarEnderecoBeneficiario ? enderecoBeneficiario : "")
                 .Replace("@INSTRUCOES", Boleto.MensagemInstrucoesCaixaFormatado.Replace(Environment.NewLine, "<br/>"));
         }
 
@@ -649,15 +649,15 @@ namespace BoletoNetCore
         /// Monta o Html do boleto bancário
         /// </summary>
         /// <param name="fileName">Caminho do arquivo</param>
-        /// <param name="fileName">Caminho do logo do cedente</param>
+        /// <param name="fileName">Caminho do logo do beneficiario</param>
         /// <returns>Html do boleto gerado</returns>
-        //public string MontaHtml(string fileName, string logoCedente)
+        //public string MontaHtml(string fileName, string logoBeneficiario)
         //{
         //    if (fileName == null)
         //        fileName = Path.GetTempPath();
 
-        //    if (logoCedente != null)
-        //        _vLocalLogoCedente = logoCedente;
+        //    if (logoBeneficiario != null)
+        //        _vLocalLogoBeneficiario = logoBeneficiario;
 
         //    //OnLoad(EventArgs.Empty);
 
@@ -813,12 +813,12 @@ namespace BoletoNetCore
         /// Alterado por Olavo Rocha @ Exodus para utilizar arquivos dentro da própria DLL para .net core 2.2
         /// </summary>
         /// <param name="convertLinhaDigitavelToImage">Converte a Linha Digitável para imagem, com o objetivo de evitar malwares.</param>
-        /// <param name="urlImagemLogoCedente">Url/Imagem Base64 da Logo do Cedente</param>
+        /// <param name="urlImagemLogoBeneficiario">Url/Imagem Base64 da Logo do Beneficiário</param>
         /// <returns>Html do boleto gerado</returns>
         /// <desenvolvedor>Iuri André Stona, Olavo Rocha Neto</desenvolvedor>
         /// <criacao>23/01/2014</criacao>
         /// <alteracao>07/07/2019</alteracao>
-        public string MontaHtmlEmbedded(bool convertLinhaDigitavelToImage = false, bool usaCsspdf = false, string urlImagemLogoCedente = null)
+        public string MontaHtmlEmbedded(bool convertLinhaDigitavelToImage = false, bool usaCsspdf = false, string urlImagemLogoBeneficiario = null)
         {
             //OnLoad(EventArgs.Empty);
 
@@ -849,9 +849,9 @@ namespace BoletoNetCore
                 Boleto.CodigoBarra.LinhaDigitavel = @"<img style=""max-width:420px; margin-bottom: 2px"" src=" + fnLinha + " />";
             }
 
-            if (!string.IsNullOrEmpty(urlImagemLogoCedente))
+            if (!string.IsNullOrEmpty(urlImagemLogoBeneficiario))
             {
-                _vLocalLogoCedente = urlImagemLogoCedente;
+                _vLocalLogoBeneficiario = urlImagemLogoBeneficiario;
             }
 
             var s = HtmlOffLine(null, fnLogo, fnBarra, fnCodigoBarras, usaCsspdf).ToString();

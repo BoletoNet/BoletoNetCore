@@ -11,6 +11,7 @@ namespace BoletoNetCore
         private static readonly Dictionary<int, Lazy<IBanco>> Bancos = new Dictionary<int, Lazy<IBanco>>
         {
             [001] = BancoBrasil.Instance,
+            [004] = BancoNordeste.Instance,
             [033] = BancoSantander.Instance,
             [041] = BancoBanrisul.Instance,
             [104] = BancoCaixa.Instance,
@@ -60,7 +61,7 @@ namespace BoletoNetCore
         public static void FormataMensagemInstrucao(Boleto boleto)
         {
             boleto.MensagemInstrucoesCaixaFormatado = "";
-            
+
             //JUROS
             if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorJurosDia > 0)
             {
@@ -89,7 +90,7 @@ namespace BoletoNetCore
 
             if (boleto.ImprimirValoresAuxiliares == true && boleto.MensagemInstrucoesCaixa?.Length > 0)
             {
-                boleto.MensagemInstrucoesCaixaFormatado += $"//////////////////////////////{Environment.NewLine}";
+                boleto.MensagemInstrucoesCaixaFormatado += Environment.NewLine;
                 boleto.MensagemInstrucoesCaixaFormatado += boleto.MensagemInstrucoesCaixa;
             }
 

@@ -22,7 +22,7 @@ namespace BoletoNetCore
         public bool SetupCobranca(string cnpj, string razaoSocial,
                                     string enderecoLogradouro, string enderecoNumero, string enderecoComplemento, string enderecoBairro, string enderecoCidade, string enderecoEstado, string enderecoCep, string observacoes,
                                     int numeroBanco, string agencia, string digitoAgencia, string operacaoConta, string conta, string digitoConta,
-                                    string codigoCedente, string digitoCodigoCedente, string codigoTransmissao,
+                                    string codigoBeneficiario, string digitoCodigoBeneficiario, string codigoTransmissao,
                                     string carteira, string variacaoCarteira,
                                     int tipoCarteira, int tipoFormaCadastramento, int tipoImpressaoBoleto, int tipoDocumento,
                                     ref string mensagemErro)
@@ -75,9 +75,9 @@ namespace BoletoNetCore
                     mensagemErro += "Tipo do Documento do Boleto inválido: 1-Tradicional, 2-Escritural" + Environment.NewLine;
                 }
 
-                // Banco, Cedente, Conta Corrente
+                // Banco, Beneficiario, Conta Corrente
                 boletos.Banco = Banco.Instancia(numeroBanco);
-                boletos.Banco.Cedente = new Cedente
+                boletos.Banco.Beneficiario = new Beneficiario
                 {
                     CPFCNPJ = cnpj,
                     Nome = razaoSocial,
@@ -96,8 +96,8 @@ namespace BoletoNetCore
                         TipoImpressaoBoleto = (TipoImpressaoBoleto)tipoImpressaoBoleto,
                         TipoDocumento = (TipoDocumento)tipoDocumento
                     },
-                    Codigo = codigoCedente,
-                    CodigoDV = digitoCodigoCedente,
+                    Codigo = codigoBeneficiario,
+                    CodigoDV = digitoCodigoBeneficiario,
                     CodigoTransmissao = codigoTransmissao,
                     Endereco = new Endereco
                     {
@@ -110,7 +110,7 @@ namespace BoletoNetCore
                         CEP = enderecoCep?.Replace(".", "")
                     }
                 };
-                boletos.Banco.FormataCedente();
+                boletos.Banco.FormataBeneficiario();
                 setupOk = true;
             }
             catch (Exception ex)
@@ -196,7 +196,7 @@ namespace BoletoNetCore
                 return false;
             }
         }
-        public bool DefinirSacado(string cnpj, string razaoSocial, string endereco, string numero, string complemento, string bairro, string cidade, string uf, string cep, string observacoes, ref string mensagemErro)
+        public bool DefinirPagador(string cnpj, string razaoSocial, string endereco, string numero, string complemento, string bairro, string cidade, string uf, string cep, string observacoes, ref string mensagemErro)
         {
             mensagemErro = "";
             try
@@ -224,7 +224,7 @@ namespace BoletoNetCore
                 {
                     return false;
                 }
-                var sacado = new Sacado
+                var pagador = new Pagador
                 {
                     CPFCNPJ = cnpj,
                     Nome = razaoSocial,
@@ -240,7 +240,7 @@ namespace BoletoNetCore
                         CEP = cep?.Replace(".", "")
                     }
                 };
-                boleto.Sacado = sacado;
+                boleto.Pagador = pagador;
                 return true;
             }
             catch (Exception ex)
@@ -545,7 +545,7 @@ namespace BoletoNetCore
                         Boleto = boletoTmp,
                         OcultarInstrucoes = false,
                         MostrarComprovanteEntrega = true,
-                        MostrarEnderecoCedente = true
+                        MostrarEnderecoBeneficiario = true
                     };
                     {
                         html.Append("<div style=\"page-break-after: always;\">");

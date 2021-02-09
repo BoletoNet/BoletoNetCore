@@ -19,8 +19,8 @@ namespace BoletoNetCore.Exceptions
         public static BoletoNetCoreException BancoNaoImplementado(int codigoBanco)
             => new BoletoNetCoreException($"Banco não implementando: {codigoBanco}");
 
-        public static BoletoNetCoreException ErroAoFormatarCedente(Exception ex)
-            => new BoletoNetCoreException("Erro durante a formatação do cedente.", ex);
+        public static BoletoNetCoreException ErroAoFormatarBeneficiario(Exception ex)
+            => new BoletoNetCoreException("Erro durante a formatação do beneficiário.", ex);
 
         public static BoletoNetCoreException ErroAoFormatarCodigoDeBarra(Exception ex)
             => new BoletoNetCoreException("Erro durante a formatação do código de barra.", ex);
@@ -46,8 +46,8 @@ namespace BoletoNetCore.Exceptions
         public static Exception ContaInvalida(string conta, int digitos)
             => new BoletoNetCoreException($"O número da conta ({conta}) deve conter {digitos} dígitos.");
 
-        public static Exception CodigoCedenteInvalido(string codigoCedente, int digitos)
-            => new BoletoNetCoreException($"O código do cedente ({codigoCedente}) deve conter {digitos} dígitos.");
+        public static Exception CodigoBeneficiarioInvalido(string codigoBeneficiario, int digitos)
+            => new BoletoNetCoreException($"O código do beneficiário ({codigoBeneficiario}) deve conter {digitos} dígitos.");
 
         public static Exception CarteiraNaoImplementada(string carteiraComVariacao)
             => new BoletoNetCoreException($"Carteira não implementada: {carteiraComVariacao}");

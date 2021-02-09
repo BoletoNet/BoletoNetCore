@@ -12,17 +12,17 @@ namespace BoletoNetCore.Testes
 
         private static int _proximoNossoNumero = 1;
 
-        internal static Cedente GerarCedente(string codigoCedente, string digitoCodigoCedente, string codigoTransmissao, ContaBancaria contaBancaria)
+        internal static Beneficiario GerarBeneficiario(string codigoBeneficiario, string digitoCodigoBeneficiario, string codigoTransmissao, ContaBancaria contaBancaria)
         {
-            return new Cedente
+            return new Beneficiario
             {
                 CPFCNPJ = "86.875.666/0001-09",
-                Nome = "Cedente Teste",
-                Codigo = codigoCedente,
-                CodigoDV = digitoCodigoCedente,
+                Nome = "Beneficiario Teste",
+                Codigo = codigoBeneficiario,
+                CodigoDV = digitoCodigoBeneficiario,
                 Endereco = new Endereco
                 {
-                    LogradouroEndereco = "Rua Teste do Cedente",
+                    LogradouroEndereco = "Rua Teste do Beneficiário",
                     LogradouroNumero = "789",
                     LogradouroComplemento = "Cj 333",
                     Bairro = "Bairro",
@@ -34,13 +34,13 @@ namespace BoletoNetCore.Testes
             };
         }
 
-        internal static Sacado GerarSacado()
+        internal static Pagador GerarPagador()
         {
             if (_contador % 2 == 0)
-                return new Sacado
+                return new Pagador
                 {
                     CPFCNPJ = "443.316.101-28",
-                    Nome = "Sacado Teste PF",
+                    Nome = "Pagador Teste PF",
                     Observacoes = "Matricula 678/9",
                     Endereco = new Endereco
                     {
@@ -52,10 +52,10 @@ namespace BoletoNetCore.Testes
                         CEP = "56789012"
                     }
                 };
-            return new Sacado
+            return new Pagador
             {
                 CPFCNPJ = "71.738.978/0001-01",
-                Nome = "Sacado Teste PJ",
+                Nome = "Pagador Teste PJ",
                 Observacoes = "Matricula 123/4",
                 Endereco = new Endereco
                 {
@@ -87,7 +87,7 @@ namespace BoletoNetCore.Testes
 
             var boleto = new Boleto(banco)
             {
-                Sacado = GerarSacado(),
+                Pagador = GerarPagador(),
                 DataEmissao = DateTime.Now.AddDays(-3),
                 DataProcessamento = DateTime.Now,
                 DataVencimento = DateTime.Now.AddMonths(i),
@@ -106,6 +106,7 @@ namespace BoletoNetCore.Testes
                 DataJuros = DateTime.Now.AddMonths(i),
                 PercentualJurosDia = (decimal)0.2,
                 ValorJurosDia = (decimal)(100 * i * (0.2 / 100)),
+                AvisoDebitoAutomaticoContaCorrente = "2",
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
                 NumeroControleParticipante = "CHAVEPRIMARIA=" + _proximoNossoNumero
             };
@@ -121,8 +122,8 @@ namespace BoletoNetCore.Testes
             // Avalista
             if (_contador % 3 == 0)
             {
-                boleto.Avalista = GerarSacado();
-                boleto.Avalista.Nome = boleto.Avalista.Nome.Replace("Sacado", "Avalista");
+                boleto.Avalista = GerarPagador();
+                boleto.Avalista.Nome = boleto.Avalista.Nome.Replace("Pagador", "Avalista");
             }
             // Grupo Demonstrativo do Boleto
             var grupoDemonstrativo = new GrupoDemonstrativo { Descricao = "GRUPO 1" };
@@ -151,9 +152,9 @@ namespace BoletoNetCore.Testes
             Assert.AreEqual(quantidadeBoletos, boletos.Count, "Quantidade de boletos diferente de " + quantidadeBoletos);
 
             // Define os nomes dos arquivos, cria pasta e apaga arquivos anteriores
-            var nomeArquivoREM = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.REM");
-            var nomeArquivoPDF = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.PDF");
-            var nomeArquivoHTML = Path.Combine(Path.GetTempPath(), "Boleto2Net", $"{nomeCarteira}_{tipoArquivo}.html");
+            var nomeArquivoREM = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nomeCarteira}_{tipoArquivo}.REM");
+            var nomeArquivoPDF = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nomeCarteira}_{tipoArquivo}.PDF");
+            var nomeArquivoHTML = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nomeCarteira}_{tipoArquivo}.html");
             if (!Directory.Exists(Path.GetDirectoryName(nomeArquivoREM)))
                 Directory.CreateDirectory(Path.GetDirectoryName(nomeArquivoREM));
             if (File.Exists(nomeArquivoREM))
@@ -207,7 +208,7 @@ namespace BoletoNetCore.Testes
                             Boleto = boletoTmp,
                             OcultarInstrucoes = false,
                             MostrarComprovanteEntrega = false,
-                            MostrarEnderecoCedente = true,
+                            MostrarEnderecoBeneficiario = true,
                             ExibirDemonstrativo = true
                         };
 
