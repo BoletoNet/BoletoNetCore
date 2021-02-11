@@ -88,10 +88,12 @@ namespace BoletoNetCore
                 boleto.MensagemInstrucoesCaixaFormatado += $"DESCONTO DE R$ {boleto.ValorDesconto.ToString("N2")} ATÉ {boleto.DataDesconto.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
 
-            if (boleto.ImprimirValoresAuxiliares == true && boleto.MensagemInstrucoesCaixa?.Length > 0)
+            if (/*boleto.ImprimirValoresAuxiliares == true && */ boleto.MensagemInstrucoesCaixa?.Length > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += Environment.NewLine;
                 boleto.MensagemInstrucoesCaixaFormatado += boleto.MensagemInstrucoesCaixa;
+
+                boleto.MensagemInstrucoesCaixaFormatado = boleto.MensagemInstrucoesCaixaFormatado.Trim();
             }
 
         }
