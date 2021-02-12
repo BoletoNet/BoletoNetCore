@@ -88,8 +88,10 @@ namespace BoletoNetCore
                 boleto.MensagemInstrucoesCaixaFormatado += $"DESCONTO DE R$ {boleto.ValorDesconto.ToString("N2")} ATÉ {boleto.DataDesconto.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
 
-            //Aqui, define se a mensagem de instrução manual deve ser impressa, na minha visão se o usuário passo uma instrução deveria imprimir sempre, 
-            //mas foi criado um parametro com padrão "false" para manter o comportamento anterior.
+            //Aqui, define se a mensagem de instrução manual deve ser impressa, 
+            //na minha visão se o usuário passou uma instrução, esta deveria ser impressa sempre.
+            //Entretanto, para manter o comportamento atual sem querbar nenhuma aplicação, foi criado um parâmetro com valor "false"
+            //https://github.com/BoletoNet/BoletoNetCore/pull/91
             if (boleto.ImprimirMensagemInstrucao && boleto.MensagemInstrucoesCaixa?.Length > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += Environment.NewLine;
