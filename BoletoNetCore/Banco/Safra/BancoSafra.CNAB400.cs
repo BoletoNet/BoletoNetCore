@@ -214,7 +214,21 @@ namespace BoletoNetCore
 
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0180, 013, 2, boleto.ValorDesconto, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0193, 013, 2, boleto.ValorIOF, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0206, 013, 2, boleto.ValorAbatimento, '0');
+
+                /*
+                 Boleto com multa aplicada
+                 Posição 206 a 211: a data a partir da qual a multa deve ser cobrada (vencimento + 1 dia)
+                 Posição 212 a 215: o percentual referente à mlta no formato 99v99 Ex: 2% preencher 0200
+                 Posição 216 a 218 zeros - 000
+                 */
+                if (boleto.CodigoInstrucao1 == "16")
+                {
+                    reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0206, 6, 2, boleto.DataMulta, '0');
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0212, 4, 2, boleto.PercentualMulta, '0');
+                    reg.Adicionar(TTiposDadoEDI.ediInteiro______________, 0216, 4, 3, "000", '0');
+                }
+                else
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0206, 013, 2, boleto.ValorAbatimento, '0');
 
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0219, 002, 0, boleto.Pagador.TipoCPFCNPJ("00"), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 014, 0, boleto.Pagador.CPFCNPJ, '0');
