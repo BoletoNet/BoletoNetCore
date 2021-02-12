@@ -68,10 +68,15 @@ namespace BoletoNetCore
         public string Aceite { get; set; } = "N";
         public string UsoBanco { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Define se as mensagens de instrução passadas de forma manual devem ser impressas
+        /// </summary>
+        public bool ImprimirMensagemInstrucao { get; set; } = false;
+
         // Valores do Boleto
         public decimal ValorTitulo { get; set; }
 
-        public bool ImprimirValoresAuxiliares { get; set; } = false;
+        public bool ImprimirValoresAuxiliares { get; set; } = false;        
         public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o pagador pagou. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que será creditado na conta corrente. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorJurosDia { get; set; }
