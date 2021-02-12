@@ -225,7 +225,7 @@ namespace BoletoNetCore
                 {
                     reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0206, 6, 2, boleto.DataMulta, '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0212, 4, 2, boleto.PercentualMulta, '0');
-                    reg.Adicionar(TTiposDadoEDI.ediInteiro______________, 0216, 4, 3, "000", '0');
+                    reg.Adicionar(TTiposDadoEDI.ediInteiro______________, 0216, 3, 0, "000", '0');
                 }
                 else
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0206, 013, 2, boleto.ValorAbatimento, '0');
