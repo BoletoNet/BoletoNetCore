@@ -46,6 +46,8 @@ namespace BoletoNetCore
                         return ((IBancoCNAB240)this)?.GerarDetalheRemessaCNAB240(boleto, ref numeroRegistro);
                     case TipoArquivo.CNAB400:
                         return ((IBancoCNAB400)this)?.GerarDetalheRemessaCNAB400(boleto, ref numeroRegistro);
+                    case TipoArquivo.CNAB150:
+                        return ((IBancoCNAB150)this)?.GerarDetalheRemessaCNAB150(boleto, ref numeroRegistro);
                     default:
                         throw new Exception("Tipo de arquivo inexistente.");
                 }
@@ -87,6 +89,9 @@ namespace BoletoNetCore
                         break;
                     case TipoArquivo.CNAB400:
                         header += ((IBancoCNAB400)this).GerarHeaderRemessaCNAB400(ref numeroArquivoRemessa, ref numeroRegistro);
+                        break;
+                    case TipoArquivo.CNAB150:
+                        header += ((IBancoCNAB150)this).GerarHeaderRemessaCNAB150(ref numeroArquivoRemessa, ref numeroRegistro);
                         break;
                     default:
                         throw new Exception("Tipo de arquivo inexistente.");
@@ -137,6 +142,19 @@ namespace BoletoNetCore
                                              numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
                                              numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
                                              numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
+                    case TipoArquivo.CNAB150:
+                        return ((IBancoCNAB150)this).GerarTrailerLoteRemessaCNAB150(
+                                            ref numeroArquivoRemessa, numeroRegistroGeral, valorBoletoGeral,
+                                            numeroRegistroCobrancaSimples, valorCobrancaSimples,
+                                            numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
+                                            numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
+                                            numeroRegistroCobrancaDescontada, valorCobrancaDescontada) + Environment.NewLine
+                                            + ((IBancoCNAB150)this).GerarTrailerRemessaCNAB150(
+                                            numeroRegistroGeral, valorBoletoGeral,
+                                            numeroRegistroCobrancaSimples, valorCobrancaSimples,
+                                            numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
+                                            numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
+                                            numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
                     default:
                         throw new Exception("Tipo de arquivo inexistente.");
                 }

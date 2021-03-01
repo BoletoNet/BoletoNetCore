@@ -25,10 +25,15 @@ namespace BoletoNetCore
 
             contaBancaria.FormatarDados("PAGÁVEL PREFERENCIALMENTE NO BANCO SANTANDER.", "", "", digitosConta: 9);
 
-            var codigoBeneficiario = Beneficiario.Codigo;
-            Beneficiario.Codigo = codigoBeneficiario.Length <= 7 ? codigoBeneficiario.PadLeft(7, '0') : throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, 7);
+            if (contaBancaria.CarteiraComVariacaoPadrao != "1")
+            {
+                var codigoBeneficiario = Beneficiario.Codigo;
+                Beneficiario.Codigo = codigoBeneficiario.Length <= 7
+                    ? codigoBeneficiario.PadLeft(7, '0')
+                    : throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, 7);
 
-            Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {Beneficiario.Codigo}";
+                Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {Beneficiario.Codigo}";
+            }
         }
 
         public override string FormatarNomeArquivoRemessa(int numeroSequencial)
