@@ -1,3 +1,4 @@
+using BoletoNetCore.Enums;
 using System;
 using System.IO;
 using System.Text;
@@ -23,7 +24,7 @@ namespace BoletoNetCore
         {
             try
             {
-                int numeroRegistroGeral = 0,
+                int numeroRegistroGeral = Banco.Codigo == (int)CodigoBanco.SICREDI ? 2 : 0,
                     numeroRegistroCobrancaSimples = 0,
                     numeroRegistroCobrancaVinculada = 0,
                     numeroRegistroCobrancaCaucionada = 0,
@@ -73,7 +74,7 @@ namespace BoletoNetCore
                         throw new Exception("Registro DETALHE obrigatório.");
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
-                    
+                    if (Banco.Codigo == (int)CodigoBanco.SICREDI) numeroRegistroGeral++;
                     // Ajusta Totalizadores
                     valorBoletoGeral += boleto.ValorTitulo;
                     switch (boleto.TipoCarteira)
@@ -116,7 +117,7 @@ namespace BoletoNetCore
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
                 }
-                
+
 
                 if (fecharRemessa)
                 {
@@ -124,7 +125,8 @@ namespace BoletoNetCore
                     arquivoRemessa.Dispose();
                     arquivoRemessa = null;
                 }
-                else {
+                else
+                {
                     arquivoRemessa.Flush();
                 }
             }
