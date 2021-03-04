@@ -107,6 +107,34 @@ namespace BoletoNetCore
         void LerDetalheRetornoCNAB240SegmentoA(ref Boleto boleto, string regitro);
     }
 
+
+    /// <summary>
+    /// Implementa Remessa e Retorno de Cobrança no formato CNAB150 em uma Intituição Financeira
+    /// </summary>
+    public interface IBancoCNAB150 : IBanco
+    {
+        /// <summary>
+        /// 1 - Header de Remessa e Lote do Arquivo de Remessa
+        /// </summary>
+        /// <param name="numeroArquivoRemessa"></param>
+        /// <param name="numeroRegistro"></param>
+        /// <returns></returns>
+        string GerarHeaderRemessaCNAB150(ref int numeroArquivoRemessa, ref int numeroRegistro);
+        string GerarDetalheRemessaCNAB150(Boleto boleto, ref int registro);
+
+        string GerarTrailerLoteRemessaCNAB150(ref int numeroArquivoRemessa,int numeroRegistroGeral, decimal valorBoletoGeral,
+            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
+            int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
+            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
+            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada);
+
+        string GerarTrailerRemessaCNAB150(int numeroRegistroGeral, decimal valorBoletoGeral,
+            int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
+            int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
+            int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
+            int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada);
+    }
+    
     /// <summary>
     /// Implementa Registro Online de Boleto
     /// </summary>
