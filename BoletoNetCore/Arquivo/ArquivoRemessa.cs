@@ -1,4 +1,3 @@
-using BoletoNetCore.Enums;
 using System;
 using System.IO;
 using System.Text;
@@ -7,6 +6,8 @@ namespace BoletoNetCore
 {
     public class ArquivoRemessa // : AbstractArquivoRemessa, IArquivoRemessa
     {
+        private readonly int SICREDI = 748;
+
         public IBanco Banco { get; set; }
         public TipoArquivo TipoArquivo { get; set; }
         public int NumeroArquivoRemessa { get; set; }
@@ -24,7 +25,7 @@ namespace BoletoNetCore
         {
             try
             {
-                int numeroRegistroGeral = Banco.Codigo == (int)CodigoBanco.SICREDI ? 2 : 0,
+                int numeroRegistroGeral = Banco.Codigo == SICREDI ? 2 : 0,
                     numeroRegistroCobrancaSimples = 0,
                     numeroRegistroCobrancaVinculada = 0,
                     numeroRegistroCobrancaCaucionada = 0,
@@ -74,7 +75,7 @@ namespace BoletoNetCore
                         throw new Exception("Registro DETALHE obrigatório.");
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
-                    if (Banco.Codigo == (int)CodigoBanco.SICREDI) numeroRegistroGeral++;
+                    if (Banco.Codigo == SICREDI) numeroRegistroGeral++;
                     // Ajusta Totalizadores
                     valorBoletoGeral += boleto.ValorTitulo;
                     switch (boleto.TipoCarteira)

@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using BoletoNetCore.Exceptions;
+﻿using BoletoNetCore.Exceptions;
 using System;
-using BoletoNetCore.Enums;
+using System.Collections.Generic;
 
 namespace BoletoNetCore
 {
@@ -9,7 +8,7 @@ namespace BoletoNetCore
     {
         public BancoSicredi()
         {
-            Codigo = (int)CodigoBanco.SICREDI;
+            Codigo = 748;
             Nome = "Sicredi";
             Digito = "X";
             IdsRetornoCnab400RegistroDetalhe = new List<string> { "1" };
