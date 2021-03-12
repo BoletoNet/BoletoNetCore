@@ -10,6 +10,8 @@ namespace BoletoNetCore
         {
             string detalhe = string.Empty;
 
+            registro++;
+
             //Redireciona para o Detalhe da remessa Conforme o "Tipo de Documento" = "Tipo de Cobrança do CNAB400":
             //  A = 'A' - SICREDI com Registro
             // C1 = 'C' - SICREDI sem Registro Impressão Completa pelo Sicredi
