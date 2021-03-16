@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using BoletoNetCore.Exceptions;
-using System;
+﻿using System;
 
 namespace BoletoNetCore
 {
@@ -9,7 +7,7 @@ namespace BoletoNetCore
         public string GerarDetalheRemessaCNAB400(Boleto boleto, ref int registro)
         {
             string detalhe = string.Empty;
-
+            registro += 1;
             //Redireciona para o Detalhe da remessa Conforme o "Tipo de Documento" = "Tipo de Cobrança do CNAB400":
             //  A = 'A' - SICREDI com Registro
             // C1 = 'C' - SICREDI sem Registro Impressão Completa pelo Sicredi
@@ -43,13 +41,13 @@ namespace BoletoNetCore
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0111, 007, 0, numeroArquivoRemessa.ToString(), '0')); //111-117
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0118, 273, 0, "", ' '));                              //118-390
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0391, 004, 0, "2.00", ' '));                          //391-394
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0395, 006, 0, "000001", ' '));                        //395-400
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0395, 006, 0, "000001", '0'));                        //395-400
 
                 reg.CodificarLinha();
 
                 string vLinha = reg.LinhaRegistro;
                 string _header = Utils.SubstituiCaracteresEspeciais(vLinha);
-
+                numeroRegistroGeral += 1;
                 return _header;
             }
             catch (Exception ex)
@@ -68,7 +66,7 @@ namespace BoletoNetCore
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0003, 003, 0, "748", ' '));                       //003-006
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0006, 005, 0, Beneficiario.Codigo, ' '));              //006-010                
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0011, 384, 0, string.Empty, ' '));                //011-394
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0'));         //395-400
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral += 1, '0'));         //395-400
 
                 reg.CodificarLinha();
 
@@ -87,8 +85,6 @@ namespace BoletoNetCore
         {
             try
             {
-                //string NumeroDocumento = boleto.NossoNumero;
-
                 TRegistroEDI reg = new TRegistroEDI();
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "1", ' '));                                                    //001-001
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 001, 0, "A", ' '));                                                    //002-002  'A' - SICREDI com Registro
@@ -124,7 +120,7 @@ namespace BoletoNetCore
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0093, 004, 0, boleto.PercentualMulta, '0'));                                //093-096
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0097, 012, 0, string.Empty, ' '));                                          //097-108
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0109, 002, 0, "01", ' '));                                                  //109-110 01 - Cadastro de título;
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NossoNumero, ' '));                                    //111-120
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NumeroDocumento, ' '));                                    //111-120
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediDataDDMMAA___________, 0121, 006, 0, boleto.DataVencimento, ' '));                                 //121-126
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 013, 2, boleto.ValorTitulo, '0'));                                    //127-139
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0140, 009, 0, string.Empty, ' '));                                          //140-148
@@ -228,7 +224,6 @@ namespace BoletoNetCore
             throw new NotImplementedException("Função não implementada.");
         }
 
-
         public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             try
@@ -266,7 +261,6 @@ namespace BoletoNetCore
 
                 // Identificação de Ocorrência - Código Auxiliar
                 boleto.CodigoMotivoOcorrencia = registro.Substring(381, 10);
-
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
             }
@@ -324,6 +318,8 @@ namespace BoletoNetCore
                     return "Devolução, liquidado anteriormente";
                 case "26":
                     return "Devolvido pelo cartório – erro de informação";
+                case "28":
+                    return "Tarifa";
                 case "30":
                     return "Cobrança a creditar (liquidação em trânsito)";
                 case "31":
@@ -363,7 +359,6 @@ namespace BoletoNetCore
         {
             throw new NotImplementedException();
         }
-
 
         public override void LerHeaderRetornoCNAB400(string registro)
         {
