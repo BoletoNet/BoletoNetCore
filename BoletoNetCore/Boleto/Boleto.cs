@@ -181,7 +181,7 @@ namespace BoletoNetCore
         /// custas, liquidação e baixas) em registros detalhe de títulos de cobrança.Poderão ser
         /// informados até cinco ocorrências distintas, incidente sobre o título.
         /// </summary>
-        public string DescricaoMotivoOcorrencia { get => string.Join(", ", ListMotivosOcorrencia); }
+        public string DescricaoMotivoOcorrencia { get => string.Join(", ", ListMotivosOcorrencia.Where(x => x != string.Empty).ToArray()); }
 
         /// <summary>
         /// C047 - Descrição do Motivo da Ocorrência
