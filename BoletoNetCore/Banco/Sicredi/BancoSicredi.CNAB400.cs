@@ -7,7 +7,7 @@ namespace BoletoNetCore
         public string GerarDetalheRemessaCNAB400(Boleto boleto, ref int registro)
         {
             string detalhe = string.Empty;
-            registro += 1;
+            registro++;
             //Redireciona para o Detalhe da remessa Conforme o "Tipo de Documento" = "Tipo de Cobrança do CNAB400":
             //  A = 'A' - SICREDI com Registro
             // C1 = 'C' - SICREDI sem Registro Impressão Completa pelo Sicredi
@@ -47,7 +47,7 @@ namespace BoletoNetCore
 
                 string vLinha = reg.LinhaRegistro;
                 string _header = Utils.SubstituiCaracteresEspeciais(vLinha);
-                numeroRegistroGeral += 1;
+                numeroRegistroGeral++;
                 return _header;
             }
             catch (Exception ex)
@@ -60,13 +60,14 @@ namespace BoletoNetCore
         {
             try
             {
+                numeroRegistroGeral++;
                 TRegistroEDI reg = new TRegistroEDI();
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "9", ' '));                         //001-001
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 001, 0, "1", ' '));                         //002-002
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0003, 003, 0, "748", ' '));                       //003-006
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0006, 005, 0, Beneficiario.Codigo, ' '));              //006-010                
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0011, 384, 0, string.Empty, ' '));                //011-394
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral += 1, '0'));         //395-400
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0'));         //395-400
 
                 reg.CodificarLinha();
 
