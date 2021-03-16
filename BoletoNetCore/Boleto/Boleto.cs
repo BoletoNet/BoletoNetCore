@@ -32,7 +32,7 @@ namespace BoletoNetCore
         {
             Banco = banco;
             //se o arquivo de retorno for criado par multiplas carteiras, ignora a carteira (para compatibilidade)
-            if (!ignorarCarteira)
+            if (!ignorarCarteira && banco.Beneficiario != null)
             {
                 Carteira = banco.Beneficiario.ContaBancaria.CarteiraPadrao;
                 VariacaoCarteira = banco.Beneficiario.ContaBancaria.VariacaoCarteiraPadrao;

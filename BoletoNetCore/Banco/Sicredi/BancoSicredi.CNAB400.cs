@@ -270,8 +270,9 @@ namespace BoletoNetCore
                 boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(328, 8)).ToString("####-##-##"));
 
                 // Identificação de Ocorrência - Código Auxiliar
-                boleto.CodigoMotivoOcorrencia = registro.Substring(381, 10);
-
+                boleto.CodigoMotivoOcorrencia = registro.Substring(318, 10);
+                boleto.ListMotivosOcorrencia = Cnab.MotivoOcorrenciaCnab240(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
+               
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
             }
