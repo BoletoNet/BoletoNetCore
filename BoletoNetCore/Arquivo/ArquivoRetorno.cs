@@ -83,11 +83,11 @@ namespace BoletoNetCore
                     //atribui o tipo de acordo com o conteúdo do arquivo
                     TipoArquivo = registro.Length == 240 ? TipoArquivo.CNAB240 : TipoArquivo.CNAB400;
 
-                    if (TipoArquivo == TipoArquivo.CNAB400 && Banco.IdsRetornoCnab400RegistroDetalhe.Count == 0)
-                        throw new Exception("Banco " + Banco.Codigo.ToString() + " não implementou os Ids do Registro Retorno do CNAB400.");
-
                     //instacia o banco de acordo com o codigo/id do banco presente no arquivo de retorno
                     Banco = BoletoNetCore.Banco.Instancia(Utils.ToInt32(registro.Substring(TipoArquivo == TipoArquivo.CNAB240 ? 0 : 76, 3)));
+
+                    if (TipoArquivo == TipoArquivo.CNAB400 && Banco.IdsRetornoCnab400RegistroDetalhe.Count == 0)
+                        throw new Exception("Banco " + Banco.Codigo.ToString() + " não implementou os Ids do Registro Retorno do CNAB400.");
 
                     //define a posicao do reader para o início
                     arquivoRetorno.DiscardBufferedData();
