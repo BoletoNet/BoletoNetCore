@@ -73,7 +73,6 @@ namespace BoletoNetCore
                         throw new Exception("Registro DETALHE obrigatório.");
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
-                    
                     // Ajusta Totalizadores
                     valorBoletoGeral += boleto.ValorTitulo;
                     switch (boleto.TipoCarteira)
@@ -116,7 +115,7 @@ namespace BoletoNetCore
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
                 }
-                
+
 
                 if (fecharRemessa)
                 {
@@ -124,7 +123,8 @@ namespace BoletoNetCore
                     arquivoRemessa.Dispose();
                     arquivoRemessa = null;
                 }
-                else {
+                else
+                {
                     arquivoRemessa.Flush();
                 }
             }

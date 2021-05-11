@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using BoletoNetCore.Exceptions;
+﻿using BoletoNetCore.Exceptions;
 using System;
+using System.Collections.Generic;
 
 namespace BoletoNetCore
 {
@@ -22,7 +22,12 @@ namespace BoletoNetCore
             if (!CarteiraFactory<BancoSicredi>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
                 throw BoletoNetCoreException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
-            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO.", "", "", 9);
+            string localPagamento = "PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO.";
+
+            if (!string.IsNullOrEmpty(contaBancaria.LocalPagamento) && !contaBancaria.LocalPagamento.Equals("PAGÁVEL EM QUALQUER BANCO."))
+                localPagamento = contaBancaria.LocalPagamento;
+
+            contaBancaria.FormatarDados(localPagamento, "", "", 9);
 
             Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia}.{contaBancaria.OperacaoConta}.{Beneficiario.Codigo}";
         }
@@ -47,6 +52,6 @@ namespace BoletoNetCore
             return string.Format("{0}{1}{2}.{3}", Beneficiario.Codigo, mes, dia, $"RM{(sequencial == 10 ? 0 : sequencial)}");
 
         }
-       
+
     }
 }
