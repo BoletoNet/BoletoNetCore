@@ -81,7 +81,7 @@ namespace BoletoNetCore
             var reg = new TRegistroEDI();
             registro++;
 
-            string tipoIdentificacao = (boleto.Pagador.CPFCNPJ.Trim().Length == 11) ? "1" : "2";
+            string tipoIdentificacao = (boleto.Pagador.CPFCNPJ.Trim().Length <= 11) ? "2" : "1";
             string dadosConta = $"{boleto.ContaDebitada}{boleto.DigitoVerificadorAgenciaContaDebitada}";
 
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "E", '0');
