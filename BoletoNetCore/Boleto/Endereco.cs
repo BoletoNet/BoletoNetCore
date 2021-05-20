@@ -19,7 +19,7 @@ namespace BoletoNetCore
             if (!string.IsNullOrEmpty(LogradouroNumero))
                 logradouroCompleto += " " + LogradouroNumero;
             if (!string.IsNullOrEmpty(LogradouroComplemento))
-                logradouroCompleto += " " + LogradouroComplemento;
+                logradouroCompleto += " " + (LogradouroComplemento.Length > 20 ? LogradouroComplemento.Substring(0, 20) : LogradouroComplemento);
 
             if (tamanhoFinal == 0)
                 return LogradouroEndereco + logradouroCompleto;

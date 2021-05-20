@@ -374,12 +374,18 @@ namespace BoletoNetCore
                     return TipoEspecieDocumento.NS;
                 case "05":
                     return TipoEspecieDocumento.RC;
-                case "10":
-                    return TipoEspecieDocumento.LC;
-                case "11":
-                    return TipoEspecieDocumento.ND;
-                case "12":
+                case "08":
                     return TipoEspecieDocumento.DS;
+                case "09":
+                    return TipoEspecieDocumento.LC;
+                case "13":
+                    return TipoEspecieDocumento.ND;
+                case "15":
+                    return TipoEspecieDocumento.DD;
+                case "16":
+                    return TipoEspecieDocumento.EC;
+                case "18":
+                    return TipoEspecieDocumento.BP;
                 default:
                     return TipoEspecieDocumento.OU;
             }
@@ -397,12 +403,18 @@ namespace BoletoNetCore
                     return "03";
                 case TipoEspecieDocumento.RC:
                     return "05";
-                case TipoEspecieDocumento.LC:
-                    return "10";
-                case TipoEspecieDocumento.ND:
-                    return "11";
                 case TipoEspecieDocumento.DS:
-                    return "12";
+                    return "08";
+                case TipoEspecieDocumento.LC:
+                    return "09";
+                case TipoEspecieDocumento.ND:
+                    return "13";
+                case TipoEspecieDocumento.DD:
+                    return "15";
+                case TipoEspecieDocumento.EC:
+                    return "16";
+                case TipoEspecieDocumento.BP:
+                    return "18";
                 default:
                     return "99";
             }

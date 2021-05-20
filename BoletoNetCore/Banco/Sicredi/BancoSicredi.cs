@@ -37,10 +37,15 @@ namespace BoletoNetCore
             if (mes == "12") mes = "D";
             var dia = agora.Day.ToString().PadLeft(2, '0');
 
-            //Caso for gerado mais de um arquivo de remessa alterar a extensão do aquivo para "RM" + o contador do numero do arquivo de remessa gerado no dia
-            var nomeArquivoRemessa = string.Format("{0}{1}{2}.{3}", Beneficiario.Codigo, mes, dia, "CRM");
+            if (sequencial < 0 || sequencial > 10)
+                throw BoletoNetCoreException.NumeroSequencialInvalido(sequencial);
 
-            return nomeArquivoRemessa;
+            if (sequencial < 1) // se 0 ou 1 é o primeiro arquivo do dia
+                return string.Format("{0}{1}{2}.{3}", Beneficiario.Codigo, mes, dia, "CRM");
+
+            //número máximos de arquivos enviados no dia são 10 
+            return string.Format("{0}{1}{2}.{3}", Beneficiario.Codigo, mes, dia, $"RM{(sequencial == 10 ? 0 : sequencial)}");
+
         }
        
     }

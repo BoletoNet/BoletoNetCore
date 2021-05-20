@@ -52,5 +52,7 @@ namespace BoletoNetCore.Exceptions
         public static Exception CarteiraNaoImplementada(string carteiraComVariacao)
             => new BoletoNetCoreException($"Carteira não implementada: {carteiraComVariacao}");
 
+        public static Exception NumeroSequencialInvalido(int numeroSequencial)
+            => new BoletoNetCoreException($"Número sequencial é inválido: {numeroSequencial}");
     }
 }
