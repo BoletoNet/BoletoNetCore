@@ -35,10 +35,21 @@ namespace BoletoNetCore
                     valorCobrancaDescontada = 0;
 
                 int tamanhoRegistro;
-                if (this.TipoArquivo == TipoArquivo.CNAB240)
-                    tamanhoRegistro = 240;
-                else
-                    tamanhoRegistro = 400;
+
+                switch (this.TipoArquivo)
+                {
+                    case TipoArquivo.CNAB240:
+                        tamanhoRegistro = 240;
+                        break;
+                    case TipoArquivo.CNAB400:
+                        tamanhoRegistro = 400;
+                        break;
+                    case TipoArquivo.CNAB150:
+                        tamanhoRegistro = 150;
+                        break;
+                    default:
+                        throw new Exception("Layout não encontrado");
+                }
 
                 StreamWriter arquivoRemessa = new StreamWriter(stream, Encoding.GetEncoding("ISO-8859-1"));
                 string strline = String.Empty;

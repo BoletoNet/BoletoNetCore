@@ -266,6 +266,12 @@ namespace BoletoNetCore
                 case "18": return "Tarifa Sobre Alteração de Abatimento/ Desconto"                      ;
                 case "19": return "Tarifa Sobre Arquivo mensal(Em Ser)"                                 ;
                 case "20": return "Tarifa Sobre Emissão de Boleto de Pagamento Pré - Emitido pelo Banco";
+                case "A9": return "Tarifa de manutenção de título vencido"                              ;
+                case "B1": return "Tarifa de baixa da carteira"                                         ;
+                case "B3": return "Tarifa de registro de entrada do título"                             ;
+                case "F5": return "Tarifa de entrada na rede"                                           ;
+                case "S4": return "Tarifa de Inclusão Negativação"                                      ;
+                case "S5": return "Tarifa de Exclusão Negativação"                                      ;
                 default: return "";
             }
         };

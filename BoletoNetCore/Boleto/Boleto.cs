@@ -32,7 +32,7 @@ namespace BoletoNetCore
         {
             Banco = banco;
             //se o arquivo de retorno for criado par multiplas carteiras, ignora a carteira (para compatibilidade)
-            if (!ignorarCarteira)
+            if (!ignorarCarteira && banco.Beneficiario != null)
             {
                 Carteira = banco.Beneficiario.ContaBancaria.CarteiraPadrao;
                 VariacaoCarteira = banco.Beneficiario.ContaBancaria.VariacaoCarteiraPadrao;
@@ -181,7 +181,7 @@ namespace BoletoNetCore
         /// custas, liquidação e baixas) em registros detalhe de títulos de cobrança.Poderão ser
         /// informados até cinco ocorrências distintas, incidente sobre o título.
         /// </summary>
-        public string DescricaoMotivoOcorrencia { get => string.Join(", ", ListMotivosOcorrencia); }
+        public string DescricaoMotivoOcorrencia { get => string.Join(", ", ListMotivosOcorrencia.Where(x => x != string.Empty).ToArray()); }
 
         /// <summary>
         /// C047 - Descrição do Motivo da Ocorrência
