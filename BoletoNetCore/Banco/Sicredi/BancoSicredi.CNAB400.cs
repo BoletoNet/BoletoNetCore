@@ -8,7 +8,6 @@ namespace BoletoNetCore
     {
         public string GerarDetalheRemessaCNAB400(Boleto boleto, ref int registro)
         {
-            registro++;
             string detalhe = string.Empty;
 
             registro++;
