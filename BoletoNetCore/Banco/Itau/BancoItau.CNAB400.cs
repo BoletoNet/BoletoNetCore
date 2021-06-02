@@ -126,7 +126,7 @@ namespace BoletoNetCore
         {
             try
             {
-                if (boleto.PercentualMulta == 0)
+                if (boleto.PercentualMulta == 0 && boleto.ValorMulta == 0)
                     return "";
 
                 numeroRegistroGeral++;
@@ -137,7 +137,10 @@ namespace BoletoNetCore
                 var dataMulta = boleto.DataMulta >= boleto.DataVencimento ? boleto.DataMulta : boleto.DataVencimento;
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0003, 008, 0, dataMulta, '0');
 
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0011, 013, 2, boleto.PercentualMulta, '0');
+                if (boleto.PercentualMulta > 0)
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0011, 013, 2, boleto.PercentualMulta, '0');
+                else
+                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0011, 013, 2, CalcularValorPercentualMulta(boleto.ValorTitulo, boleto.ValorMulta), '0');
 
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0024, 371, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
@@ -422,10 +425,13 @@ namespace BoletoNetCore
 
         public void LerTrailerRetornoCNAB400(string registro)
         {
-            
+
         }
 
-        
+        private decimal CalcularValorPercentualMulta(decimal valorTitulo, decimal valorMulta)
+        {
+            return (valorMulta / valorTitulo) * 100;
+        }
     }
 }
 
