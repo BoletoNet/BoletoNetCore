@@ -1,4 +1,5 @@
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -25,15 +26,26 @@ namespace BoletoNetCore
         }
         #endregion
 
-        public string ChaveMaster { get; set; }
+        #region Chaves de Acesso Api
+
+        // Chave Master que deve ser gerada pelo portal do sicredi
+        // Menu Cobrança, Sub Menu Lateral Código de Acesso / Gerar
+        public string ChaveApi { get; set; }
+
+        // Chave de Transação valida por 24 horas
+        // Segundo o manual, não é permitido gerar uma nova chave de transação antes da atual estar expirada.
+        // Caso seja necessário gerar uma chave de transação antes, é necessário criar uma nova chave master, o que invalida a anterior.
         public string Token { get; set; }
+
+        #endregion
 
         public async Task<string> GerarToken()
         {
             var request = new HttpRequestMessage(HttpMethod.Post, "autenticacao");
-            request.Headers.Add("token", this.ChaveMaster);
+            request.Headers.Add("token", this.ChaveApi);
 
             var response = await this.httpClient.SendAsync(request);
+            await this.CheckHttpResponseError(response);
             var ret = await response.Content.ReadFromJsonAsync<ChaveTransacaoSicrediApi>();
             this.Token = ret.ChaveTransacao;
             return ret.ChaveTransacao;
@@ -45,7 +57,7 @@ namespace BoletoNetCore
             emissao.Agencia = boleto.Banco.Beneficiario.ContaBancaria.Agencia;
             emissao.Posto = boleto.Banco.Beneficiario.ContaBancaria.DigitoAgencia;
             emissao.Cedente = boleto.Banco.Beneficiario.Codigo;
-            emissao.NossoNumero = boleto.NossoNumeroFormatado;
+            emissao.NossoNumero = boleto.NossoNumero;
             emissao.TipoPessoa = boleto.Pagador.TipoCPFCNPJ("0");
             emissao.CpfCnpj = boleto.Pagador.CPFCNPJ;
             emissao.Nome = boleto.Pagador.Nome;
@@ -53,15 +65,26 @@ namespace BoletoNetCore
             emissao.Cidade = boleto.Pagador.Endereco.Cidade;
             emissao.Uf = boleto.Pagador.Endereco.UF;
             emissao.Cep = boleto.Pagador.Endereco.CEP;
-            emissao.Telefone = ""; // todo: sicredi exige o telefone
+
+            // todo
+            emissao.CodigoPagador = string.Empty;
+
+            // manual: "Opcional. Será obrigatório se o código do pagador não for informado"
+            emissao.Telefone = boleto.Pagador.Telefone;
+
             emissao.Email = "";
-            emissao.EspecieDocumento = "A"; // todo: A - Duplicata Mercantil
+            emissao.EspecieDocumento = this.EspecieDocumentoSicredi(boleto.EspecieDocumento);
             emissao.SeuNumero = boleto.NumeroDocumento;
             emissao.DataVencimento = boleto.DataVencimento.ToString("dd/MM/yyyy");
             emissao.Valor = boleto.ValorTitulo;
             emissao.TipoDesconto = "A"; // todo: 
-            emissao.ValorDesconto1 = boleto.ValorDesconto;
-            emissao.DataDesconto1 = boleto.DataDesconto.ToString("dd/MM/yyyy");
+
+            if (boleto.ValorDesconto != 0)
+            {
+                emissao.ValorDesconto1 = boleto.ValorDesconto;
+                emissao.DataDesconto1 = boleto.DataDesconto.ToString("dd/MM/yyyy");
+            }
+
             emissao.TipoJuros = "A"; // todo
             emissao.Juros = boleto.ValorJurosDia;
             emissao.Multas = boleto.ValorMulta;
@@ -73,9 +96,88 @@ namespace BoletoNetCore
             var request = new HttpRequestMessage(HttpMethod.Post, "emissao");
             request.Headers.Add("token", this.Token);
             request.Content = JsonContent.Create(emissao);
-            //var emitido = await this.httpClient.SendAsync(request);
-            await this.httpClient.SendAsync(request);
+            var response = await this.httpClient.SendAsync(request);
+            await this.CheckHttpResponseError(response);
+
+            // todo: verificar a necessidade de preencher dados do boleto com o retorno do sicredi
+            var boletoEmitido = await response.Content.ReadFromJsonAsync<BoletoEmitidoSicrediApi>();
+            boletoEmitido.LinhaDigitável.ToString();
+            boletoEmitido.CodigoBarra.ToString();
         }
+
+        private async Task CheckHttpResponseError(HttpResponseMessage response)
+        {
+            if (response.IsSuccessStatusCode)
+                return;
+
+            if (response.StatusCode == HttpStatusCode.BadRequest || (response.StatusCode == HttpStatusCode.NotFound && response.Content.Headers.ContentType.MediaType == "application/json"))
+            {
+                var bad = await response.Content.ReadFromJsonAsync<BadRequestSicrediApi>();
+                throw new Exception(string.Format("{0} {1}", bad.Parametro, bad.Mensagem).Trim());
+            }
+            else
+                throw new Exception(string.Format("Erro desconhecido: {0}", response.StatusCode));
+        }
+
+        public async Task ConsultarStatus(Boleto boleto)
+        {
+            var agencia = boleto.Banco.Beneficiario.ContaBancaria.Agencia;
+            var posto = boleto.Banco.Beneficiario.ContaBancaria.DigitoAgencia;
+            var cedente = boleto.Banco.Beneficiario.Codigo;
+            var nossoNumero = boleto.NossoNumero;
+
+            // existem outros parametros no manual para consulta de multiplos boletos
+            var url = string.Format("consulta?agencia={0}&cedente={1}&posto={2}&nossoNumero={3}", agencia, cedente, posto, nossoNumero);
+
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            request.Headers.Add("token", this.Token);
+            var response = await this.httpClient.SendAsync(request);
+            await this.CheckHttpResponseError(response);
+            var ret = await response.Content.ReadFromJsonAsync<RetornoConsultaBoletoSicrediApi[]>();
+
+            // todo: verificar quais dados necessarios para preencher boleto
+            ret[0].Situacao.ToString();
+        }
+    }
+
+    #region Classes Auxiliares (json) Sicredi
+
+    class InstrucaoSicrediApi
+    {
+        public string Agencia { get; set; }
+        public string Posto { get; set; }
+        public string Cedente { get; set; }
+        public string NossoNumero { get; set; }
+
+        /*
+            PEDIDO_BAIXA
+            CONCESSAO_ABATIMENTO
+            CANCELAMENTO_ABATIMENTO_CONCEDIDO
+            ALTERACAO_VENCIMENTO
+            ALTERACAO_SEU_NUMERO
+            PEDIDO_PROTESTO
+            SUSTAR_PROTESTO_BAIXAR _TITULO
+            SUSTAR_PROTESTO_MANTER_CARTEIRA
+            ALTERACAO_OUTROS_DADOS
+        */
+        public string InstrucaoComando { get; set; }
+
+        /*
+            DESCONTO
+            JUROS_DIA
+            DESCONTO_DIA_ANTECIPACAO
+            DATA_LIMITE_CONCESSAO_DESCONTO
+            CANCELAMENTO_PROTESTO _AUTOMATICO
+            CANCELAMENTO_NEGATIVACAO_AUTOMATICA
+        */
+        public string ComplementoInstrucao { get; set; }
+    }
+
+    class BadRequestSicrediApi
+    {
+        public string Codigo { get; set; }
+        public string Mensagem { get; set; }
+        public string Parametro { get; set; }
     }
 
     class ChaveTransacaoSicrediApi
@@ -173,4 +275,6 @@ namespace BoletoNetCore
         public string CodigoMensagem { get; set; }
         public int NumDiasNegativacaoAuto { get; set; }
     }
+
+    #endregion
 }

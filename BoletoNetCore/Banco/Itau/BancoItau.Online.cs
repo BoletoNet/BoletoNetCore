@@ -8,6 +8,14 @@ namespace BoletoNetCore
 {
     partial class BancoItau : IBancoOnlineRest
     {
+        public string ChaveApi { get; set; }
+        public string Token { get; set; }
+
+        public Task ConsultarStatus(Boleto boleto)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// TODO: Necessário verificar quais os métodos necessários
         /// </summary>

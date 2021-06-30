@@ -141,8 +141,20 @@ namespace BoletoNetCore
     /// </summary>
     public interface IBancoOnlineRest : IBanco
     {
+        /// <summary>
+        /// Chave de Acesso (ApiKey), geralmente utilizado para gerar o token de autenticacao
+        /// No caso do sicredi por exemplo, a nomenclatura utilizada é Chave Master
+        /// </summary>
+        string ChaveApi { get; set; }
+
+        /// <summary>
+        /// Token de autenticacao com validade temporaria
+        /// No caso do sicredi por exemplo, a nomenclatura utilizada é Chave de Transação
+        /// </summary>
+        string Token { get; set; }
+
         Task<string> GerarToken();
         Task RegistrarBoleto(Boleto boleto);
-        //StatusBoletoOnline ConsultarStatus(ref Boleto boleto, string registro);
+        Task ConsultarStatus(Boleto boleto);
     }
 }
