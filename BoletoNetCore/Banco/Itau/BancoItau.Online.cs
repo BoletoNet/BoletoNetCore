@@ -8,8 +8,6 @@ namespace BoletoNetCore
 {
     partial class BancoItau : IBancoOnlineRest
     {
-        public string UrlApi => throw new NotImplementedException();
-
         /// <summary>
         /// TODO: Necessário verificar quais os métodos necessários
         /// </summary>
@@ -19,7 +17,7 @@ namespace BoletoNetCore
             throw new NotImplementedException();
         }
 
-        public Task RegistrarBoleto(ref Boleto boleto, string registro)
+        public Task RegistrarBoleto(Boleto boleto)
         {
             throw new NotImplementedException();
         }
