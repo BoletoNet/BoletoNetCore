@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace BoletoNetCore
 {
     public interface IBanco
     {
         /// <summary>
-        /// Beneficiário de uma Cobrança
+        /// Beneficiï¿½rio de uma Cobranï¿½a
         /// </summary>
         Beneficiario Beneficiario { get; set; }
         int Codigo { get; }
@@ -15,19 +16,19 @@ namespace BoletoNetCore
         bool RemoveAcentosArquivoRemessa { get; }
 
         /// <summary>
-        /// Formata o beneficiário (Agência, Conta, Código)
+        /// Formata o beneficiï¿½rio (Agï¿½ncia, Conta, Cï¿½digo)
         /// </summary>
         void FormataBeneficiario();
         /// <summary>
-        /// Formata o campo livre do código de barras
+        /// Formata o campo livre do cï¿½digo de barras
         /// </summary>
         string FormataCodigoBarraCampoLivre(Boleto boleto);
         /// <summary>
-        /// Formata o nosso número
+        /// Formata o nosso nï¿½mero
         /// </summary>
         void FormataNossoNumero(Boleto boleto);
         /// <summary>
-        /// Responsável pela validação de todos os dados referente ao banco, que serão usados no boleto
+        /// Responsï¿½vel pela validaï¿½ï¿½o de todos os dados referente ao banco, que serï¿½o usados no boleto
         /// </summary>
         void ValidaBoleto(Boleto boleto);
 
@@ -55,7 +56,7 @@ namespace BoletoNetCore
     }
 
     /// <summary>
-    /// Implementa Remessa e Tetorno de Cobrança no Formato CNAB400
+    /// Implementa Remessa e Tetorno de Cobranï¿½a no Formato CNAB400
     /// </summary>
     public interface IBancoCNAB400 : IBanco
     {
@@ -76,7 +77,7 @@ namespace BoletoNetCore
     }
 
     /// <summary>
-    /// Implementa Remessa e Retorno de Cobrança no formato CNAB240 em uma Intituição Financeira
+    /// Implementa Remessa e Retorno de Cobranï¿½a no formato CNAB240 em uma Intituiï¿½ï¿½o Financeira
     /// </summary>
     public interface IBancoCNAB240 : IBanco
     {
@@ -109,7 +110,7 @@ namespace BoletoNetCore
 
 
     /// <summary>
-    /// Implementa Remessa e Retorno de Cobrança no formato CNAB150 em uma Intituição Financeira
+    /// Implementa Remessa e Retorno de Cobranï¿½a no formato CNAB150 em uma Intituiï¿½ï¿½o Financeira
     /// </summary>
     public interface IBancoCNAB150 : IBanco
     {
@@ -122,7 +123,7 @@ namespace BoletoNetCore
         string GerarHeaderRemessaCNAB150(ref int numeroArquivoRemessa, ref int numeroRegistro);
         string GerarDetalheRemessaCNAB150(Boleto boleto, ref int registro);
 
-        string GerarTrailerLoteRemessaCNAB150(ref int numeroArquivoRemessa,int numeroRegistroGeral, decimal valorBoletoGeral,
+        string GerarTrailerLoteRemessaCNAB150(ref int numeroArquivoRemessa, int numeroRegistroGeral, decimal valorBoletoGeral,
             int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples,
             int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada,
             int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
@@ -134,14 +135,26 @@ namespace BoletoNetCore
             int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada,
             int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada);
     }
-    
+
     /// <summary>
     /// Implementa Registro Online de Boleto
     /// </summary>
     public interface IBancoOnlineRest : IBanco
     {
-        string GerarToken();
-        void RegistrarBoleto(ref Boleto boleto, string registro);
-        //StatusBoletoOnline ConsultarStatus(ref Boleto boleto, string registro);
+        /// <summary>
+        /// Chave de Acesso (ApiKey), geralmente utilizado para gerar o token de autenticacao
+        /// No caso do sicredi por exemplo, a nomenclatura utilizada Ã© Chave Master
+        /// </summary>
+        string ChaveApi { get; set; }
+
+        /// <summary>
+        /// Token de autenticacao com validade temporaria
+        /// No caso do sicredi por exemplo, a nomenclatura utilizada Ã© Chave de TransaÃ§Ã£o
+        /// </summary>
+        string Token { get; set; }
+
+        Task<string> GerarToken();
+        Task RegistrarBoleto(Boleto boleto);
+        Task ConsultarStatus(Boleto boleto);
     }
 }
