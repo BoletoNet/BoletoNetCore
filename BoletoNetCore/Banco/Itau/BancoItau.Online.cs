@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using BoletoNetCore.Exceptions;
 using static System.String;
 
@@ -11,12 +12,12 @@ namespace BoletoNetCore
         /// TODO: Necessário verificar quais os métodos necessários
         /// </summary>
         /// <returns></returns>
-        public string GerarToken()
+        public Task<string> GerarToken()
         {
             throw new NotImplementedException();
         }
 
-        public void RegistrarBoleto(ref Boleto boleto, string registro)
+        public Task RegistrarBoleto(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
         }
