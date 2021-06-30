@@ -8,6 +8,8 @@ namespace BoletoNetCore
 {
     partial class BancoItau : IBancoOnlineRest
     {
+        public string UrlApi => throw new NotImplementedException();
+
         /// <summary>
         /// TODO: Necessário verificar quais os métodos necessários
         /// </summary>

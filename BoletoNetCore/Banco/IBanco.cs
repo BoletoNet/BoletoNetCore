@@ -141,6 +141,7 @@ namespace BoletoNetCore
     /// </summary>
     public interface IBancoOnlineRest : IBanco
     {
+        string UrlApi { get; }
         Task<string> GerarToken();
         Task RegistrarBoleto(ref Boleto boleto, string registro);
         //StatusBoletoOnline ConsultarStatus(ref Boleto boleto, string registro);
