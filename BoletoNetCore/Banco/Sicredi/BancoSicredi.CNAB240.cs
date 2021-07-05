@@ -8,8 +8,8 @@ namespace BoletoNetCore
         public string GerarDetalheRemessaCNAB240(Boleto boleto, ref int registro)
         {
             var linhas = this.GerarDetalheRemessaCNAB240_SegmentoP(boleto, ref registro);
-            linhas += this.GerarDetalheRemessaCNAB240_SegmentoQ(boleto, ref registro);
-            linhas += this.GerarDetalheRemessaCNAB240_SegmentoR(boleto, ref registro);
+            linhas += Environment.NewLine + this.GerarDetalheRemessaCNAB240_SegmentoQ(boleto, ref registro);
+            linhas += Environment.NewLine + this.GerarDetalheRemessaCNAB240_SegmentoR(boleto, ref registro);
             return linhas;
         }
 
@@ -17,7 +17,7 @@ namespace BoletoNetCore
         {
             registro++;
             var reg = new TRegistroEDI();
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "748", ' '); // 001 a 003 - Código do banco na compensação "748" SCIREDI
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 003, 0, "748", ' '); // 001 a 003 - Código do banco na compensação "748" SCIREDI
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0004, 004, 0, "0001", '0'); // 004 a 007 - Lote de serviço "0001"
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0008, 001, 0, "3", '0');    // 008 a 008 - Tipo de registro = "3" DETALHE
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0009, 005, 0, registro, '0'); // 009 a 013 - Nº sequencial do registro do lote
@@ -67,7 +67,7 @@ namespace BoletoNetCore
 
             registro++;
             var reg = new TRegistroEDI();
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "748", ' '); // 001 a 003 - Código do banco na compensação "748" SCIREDI
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 003, 0, "748", ' '); // 001 a 003 - Código do banco na compensação "748" SCIREDI
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0004, 004, 0, "0001", '0'); // 004 a 007 - Lote de serviço "0001"
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0008, 001, 0, "3", '0');    // 008 a 008 - Tipo de registro = "3" DETALHE
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0009, 005, 0, registro, '0'); // 009 a 013 - Nº sequencial do registro do lote
@@ -79,7 +79,7 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0034, 040, 0, boleto.Pagador.Nome, ' '); // 034 a 073 - Nome
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0074, 040, 0, ender, ' '); // 074 a 113 - Endereço
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0114, 015, 0, boleto.Pagador.Endereco.Bairro, ' '); // 114 a 128 - Bairro
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0129, 009, 0, boleto.Pagador.Endereco.CEP.OnlyNumber(), '0'); // 129 a 133 - CEP + 134 a 136 - Sufixo do CEP
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0129, 008, 0, boleto.Pagador.Endereco.CEP.OnlyNumber(), '0'); // 129 a 133 - CEP + 134 a 136 - Sufixo do CEP
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0137, 015, 0, boleto.Pagador.Endereco.Cidade, ' '); // 137 a 151 - Cidade
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0152, 002, 0, boleto.Pagador.Endereco.UF, ' '); // 152 a 153 - Unidade da Federação
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0154, 001, 0, boleto.Avalista.TipoCPFCNPJ("0"), '1'); // 154 a 154 - Tipo de inscrição
@@ -96,7 +96,7 @@ namespace BoletoNetCore
         {
             registro++;
             var reg = new TRegistroEDI();
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "748", ' '); // 001 a 003 - Código do banco na compensação "748" SCIREDI
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 003, 0, "748", ' '); // 001 a 003 - Código do banco na compensação "748" SCIREDI
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0004, 004, 0, "0001", '0'); // 004 a 007 - Lote de serviço "0001"
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0008, 001, 0, "3", '0');    // 008 a 008 - Tipo de registro = "3" DETALHE
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0009, 005, 0, registro, '0'); // 009 a 013 - Nº sequencial do registro do lote
@@ -223,16 +223,16 @@ namespace BoletoNetCore
         {
             numeroRegistro++;
             var reg = new TRegistroEDI();
-            reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "748", ' ')); // 001 a 003 - Código do banco na compensação "748" SCIREDI
+            reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 003, 0, "748", ' ')); // 001 a 003 - Código do banco na compensação "748" SCIREDI
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0004, 004, 0, "0001", '0')); // 004 a 007 - Lote de serviço "0001"
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0008, 001, 0, "1", '0'));    // 008 a 008 - Tipo de registro = "1" HEADER LOTE
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 001, 0, "R", ' ')); // 009 a 009 - Tipo de operação = "R" Arquivo de Remessa
-            reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliDireita______, 0010, 002, 0, "001", '0')); // 010 a 011 - Tipo de serviço = "01" Cobrança
+            reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliDireita______, 0010, 002, 0, "01", '0')); // 010 a 011 - Tipo de serviço = "01" Cobrança
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0012, 002, 0, "", ' ')); // 012 a 013 - Uso exclusivo FEBRABAN/CNAB
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliDireita______, 0014, 003, 0, "040", '0')); // 014 a 016 - Nº da versão do leiaute do lote = "040"
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0017, 001, 0, "", ' ')); // 017 a 017 - Uso exclusivo FEBRABAN/CNAB
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0018, 001, 0, this.Beneficiario.TipoCPFCNPJ("0"), ' ')); // 018 a 018 - Tipo de inscrição da empresa = "1" Pessoa Física "2" Pessoa Jurídica
-            reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0019, 014, 0, this.Beneficiario.CPFCNPJ.OnlyNumber(), '0')); // 019 a 033 - Número de inscrição da empresa
+            reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0019, 015, 0, this.Beneficiario.CPFCNPJ.OnlyNumber(), '0')); // 019 a 033 - Número de inscrição da empresa
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0034, 020, 0, "", ' ')); // 034 a 053 - Código do convênio no banco (O SICREDI não valida este campo; cfe Manual Agosto 2010 pág. 35)
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliDireita______, 0054, 005, 0, this.Beneficiario.ContaBancaria.Agencia.OnlyNumber(), '0')); // 054 a 058 - Agência mantenedora da conta
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0059, 001, 0, "", ' ')); // 059 a 059 - Dígito verificador da agência
@@ -254,7 +254,7 @@ namespace BoletoNetCore
         {
             numeroRegistro++;
             var reg = new TRegistroEDI();
-            reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliDireita______, 0001, 001, 0, "748", '0')); // 001 a 003 - Código do banco na compensação "748" SCIREDI
+            reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliDireita______, 0001, 003, 0, "748", '0')); // 001 a 003 - Código do banco na compensação "748" SCIREDI
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0004, 004, 0, "0000", '0')); // 004 a 007 - Lote de serviço "0000"
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0008, 001, 0, "0", '1'));    // 008 a 008 - Tipo de registro = "0" HEADER ARQUIVO
             reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 009, 0, "", ' ')); // 009 a 017 - Uso exclusivo FEBRABAN/CNAB            
@@ -287,7 +287,7 @@ namespace BoletoNetCore
             // O número de registros no lote é igual ao número de registros gerados + 2 (header e trailler do lote)
             var numeroRegistrosNoLote = numeroRegistroGeral + 2;
             var reg = new TRegistroEDI();
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0001, 001, 0, "748", '0'); // 001 a 003 - Código do banco na compensação "748" SCIREDI
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0001, 003, 0, "748", '0'); // 001 a 003 - Código do banco na compensação "748" SCIREDI
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0004, 004, 0, "0001", '0'); // 004 a 007 - Lote de serviço "0000"
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0008, 001, 0, "5", '0');    // 008 a 008 - Tipo do registro = "5" TRAILLER LOTE
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 009, 0, "", ' '); // 009 a 017 - Uso exclusivo FEBRABAN/CNAB
