@@ -137,7 +137,6 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0086, 015, 2, boleto.ValorTitulo, '0'); // 086 a 100 - Valor nominal do título
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0101, 005, 0, "00000", '0'); // 101 a 105 - Coop./Ag. encarregada da cobrança
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0106, 001, 0, "", ' '); // 106 a 106 - Dígito verificador da coop./agência
-            this.EspecieDocumentoSicrediCNAB400(boleto.EspecieDocumento);
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0107, 002, 0, this.EspecieDocumentoSicrediCNAB240(boleto.EspecieDocumento), ' '); // 107 a 108 - Espécie do título
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0109, 001, 0, boleto.Aceite, 'N'); // 109 a 109 - Identificação de título aceito/não aceito
             reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0110, 008, 0, boleto.DataEmissao, '0'); // 110 a 117 - Data da emissão do título
