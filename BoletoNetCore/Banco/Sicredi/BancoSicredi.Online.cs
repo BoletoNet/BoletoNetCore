@@ -73,7 +73,7 @@ namespace BoletoNetCore
             emissao.Telefone = boleto.Pagador.Telefone;
 
             emissao.Email = "";
-            emissao.EspecieDocumento = this.EspecieDocumentoSicredi(boleto.EspecieDocumento);
+            emissao.EspecieDocumento = this.EspecieDocumentoSicrediCNAB400(boleto.EspecieDocumento);
             emissao.SeuNumero = boleto.NumeroDocumento;
             emissao.DataVencimento = boleto.DataVencimento.ToString("dd/MM/yyyy");
             emissao.Valor = boleto.ValorTitulo;

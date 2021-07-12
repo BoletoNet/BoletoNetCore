@@ -35,6 +35,12 @@ namespace BoletoNetCore.Testes
             Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSicrediCarteira1Tests), 9, true, "N", 00001);
         }
 
+        [Test]
+        public void Sicredi_1_REM240()
+        {
+            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSicrediCarteira1Tests), 9, true, "N", 00001);
+        }
+
         [TestCase(500, "4", "4", "4", "19/200004-8", "74894629800000500001119200004801560585305103", "74891.11927 00004.801569 05853.051034 4 62980000050000", 2015, 01, 04)]
         [TestCase(400, "3", "4", "4", "19/200003-0", "74894740700000400001119200003001560585305101", "74891.11927 00003.001567 05853.051018 4 74070000040000", 2018, 01, 17)]
         [TestCase(800, "10", "10", "3", "19/200010-2", "74893787000000800001119200010201560585305102", "74891.11927 00010.201564 05853.051026 3 78700000080000", 2019, 04, 25)]
