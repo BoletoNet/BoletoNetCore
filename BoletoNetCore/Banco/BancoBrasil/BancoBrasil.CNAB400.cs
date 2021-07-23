@@ -158,7 +158,7 @@ namespace BoletoNetCore
         {
             try
             {
-                if (boleto.ValorMulta == 0 && boleto.DiasLimiteRecebimento.HasValue)
+                if (boleto.ValorMulta == 0)
                     return "";
 
                 numeroRegistroGeral++;
