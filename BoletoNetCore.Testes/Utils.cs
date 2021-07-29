@@ -20,6 +20,7 @@ namespace BoletoNetCore.Testes
                 Nome = "Beneficiario Teste",
                 Codigo = codigoBeneficiario,
                 CodigoDV = digitoCodigoBeneficiario,
+                CodigoTransmissao = codigoTransmissao,
                 Endereco = new Endereco
                 {
                     LogradouroEndereco = "Rua Teste do Beneficiário",
