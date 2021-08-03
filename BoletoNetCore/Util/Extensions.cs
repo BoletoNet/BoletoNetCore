@@ -21,5 +21,10 @@ namespace BoletoNetCore.Util
                 ? str.Substring(str.Length - length, length)
                 : str;
         }
+
+        public static string OnlyNumber(this string str)
+        {
+            return str == null ? string.Empty : string.Join("", System.Text.RegularExpressions.Regex.Split(str ?? "", @"[^\d]"));
+        }
     }
 }
