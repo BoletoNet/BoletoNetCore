@@ -28,7 +28,7 @@ namespace BoletoNetCore
             if (Beneficiario.Codigo.Length != 7)
                 throw BoletoNetCoreException.CodigoBeneficiarioInvalido(Beneficiario.Codigo, 7);
 
-            Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia}{(string.IsNullOrEmpty(contaBancaria.DigitoAgencia) ? "" : "-" + contaBancaria.DigitoAgencia)} / {contaBancaria.Conta}{(string.IsNullOrEmpty(contaBancaria.DigitoConta) ? "" : "-" + contaBancaria.DigitoConta)}";
+            Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
         }
 
     }
