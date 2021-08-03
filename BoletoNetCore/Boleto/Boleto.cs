@@ -215,6 +215,7 @@ namespace BoletoNetCore
         /// Este Registro deve, obrigatoriamente, ser inserido após o Registro Detalhe Obrigatório correspondente ao título
         /// </summary>
         public int? DiasLimiteRecebimento { get; set; } = null;
+
         public IBanco Banco { get; set; }
         public Pagador Pagador { get; set; } = new Pagador();
         public Pagador Avalista { get; set; } = new Pagador();
