@@ -274,7 +274,7 @@ namespace BoletoNetCore
                 // Identificação de Ocorrência - Código Auxiliar
                 boleto.CodigoMotivoOcorrencia = registro.Substring(318, 10);
                 boleto.ListMotivosOcorrencia = Cnab.MotivoOcorrenciaCnab240(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
-
+               
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
             }

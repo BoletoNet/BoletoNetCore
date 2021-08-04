@@ -160,7 +160,6 @@ namespace BoletoNetCore
             {
                 if (boleto.ValorMulta == 0)
                     return "";
-
                 numeroRegistroGeral++;
                 var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "5", '0');
@@ -460,9 +459,9 @@ namespace BoletoNetCore
 
         public void LerTrailerRetornoCNAB400(string registro)
         {
-
+            
         }
 
-
+        
     }
 }
