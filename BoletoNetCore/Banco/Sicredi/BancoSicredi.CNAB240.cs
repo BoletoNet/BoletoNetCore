@@ -322,5 +322,31 @@ namespace BoletoNetCore
             reg.CodificarLinha();
             return reg.LinhaRegistro;
         }
+
+        public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
+        {
+            try
+            {
+                // pega os dados da classe base BancoFebraban.CNAB240
+                base.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
+
+                // o manual do sicredi preve o nosso numero da posicao 38 ate 57 (20 caracteres)
+                // contudo, o retorno CNAB240 do sicredi retorna assim: "7480001300005T 0600720 0000000427179 212332573           1DOC1234"
+                // sendo que o valor na possicao do nosso numero seria "212332883           "
+                // há um espacamento em branco no retorno, e a classe base tem feito substring a partir da posicao 8 
+                // assim, está pegando apenas o ultimo digito e o restante espacos em branco
+                // string tmp = registro.Substring(37, 20);
+                // boleto.NossoNumero = tmp.Substring(8, 11);
+                // essa implementação sugere dessa maneira, ou seja, aproveitando a classe base mas alterando a posicao do nosso numero
+                boleto.NossoNumero = registro.Substring(37, 20).OnlyNumber();
+                boleto.NossoNumeroDV = boleto.NossoNumero.Substring(boleto.NossoNumero.Length - 1, 1);
+                boleto.NossoNumeroFormatado = boleto.NossoNumero;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO SICREDI / CNAB 240 / T.", ex);
+            }
+
+        }
     }
 }
