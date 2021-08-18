@@ -142,7 +142,7 @@ namespace BoletoNetCore
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0378, 014, 0, boleto.Avalista.CPFCNPJ, ' ');
                 }
 
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0392, 002, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0392, 002, 0, boleto.CodigoProtesto == TipoCodigoProtesto.ProtestarDiasCorridos ? boleto.DiasProtesto.ToString("00") : string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0394, 001, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
                 reg.CodificarLinha();
@@ -459,9 +459,9 @@ namespace BoletoNetCore
 
         public void LerTrailerRetornoCNAB400(string registro)
         {
-            
+
         }
 
-        
+
     }
 }
