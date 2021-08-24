@@ -3,7 +3,7 @@ using static System.String;
 
 namespace BoletoNetCore
 {
-    [CarteiraCodigo("17/019", "17/027")]
+    [CarteiraCodigo("17/019", "17/027", "17/035")]
     internal class BancoBrasilCarteira17 : ICarteira<BancoBrasil>
     {
         internal static Lazy<ICarteira<BancoBrasil>> Instance { get; } = new Lazy<ICarteira<BancoBrasil>>(() => new BancoBrasilCarteira17());
