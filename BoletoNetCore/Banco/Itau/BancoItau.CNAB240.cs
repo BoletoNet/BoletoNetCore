@@ -5,6 +5,7 @@ namespace BoletoNetCore
 {
     partial class BancoItau : IBancoCNAB240
     {
+        #region REMESSA
         public string GerarHeaderRemessaCNAB240(ref int numeroArquivoRemessa, ref int numeroRegistro)
         {
             try
@@ -44,13 +45,14 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB240.", ex);
             }
         }
+
         public string GerarHeaderLoteRemessaCNAB240(ref int numeroArquivoRemessa, ref int numeroRegistro)
         {
             try
             {
                 var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 003, 0, "341", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "1", '0'); 
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 004, 0, "1", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0008, 001, 0, "1", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0009, 001, 0, "R", ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0010, 002, 0, "01", '0');
@@ -63,10 +65,10 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0054, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0055, 004, 0, Beneficiario.ContaBancaria.Agencia, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0059, 001, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0060, 007, 0, "0", '0'); 
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0067, 005, 0, Beneficiario.ContaBancaria.Conta, '0'); 
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0060, 007, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0067, 005, 0, Beneficiario.ContaBancaria.Conta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0072, 001, 0, Empty, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0073, 001, 0, Beneficiario.ContaBancaria.DigitoConta, '0'); 
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0073, 001, 0, Beneficiario.ContaBancaria.DigitoConta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0074, 030, 0, Beneficiario.Nome, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0104, 080, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0184, 008, 0, numeroArquivoRemessa, '0');
@@ -111,7 +113,7 @@ namespace BoletoNetCore
         {
             try
             {
-              // O número de registros no arquivo é igual ao número de registros gerados + 4 (header e trailler do lote / header e trailler do arquivo)
+                // O número de registros no arquivo é igual ao número de registros gerados + 4 (header e trailler do lote / header e trailler do arquivo)
                 var numeroRegistrosNoArquivo = numeroRegistroGeral + 4;
                 var qtLotes = 1;
                 var reg = new TRegistroEDI();
@@ -150,7 +152,6 @@ namespace BoletoNetCore
             return detalhe;
         }
 
- 
         private string GerarDetalheSegmentoPRemessaCNAB240(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
@@ -348,7 +349,9 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar DETALHE do Segmento R no arquivo de remessa do CNAB240.", ex);
             }
         }
+        #endregion
 
+        #region RETORNO
         public override void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
         {
             arquivoRetorno.Banco.Beneficiario = new Beneficiario();
@@ -388,7 +391,7 @@ namespace BoletoNetCore
                 boleto.NumeroDocumento = registro.Substring(73, 15).Trim();
 
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(93, 8)).ToString("##-##-####"));
-                
+
                 boleto.ValorIOF = Convert.ToDecimal(registro.Substring(104, 15)) / 100;
 
                 boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(119, 15)) / 100;
@@ -396,7 +399,7 @@ namespace BoletoNetCore
                 boleto.NossoNumero = registro.Substring(134, 20).Trim();
 
                 boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(154, 8)).ToString("##-##-####"));
-                
+
                 string _valorPagoCredito = registro.Substring(162, 15).Trim(); // ? 
 
                 boleto.ValorPagoCredito = _valorPagoCredito == string.Empty ? 0 : Convert.ToDecimal(_valorPagoCredito);
@@ -415,5 +418,50 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / A.", ex);
             }
         }
+
+        public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
+        {
+            try
+            {
+                //Nº Controle do Participante
+                boleto.NumeroControleParticipante = registro.Substring(105, 25);
+
+                //Carteira
+                boleto.Carteira = registro.Substring(37, 3);
+
+                //Identificação do Título no Banco
+                boleto.NossoNumero = registro.Substring(40, 08);
+                boleto.NossoNumeroDV = registro.Substring(48, 1);
+                boleto.NossoNumeroFormatado = Format("{0}-{1}", boleto.NossoNumero, boleto.NossoNumeroDV);
+
+                //Identificação de Ocorrência
+                boleto.CodigoMovimentoRetorno = registro.Substring(15, 2);
+                boleto.DescricaoMovimentoRetorno = Cnab.MovimentoRetornoCnab240(boleto.CodigoMovimentoRetorno);
+                boleto.CodigoMotivoOcorrencia = registro.Substring(213, 08);
+                boleto.ListMotivosOcorrencia = Cnab.MotivoOcorrenciaCnab240(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
+
+                //Número do Documento
+                boleto.NumeroDocumento = registro.Substring(58, 10);
+                boleto.EspecieDocumento = TipoEspecieDocumento.NaoDefinido;
+
+                //Valor do Título
+                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(81, 15)) / 100;
+                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(198, 15)) / 100;
+
+                //Data Vencimento do Título
+                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
+
+                // Registro Retorno
+                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
+            }
+        }
+
+        // Segmento U está no padrão Febraban - não foi necessario sobreescrever
+
+        #endregion 
     }
 }
