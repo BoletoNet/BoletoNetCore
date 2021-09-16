@@ -173,8 +173,8 @@ namespace BoletoNetCore
                     case "50": return "CEP Referente a um Banco Correspondente"                                                               ;
                     case "51": return "CEP incompatível com a Unidade da Federação"                                                           ;
                     case "52": return "Unidade da Federação Inválida"                                                                         ;
-                    case "53": return "Tipo / Número de Inscrição do Pagadorr / Avalista Inválidos"                                            ;
-                    case "54": return "Pagadorr / Avalista Não Informado"                                                                      ;
+                    case "53": return "Tipo / Número de Inscrição do Pagador / Avalista Inválidos"                                            ;
+                    case "54": return "Pagador / Avalista Não Informado"                                                                      ;
                     case "55": return "Nosso número no Banco Correspondente Não Informado"                                                    ;
                     case "56": return "Código do Banco Correspondente Não Informado"                                                          ;
                     case "57": return "Código da Multa Inválido"                                                                              ;
@@ -222,7 +222,7 @@ namespace BoletoNetCore
                     case "99": return "Rejeição da alteração do número do título dado pelo Beneficiário"                                      ;
                     case "A1": return "Rejeição da alteração do número controle do participante"                                              ;
                     case "A2": return "Rejeição da alteração dos dados do Pagador"                                                            ;
-                    case "A3": return "Rejeição da alteração dos dados do Pagadorr / avalista"                                                 ;
+                    case "A3": return "Rejeição da alteração dos dados do Pagador / avalista"                                                 ;
                     case "A4": return "Pagador DDA"                                                                                        ;
                     case "A5": return "Registro Rejeitado – Título já Liquidado"                                                              ;
                     case "A6": return "Código do Convenente Inválido ou Encerrado"                                                            ;
