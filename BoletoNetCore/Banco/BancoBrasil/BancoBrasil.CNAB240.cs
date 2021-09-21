@@ -327,6 +327,11 @@ namespace BoletoNetCore
                         break;
                 }
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0222, 002, 0, boleto.DiasProtesto, '0');
+
+                // conforme o manual Particularidades BB (pagina 10) disponível em https://www.bb.com.br/docs/pub/emp/empl/dwn/CbrVer04BB.pdf
+                // "Campo não tratado pelo sistema. Informar 'zeros'. O sistema considera a informação que foi cadastrada na sua carteira junto ao Banco do Brasil."
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, 0, '0');
+                /*
                 switch (boleto.CodigoBaixaDevolucao)
                 {
                     case TipoCodigoBaixaDevolucao.NaoBaixarNaoDevolver:
@@ -339,6 +344,8 @@ namespace BoletoNetCore
                         reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, 0, '0');
                         break;
                 }
+                */
+
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0225, 003, 0, boleto.DiasBaixaDevolucao, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0228, 002, 0, "09", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0230, 010, 2, "0", '0');
