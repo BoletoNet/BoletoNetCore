@@ -13,8 +13,9 @@ Foi criado um novo projeto para não quebrar a compatibilidade com aplicações 
 ### Carteiras Homologadas
 * Banrisul (041) - Carteira 1
 * Bradesco (237) - Carteira 09
-* Brasil (001) - Carteira 17 (Variações 019 027)
+* Brasil (001) - Carteira 17 (Variações 019 027 035)
 * Caixa Econômica Federal (104) - Carteira SIG14
+* Cecred/Ailos (085) - Carteira 1
 * Itau (341) - Carteira 109, 112
 * Safra (422) - Carteira 1
 * Santander (033) - Carteira 101
