@@ -6,6 +6,7 @@ namespace BoletoNetCore
         BancoDoNordeste = 004,
         Santander = 033,
         Banrisul = 041,
+        Cecred = 085,
         Caixa = 104,
         Bradesco = 237,
         Itau = 341,

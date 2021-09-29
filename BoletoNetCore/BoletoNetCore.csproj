@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <None Remove="BoletoImpressao\Parts\Pix.html" />
+    <None Remove="Imagens\085.jpg" />
   </ItemGroup>
 
   <ItemGroup>

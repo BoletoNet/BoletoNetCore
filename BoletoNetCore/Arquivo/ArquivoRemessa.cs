@@ -4,13 +4,13 @@ using System.Text;
 
 namespace BoletoNetCore
 {
-    public class ArquivoRemessa // : AbstractArquivoRemessa, IArquivoRemessa
+    public class ArquivoRemessa 
     {
         public IBanco Banco { get; set; }
         public TipoArquivo TipoArquivo { get; set; }
         public int NumeroArquivoRemessa { get; set; }
 
-        public string NomeArquivo => this.Banco?.FormatarNomeArquivoRemessa(this.NumeroArquivoRemessa); //
+        public string NomeArquivo => Banco?.FormatarNomeArquivoRemessa(NumeroArquivoRemessa); //
 
         public ArquivoRemessa(IBanco banco, TipoArquivo tipoArquivo, int numeroArquivoRemessa)
         {
@@ -36,7 +36,7 @@ namespace BoletoNetCore
 
                 int tamanhoRegistro;
 
-                switch (this.TipoArquivo)
+                switch (TipoArquivo)
                 {
                     case TipoArquivo.CNAB240:
                         tamanhoRegistro = 240;
@@ -52,11 +52,11 @@ namespace BoletoNetCore
                 }
 
                 StreamWriter arquivoRemessa = new StreamWriter(stream, Encoding.GetEncoding("ISO-8859-1"));
-                string strline = String.Empty;
+                string strline = string.Empty;
 
                 // Header do Arquivo
-                strline = Banco.GerarHeaderRemessa(this.TipoArquivo, this.NumeroArquivoRemessa, ref numeroRegistroGeral);
-                if (String.IsNullOrWhiteSpace(strline))
+                strline = Banco.GerarHeaderRemessa(TipoArquivo, NumeroArquivoRemessa, ref numeroRegistroGeral);
+                if (string.IsNullOrWhiteSpace(strline))
                     throw new Exception("Registro HEADER obrigatório.");
                 strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                 arquivoRemessa.WriteLine(strline);
@@ -65,15 +65,15 @@ namespace BoletoNetCore
                 {
                     // Todos os boletos da coleção devem ser do mesmo banco da geração do arquivo remessa
                     // A solução aqui é forçar essa relação, mas talvez seja melhor subir uma exceção detalhando o erro.
-                    boleto.Banco = this.Banco;
+                    boleto.Banco = Banco;
 
                     // Detalhe do arquivo
-                    strline = boleto.Banco.GerarDetalheRemessa(this.TipoArquivo, boleto, ref numeroRegistroGeral);
-                    if (String.IsNullOrWhiteSpace(strline))
+                    strline = boleto.Banco.GerarDetalheRemessa(TipoArquivo, boleto, ref numeroRegistroGeral);
+                    if (string.IsNullOrWhiteSpace(strline))
                         throw new Exception("Registro DETALHE obrigatório.");
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
-                    
+
                     // Ajusta Totalizadores
                     valorBoletoGeral += boleto.ValorTitulo;
                     switch (boleto.TipoCarteira)
@@ -105,18 +105,18 @@ namespace BoletoNetCore
                 }
 
                 // Trailler do Arquivo
-                strline = Banco.GerarTrailerRemessa(this.TipoArquivo, this.NumeroArquivoRemessa,
+                strline = Banco.GerarTrailerRemessa(TipoArquivo, NumeroArquivoRemessa,
                                                             ref numeroRegistroGeral, valorBoletoGeral,
                                                             numeroRegistroCobrancaSimples, valorCobrancaSimples,
                                                             numeroRegistroCobrancaVinculada, valorCobrancaVinculada,
                                                             numeroRegistroCobrancaCaucionada, valorCobrancaCaucionada,
                                                             numeroRegistroCobrancaDescontada, valorCobrancaDescontada);
-                if (!String.IsNullOrWhiteSpace(strline))
+                if (!string.IsNullOrWhiteSpace(strline))
                 {
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
                 }
-                
+
 
                 if (fecharRemessa)
                 {
@@ -124,7 +124,8 @@ namespace BoletoNetCore
                     arquivoRemessa.Dispose();
                     arquivoRemessa = null;
                 }
-                else {
+                else
+                {
                     arquivoRemessa.Flush();
                 }
             }
