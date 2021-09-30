@@ -322,6 +322,9 @@ namespace BoletoNetCore
                     case TipoCodigoProtesto.ProtestarDiasUteis:
                         reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, 2, '0');
                         break;
+                    case TipoCodigoProtesto.NegativacaoSemProtesto:
+                        reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, 8, '0');
+                        break;
                     default:
                         reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 001, 0, 0, '0');
                         break;
