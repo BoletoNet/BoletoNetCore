@@ -26,12 +26,28 @@ namespace BoletoNetCore
             contaBancaria.FormatarDados("PREFERENCIALMENTE NAS CASAS LOTERICAS ATE O VALOR LIMITE", "", "SAC CAIXA: 0800 726 0101 (informações, reclamações, sugestões e elogios)<br>Para pessoas com deficiência auditiva ou de fala: 0800 726 2492<br>Ouvidoria: 0800 725 7474<br>caixa.gov.br<br>", 6);
 
             var codigoBeneficiario = Beneficiario.Codigo;
-            Beneficiario.Codigo = codigoBeneficiario.Length <= 6 ? codigoBeneficiario.PadLeft(6, '0') : throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, 6);
+            if (codigoBeneficiario.Length <= 6)
+            {
+                Beneficiario.Codigo = codigoBeneficiario.PadLeft(6, '0');
 
-            if (Beneficiario.CodigoDV == Empty)
-                throw new Exception($"Dígito do código do beneficiário ({codigoBeneficiario}) não foi informado.");
+                if (Beneficiario.CodigoDV == Empty)
+                    throw new Exception($"Dígito do código do beneficiário ({codigoBeneficiario}) não foi informado.");
 
-            Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoBeneficiario}-{Beneficiario.CodigoDV}";
+                Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoBeneficiario}-{Beneficiario.CodigoDV}";
+            }
+            else if (codigoBeneficiario.Length == 7)
+            {
+                Beneficiario.Codigo = codigoBeneficiario;
+
+                if (Beneficiario.CodigoDV != Empty)
+                    throw new Exception($"Dígito do código do beneficiário ({codigoBeneficiario}) não deve ser informado quando codigo beneficiario tiver 7 dígitos.");
+
+                Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoBeneficiario}";
+            }
+            else
+            {
+                throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, "6 ou 7");
+            }
         }
 
         public override string FormatarNomeArquivoRemessa(int numeroSequencial)

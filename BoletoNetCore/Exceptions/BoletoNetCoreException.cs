@@ -49,6 +49,9 @@ namespace BoletoNetCore.Exceptions
         public static Exception CodigoBeneficiarioInvalido(string codigoBeneficiario, int digitos)
             => new BoletoNetCoreException($"O código do beneficiário ({codigoBeneficiario}) deve conter {digitos} dígitos.");
 
+        public static Exception CodigoBeneficiarioInvalido(string codigoBeneficiario, string digitos)
+            => new BoletoNetCoreException($"O código do beneficiário ({codigoBeneficiario}) deve conter {digitos} dígitos.");
+
         public static Exception CarteiraNaoImplementada(string carteiraComVariacao)
             => new BoletoNetCoreException($"Carteira não implementada: {carteiraComVariacao}");
 
