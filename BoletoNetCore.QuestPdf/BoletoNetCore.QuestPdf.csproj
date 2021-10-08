@@ -1,0 +1,152 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="5.0.10" />
+    <PackageReference Include="QuestPDF" Version="2021.9.3" />
+    <PackageReference Include="SkiaSharp.NativeAssets.Linux" Version="2.80.3" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Barcoder" Version="1.0.0.90" />
+    <PackageReference Include="Barcoder.Renderer.Image" Version="1.0.0.90" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Boletos\logos\*.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="logos\001.bmp" />
+    <None Remove="logos\003.bmp" />
+    <None Remove="logos\004.bmp" />
+    <None Remove="logos\008.bmp" />
+    <None Remove="logos\021.bmp" />
+    <None Remove="logos\024.bmp" />
+    <None Remove="logos\025.bmp" />
+    <None Remove="logos\027.bmp" />
+    <None Remove="logos\028.bmp" />
+    <None Remove="logos\029.bmp" />
+    <None Remove="logos\031.bmp" />
+    <None Remove="logos\033.bmp" />
+    <None Remove="logos\036.bmp" />
+    <None Remove="logos\038.bmp" />
+    <None Remove="logos\041.bmp" />
+    <None Remove="logos\047.bmp" />
+    <None Remove="logos\070.bmp" />
+    <None Remove="logos\084.bmp" />
+    <None Remove="logos\085.bmp" />
+    <None Remove="logos\097.bmp" />
+    <None Remove="logos\099.bmp" />
+    <None Remove="logos\104.bmp" />
+    <None Remove="logos\133.bmp" />
+    <None Remove="logos\136.bmp" />
+    <None Remove="logos\151.bmp" />
+    <None Remove="logos\231.bmp" />
+    <None Remove="logos\237.bmp" />
+    <None Remove="logos\244.bmp" />
+    <None Remove="logos\246.bmp" />
+    <None Remove="logos\263.bmp" />
+    <None Remove="logos\274.bmp" />
+    <None Remove="logos\275.bmp" />
+    <None Remove="logos\291.bmp" />
+    <None Remove="logos\320.bmp" />
+    <None Remove="logos\341.bmp" />
+    <None Remove="logos\347.bmp" />
+    <None Remove="logos\353.bmp" />
+    <None Remove="logos\356.bmp" />
+    <None Remove="logos\389.bmp" />
+    <None Remove="logos\392.bmp" />
+    <None Remove="logos\399.bmp" />
+    <None Remove="logos\409.bmp" />
+    <None Remove="logos\422.bmp" />
+    <None Remove="logos\424.bmp" />
+    <None Remove="logos\453.bmp" />
+    <None Remove="logos\479.bmp" />
+    <None Remove="logos\600.bmp" />
+    <None Remove="logos\604.bmp" />
+    <None Remove="logos\610.bmp" />
+    <None Remove="logos\623.bmp" />
+    <None Remove="logos\633.bmp" />
+    <None Remove="logos\637.bmp" />
+    <None Remove="logos\641.bmp" />
+    <None Remove="logos\702.bmp" />
+    <None Remove="logos\707.bmp" />
+    <None Remove="logos\721.bmp" />
+    <None Remove="logos\741.bmp" />
+    <None Remove="logos\745.bmp" />
+    <None Remove="logos\748.bmp" />
+    <None Remove="logos\749.bmp" />
+    <None Remove="logos\756.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="logos\001.bmp" />
+    <EmbeddedResource Include="logos\003.bmp" />
+    <EmbeddedResource Include="logos\004.bmp" />
+    <EmbeddedResource Include="logos\008.bmp" />
+    <EmbeddedResource Include="logos\021.bmp" />
+    <EmbeddedResource Include="logos\024.bmp" />
+    <EmbeddedResource Include="logos\025.bmp" />
+    <EmbeddedResource Include="logos\027.bmp" />
+    <EmbeddedResource Include="logos\028.bmp" />
+    <EmbeddedResource Include="logos\029.bmp" />
+    <EmbeddedResource Include="logos\031.bmp" />
+    <EmbeddedResource Include="logos\033.bmp" />
+    <EmbeddedResource Include="logos\036.bmp" />
+    <EmbeddedResource Include="logos\038.bmp" />
+    <EmbeddedResource Include="logos\041.bmp" />
+    <EmbeddedResource Include="logos\047.bmp" />
+    <EmbeddedResource Include="logos\070.bmp" />
+    <EmbeddedResource Include="logos\084.bmp" />
+    <EmbeddedResource Include="logos\085.bmp" />
+    <EmbeddedResource Include="logos\097.bmp" />
+    <EmbeddedResource Include="logos\099.bmp" />
+    <EmbeddedResource Include="logos\104.bmp" />
+    <EmbeddedResource Include="logos\133.bmp" />
+    <EmbeddedResource Include="logos\136.bmp" />
+    <EmbeddedResource Include="logos\151.bmp" />
+    <EmbeddedResource Include="logos\231.bmp" />
+    <EmbeddedResource Include="logos\237.bmp" />
+    <EmbeddedResource Include="logos\244.bmp" />
+    <EmbeddedResource Include="logos\246.bmp" />
+    <EmbeddedResource Include="logos\263.bmp" />
+    <EmbeddedResource Include="logos\274.bmp" />
+    <EmbeddedResource Include="logos\275.bmp" />
+    <EmbeddedResource Include="logos\291.bmp" />
+    <EmbeddedResource Include="logos\320.bmp" />
+    <EmbeddedResource Include="logos\341.bmp" />
+    <EmbeddedResource Include="logos\347.bmp" />
+    <EmbeddedResource Include="logos\353.bmp" />
+    <EmbeddedResource Include="logos\356.bmp" />
+    <EmbeddedResource Include="logos\389.bmp" />
+    <EmbeddedResource Include="logos\392.bmp" />
+    <EmbeddedResource Include="logos\399.bmp" />
+    <EmbeddedResource Include="logos\409.bmp" />
+    <EmbeddedResource Include="logos\422.bmp" />
+    <EmbeddedResource Include="logos\424.bmp" />
+    <EmbeddedResource Include="logos\453.bmp" />
+    <EmbeddedResource Include="logos\479.bmp" />
+    <EmbeddedResource Include="logos\600.bmp" />
+    <EmbeddedResource Include="logos\604.bmp" />
+    <EmbeddedResource Include="logos\610.bmp" />
+    <EmbeddedResource Include="logos\623.bmp" />
+    <EmbeddedResource Include="logos\633.bmp" />
+    <EmbeddedResource Include="logos\637.bmp" />
+    <EmbeddedResource Include="logos\641.bmp" />
+    <EmbeddedResource Include="logos\702.bmp" />
+    <EmbeddedResource Include="logos\707.bmp" />
+    <EmbeddedResource Include="logos\721.bmp" />
+    <EmbeddedResource Include="logos\741.bmp" />
+    <EmbeddedResource Include="logos\745.bmp" />
+    <EmbeddedResource Include="logos\748.bmp" />
+    <EmbeddedResource Include="logos\749.bmp" />
+    <EmbeddedResource Include="logos\756.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoletoNetCore\BoletoNetCore.csproj" />
+  </ItemGroup>
+
+</Project>
