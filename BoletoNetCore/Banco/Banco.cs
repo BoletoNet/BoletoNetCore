@@ -30,14 +30,14 @@ namespace BoletoNetCore
             => Instancia((int)codigoBanco);
 
         /// <summary>
-        ///     Formata código de barras
-        ///     O código de barra para cobrança contém 44 posições dispostas da seguinte forma:
-        ///     01 a 03 - 3 - Identificação  do  Banco
-        ///     04 a 04 - 1 - Código da Moeda
-        ///     05 a 05 – 1 - Dígito verificador do Código de Barras
+        ///     Formata cï¿½digo de barras
+        ///     O cï¿½digo de barra para cobranï¿½a contï¿½m 44 posiï¿½ï¿½es dispostas da seguinte forma:
+        ///     01 a 03 - 3 - Identificaï¿½ï¿½o  do  Banco
+        ///     04 a 04 - 1 - Cï¿½digo da Moeda
+        ///     05 a 05 ï¿½ 1 - Dï¿½gito verificador do Cï¿½digo de Barras
         ///     06 a 09 - 4 - Fator de vencimento
         ///     10 a 19 - 10 - Valor
-        ///     20 a 44 – 25 - Campo Livre
+        ///     20 a 44 ï¿½ 25 - Campo Livre
         /// </summary>
         public static void FormataCodigoBarra(Boleto boleto)
         {
@@ -46,9 +46,9 @@ namespace BoletoNetCore
             codigoBarra.CampoLivre = banco.FormataCodigoBarraCampoLivre(boleto);
 
             if (codigoBarra.CampoLivre.Length != 25)
-                throw new Exception($"Campo Livre ({codigoBarra.CampoLivre}) deve conter 25 dígitos.");
+                throw new Exception($"Campo Livre ({codigoBarra.CampoLivre}) deve conter 25 dï¿½gitos.");
 
-            // Formata Código de Barras do Boleto
+            // Formata Cï¿½digo de Barras do Boleto
             codigoBarra.CodigoBanco = banco.Codigo.ToString().FitStringLength(3, '0');
             codigoBarra.Moeda = boleto.CodigoMoeda;
             codigoBarra.FatorVencimento = boleto.DataVencimento.FatorVencimento();
@@ -56,7 +56,7 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Formata Mensagens de Juros e Multa e Desconto nas instruções do Caixa
+        /// Formata Mensagens de Juros e Multa e Desconto nas instruï¿½ï¿½es do Caixa
         /// </summary>
         /// <param name="boleto"></param>
         public static void FormataMensagemInstrucao(Boleto boleto)
@@ -66,11 +66,11 @@ namespace BoletoNetCore
             //JUROS
             if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorJurosDia > 0)
             {
-                boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar juros de R$ {boleto.ValorJurosDia.ToString("N2")} por dia de atraso APÓS {boleto.DataJuros.ToString("dd/MM/yyyy")}{Environment.NewLine}";
+                boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar juros de R$ {boleto.ValorJurosDia.ToString("N2")} por dia de atraso APï¿½S {boleto.DataJuros.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
-            if (boleto.ImprimirValoresAuxiliares == true && boleto.PercentualJurosDia > 0)
+            else if (boleto.ImprimirValoresAuxiliares == true && boleto.PercentualJurosDia > 0)
             {
-                boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar juros de {boleto.PercentualJurosDia.ToString("N2")}% por dia de atraso APÓS {boleto.DataJuros.ToString("dd/MM/yyyy")}{Environment.NewLine}";
+                boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar juros de {boleto.PercentualJurosDia.ToString("N2")}% por dia de atraso APï¿½S {boleto.DataJuros.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
 
             //MULTA
@@ -78,7 +78,7 @@ namespace BoletoNetCore
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar multa de R$ {boleto.ValorMulta.ToString("N2")} a partir DE {boleto.DataMulta.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
-            if (boleto.ImprimirValoresAuxiliares == true && boleto.PercentualMulta > 0)
+            else if (boleto.ImprimirValoresAuxiliares == true && boleto.PercentualMulta > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar multa de {boleto.PercentualMulta.ToString("N2")}% a partir DE {boleto.DataMulta.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
@@ -86,12 +86,12 @@ namespace BoletoNetCore
             //DESCONTO
             if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorDesconto > 0)
             {
-                boleto.MensagemInstrucoesCaixaFormatado += $"Conceder desconto de R$ {boleto.ValorDesconto.ToString("N2")} ATÉ {boleto.DataDesconto.ToString("dd/MM/yyyy")}{Environment.NewLine}";
+                boleto.MensagemInstrucoesCaixaFormatado += $"Conceder desconto de R$ {boleto.ValorDesconto.ToString("N2")} ATï¿½ {boleto.DataDesconto.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
 
-            //Aqui, define se a mensagem de instrução manual deve ser impressa, 
-            //na minha visão se o usuário passou uma instrução, esta deveria ser impressa sempre.
-            //Entretanto, para manter o comportamento atual sem quebrar nenhuma aplicação, foi criado um parâmetro com valor "false"
+            //Aqui, define se a mensagem de instruï¿½ï¿½o manual deve ser impressa, 
+            //na minha visï¿½o se o usuï¿½rio passou uma instruï¿½ï¿½o, esta deveria ser impressa sempre.
+            //Entretanto, para manter o comportamento atual sem quebrar nenhuma aplicaï¿½ï¿½o, foi criado um parï¿½metro com valor "false"
             //https://github.com/BoletoNet/BoletoNetCore/pull/91
             if (boleto.ImprimirMensagemInstrucao && boleto.MensagemInstrucoesCaixa?.Length > 0)
             {
@@ -102,20 +102,20 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        ///     A linha digitável será composta por cinco campos:
-        ///     1º campo
-        ///     composto pelo código de Banco, código da moeda, as cinco primeiras posições do campo
-        ///     livre e o dígito verificador deste campo;
-        ///     2º campo
-        ///     composto pelas posições 6ª a 15ª do campo livre e o dígito verificador deste campo;
-        ///     3º campo
-        ///     composto pelas posições 16ª a 25ª do campo livre e o dígito verificador deste campo;
-        ///     4º campo
-        ///     composto pelo dígito verificador do código de barras, ou seja, a 5ª posição do código de
+        ///     A linha digitï¿½vel serï¿½ composta por cinco campos:
+        ///     1ï¿½ campo
+        ///     composto pelo cï¿½digo de Banco, cï¿½digo da moeda, as cinco primeiras posiï¿½ï¿½es do campo
+        ///     livre e o dï¿½gito verificador deste campo;
+        ///     2ï¿½ campo
+        ///     composto pelas posiï¿½ï¿½es 6ï¿½ a 15ï¿½ do campo livre e o dï¿½gito verificador deste campo;
+        ///     3ï¿½ campo
+        ///     composto pelas posiï¿½ï¿½es 16ï¿½ a 25ï¿½ do campo livre e o dï¿½gito verificador deste campo;
+        ///     4ï¿½ campo
+        ///     composto pelo dï¿½gito verificador do cï¿½digo de barras, ou seja, a 5ï¿½ posiï¿½ï¿½o do cï¿½digo de
         ///     barras;
-        ///     5º campo
+        ///     5ï¿½ campo
         ///     Composto pelo fator de vencimento com 4(quatro) caracteres e o valor do documento com 10(dez) caracteres, sem
-        ///     separadores e sem edição.
+        ///     separadores e sem ediï¿½ï¿½o.
         /// </summary>
         public static void FormataLinhaDigitavel(Boleto boleto)
         {
@@ -131,13 +131,13 @@ namespace BoletoNetCore
 
             #region Campo 1
 
-            // POSIÇÃO 1 A 3 DO CODIGO DE BARRAS
+            // POSIï¿½ï¿½O 1 A 3 DO CODIGO DE BARRAS
             var bbb = codigoDeBarras.Substring(0, 3);
-            // POSIÇÃO 4 DO CODIGO DE BARRAS
+            // POSIï¿½ï¿½O 4 DO CODIGO DE BARRAS
             var m = codigoDeBarras.Substring(3, 1);
-            // POSIÇÃO 20 A 24 DO CODIGO DE BARRAS
+            // POSIï¿½ï¿½O 20 A 24 DO CODIGO DE BARRAS
             var ccccc = codigoDeBarras.Substring(19, 5);
-            // Calculo do Dígito
+            // Calculo do Dï¿½gito
             var d1 = CalcularDvModulo10(bbb + m + ccccc);
             // Formata Grupo 1
             var grupo1 = $"{bbb}{m}{ccccc.Substring(0, 1)}.{ccccc.Substring(1, 4)}{d1} ";
@@ -146,9 +146,9 @@ namespace BoletoNetCore
 
             #region Campo 2
 
-            //POSIÇÃO 25 A 34 DO COD DE BARRAS
+            //POSIï¿½ï¿½O 25 A 34 DO COD DE BARRAS
             var d2A = codigoDeBarras.Substring(24, 10);
-            // Calculo do Dígito
+            // Calculo do Dï¿½gito
             var d2B = CalcularDvModulo10(d2A).ToString();
             // Formata Grupo 2
             var grupo2 = $"{d2A.Substring(0, 5)}.{d2A.Substring(5, 5)}{d2B} ";
@@ -157,9 +157,9 @@ namespace BoletoNetCore
 
             #region Campo 3
 
-            //POSIÇÃO 35 A 44 DO CODIGO DE BARRAS
+            //POSIï¿½ï¿½O 35 A 44 DO CODIGO DE BARRAS
             var d3A = codigoDeBarras.Substring(34, 10);
-            // Calculo do Dígito
+            // Calculo do Dï¿½gito
             var d3B = CalcularDvModulo10(d3A).ToString();
             // Formata Grupo 3
             var grupo3 = $"{d3A.Substring(0, 5)}.{d3A.Substring(5, 5)}{d3B} ";
@@ -168,7 +168,7 @@ namespace BoletoNetCore
 
             #region Campo 4
 
-            // Dígito Verificador do Código de Barras
+            // Dï¿½gito Verificador do Cï¿½digo de Barras
             var grupo4 = $"{codigoBarra.DigitoVerificador} ";
 
             #endregion Campo 4
