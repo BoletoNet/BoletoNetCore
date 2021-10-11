@@ -31,7 +31,7 @@ namespace BoletoNetCore
 
         /// <summary>
         ///     Formata código de barras
-        ///     O código de barra para cobrança contam 44 posições dispostas da seguinte forma:
+        ///     O código de barra para cobrança contém 44 posições dispostas da seguinte forma:
         ///     01 a 03 - 3 - Identificação  do  Banco
         ///     04 a 04 - 1 - Código da Moeda
         ///     05 a 05 - 1 - Dígito verificador do Código de Barras
@@ -46,7 +46,7 @@ namespace BoletoNetCore
             codigoBarra.CampoLivre = banco.FormataCodigoBarraCampoLivre(boleto);
 
             if (codigoBarra.CampoLivre.Length != 25)
-                throw new Exception($"Campo Livre ({codigoBarra.CampoLivre}) deve conter 25 d�gitos.");
+                throw new Exception($"Campo Livre ({codigoBarra.CampoLivre}) deve conter 25 dígitos.");
 
             // Formata Código de Barras do Boleto
             codigoBarra.CodigoBanco = banco.Codigo.ToString().FitStringLength(3, '0');
