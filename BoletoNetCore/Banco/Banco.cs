@@ -109,7 +109,7 @@ namespace BoletoNetCore
         ///     2° campo
         ///     composto pelas posições 6ª a 15ª do campo livre e o dígito verificador deste campo;
         ///     3º campo
-        ///     composto pelas posiçes 16ª a 25ª do campo livre e o dígito verificador deste campo;
+        ///     composto pelas posições 16ª a 25ª do campo livre e o dígito verificador deste campo;
         ///     4º campo
         ///     composto pelo dígito verificador do código de barras, ou seja, a 5ª posição do código de
         ///     barras;
