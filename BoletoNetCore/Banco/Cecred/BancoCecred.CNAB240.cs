@@ -6,7 +6,7 @@ using static System.String;
 
 namespace BoletoNetCore
 {
-     partial class BancoCecred : IBancoCNAB240
+    partial class BancoCecred : IBancoCNAB240
     {
         public string GerarHeaderRemessaCNAB240(ref int numeroArquivoRemessa, ref int numeroRegistro)
         {
@@ -45,7 +45,7 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB240.", ex);
             }
         }
- 
+
         public string GerarHeaderLoteRemessaCNAB240(ref int numeroArquivoRemessa, ref int numeroRegistro)
         {
             try
@@ -82,7 +82,7 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar HEADER do lote no arquivo de remessa do CNAB400.", ex);
             }
         }
-        
+
         public string GerarTrailerLoteRemessaCNAB240(ref int numeroArquivoRemessa, int numeroRegistroGeral, int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples, int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada, int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada, int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
         {
             try
@@ -112,7 +112,7 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar HEADER do lote no arquivo de remessa do CNAB400.", ex);
             }
         }
-       
+
         public string GerarTrailerRemessaCNAB240(int numeroRegistroGeral, decimal valorBoletoGeral, int numeroRegistroCobrancaSimples, decimal valorCobrancaSimples, int numeroRegistroCobrancaVinculada, decimal valorCobrancaVinculada, int numeroRegistroCobrancaCaucionada, decimal valorCobrancaCaucionada, int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada)
         {
             try
@@ -135,7 +135,7 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
             }
         }
-        
+
         public string GerarDetalheRemessaCNAB240(Boleto boleto, ref int numeroRegistro)
         {
             string str1 = this.GerarDetalheSegmentoPRemessaCNAB240(boleto, ref numeroRegistro) + Environment.NewLine + this.GerarDetalheSegmentoQRemessaCNAB240(boleto, ref numeroRegistro);
@@ -281,6 +281,8 @@ namespace BoletoNetCore
                 string str = "0";
                 if (boleto.ValorMulta > 0M)
                     str = "1";
+                if (boleto.PercentualMulta > 0M)
+                    str = "2";
                 if (str == "0")
                     return "";
                 ++numeroRegistroGeral;
@@ -364,7 +366,7 @@ namespace BoletoNetCore
             arquivoRetorno.DataGeracao = new DateTime?(Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####")));
             arquivoRetorno.NumeroSequencial = new int?(Utils.ToInt32(registro.Substring(157, 6)));
         }
-        
+
         public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
         {
             try
@@ -427,6 +429,6 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / U.", ex);
             }
         }
-         
+
     }
 }

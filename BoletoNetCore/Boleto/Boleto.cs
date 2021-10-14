@@ -79,8 +79,6 @@ namespace BoletoNetCore
         public bool ImprimirValoresAuxiliares { get; set; } = false;        
         public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o pagador pagou. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que será creditado na conta corrente. Se não existir essa informação no arquivo retorno, deixar zerada.
-        public decimal ValorJurosDia { get; set; }
-        public decimal ValorMulta { get; set; }
         public decimal ValorDesconto { get; set; }
         public decimal ValorTarifas { get; set; }
         public decimal ValorOutrasDespesas { get; set; }
@@ -89,6 +87,8 @@ namespace BoletoNetCore
         public decimal ValorAbatimento { get; set; }
 
         // Juros
+        public decimal ValorJurosDia { get; set; }
+       
         public decimal PercentualJurosDia { get; set; }
 
         public DateTime DataJuros { get; set; }
@@ -96,6 +96,8 @@ namespace BoletoNetCore
         public TipoJuros TipoJuros { get; set; } = TipoJuros.Isento;
 
         // Multa
+        public decimal ValorMulta { get; set; }
+
         public decimal PercentualMulta { get; set; }
 
         public DateTime DataMulta { get; set; }
