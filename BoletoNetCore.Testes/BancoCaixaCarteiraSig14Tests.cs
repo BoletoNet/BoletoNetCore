@@ -8,7 +8,7 @@ namespace BoletoNetCore.Testes
     public class BancoCaixaCarteiraSig14Tests
     {
         readonly IBanco _banco;
-
+        
         public BancoCaixaCarteiraSig14Tests()
         {
             var contaBancaria = new ContaBancaria
@@ -24,6 +24,9 @@ namespace BoletoNetCore.Testes
             };
             _banco = Banco.Instancia(Bancos.Caixa);
             _banco.Beneficiario = Utils.GerarBeneficiario("123456", "0", "", contaBancaria);
+
+            //para testar com beneficiário 7 digitos
+            //_banco.Beneficiario = Utils.GerarBeneficiario("1234567", "", "", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
