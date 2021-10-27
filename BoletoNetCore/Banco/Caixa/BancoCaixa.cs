@@ -30,7 +30,7 @@ namespace BoletoNetCore
             {
                 Beneficiario.Codigo = codigoBeneficiario.PadLeft(6, '0');
 
-                if (Beneficiario.CodigoDV == Empty)
+                if (String.IsNullOrEmpty(Beneficiario.CodigoDV))
                     throw new Exception($"Dígito do código do beneficiário ({codigoBeneficiario}) não foi informado.");
 
                 Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoBeneficiario}-{Beneficiario.CodigoDV}";
@@ -39,10 +39,10 @@ namespace BoletoNetCore
             {
                 Beneficiario.Codigo = codigoBeneficiario;
 
-                if (Beneficiario.CodigoDV != Empty)
+                if (!String.IsNullOrEmpty(Beneficiario.CodigoDV))
                     throw new Exception($"Dígito do código do beneficiário ({codigoBeneficiario}) não deve ser informado quando codigo beneficiario tiver 7 dígitos.");
 
-                Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoBeneficiario}";
+                Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoBeneficiario}-{codigoBeneficiario.CalcularDVCaixa()}";
             }
             else
             {
