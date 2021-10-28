@@ -14,7 +14,7 @@ namespace BoletoNetCore
     using System.Linq;
 
     [Serializable()]
-    public class BoletoBancario 
+    public class BoletoBancario
     {
         String _vLocalLogoBeneficiario = String.Empty;
 
@@ -73,14 +73,14 @@ namespace BoletoNetCore
 
         #endregion Propriedades
 
-       
+
 
         #region Override
 
         private string GetResourceImage(string resourcePath)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            using (var str = new BinaryReader( assembly.GetManifestResourceStream(resourcePath)))
+            using (var str = new BinaryReader(assembly.GetManifestResourceStream(resourcePath)))
             {
                 return Convert.ToBase64String(str.ReadBytes((int)str.BaseStream.Length));
             }
@@ -234,7 +234,7 @@ namespace BoletoNetCore
                 html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega5.html"));
                 html.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega6.html"));
 
-                html.Append(MostrarComprovanteEntregaLivre ? GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega71.html") : GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega7.html") );
+                html.Append(MostrarComprovanteEntregaLivre ? GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega71.html") : GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.ComprovanteEntrega7.html"));
 
                 html.Append("<br />");
                 return html.ToString();
@@ -880,7 +880,7 @@ namespace BoletoNetCore
             return s;
         }
 
-        
+
         #endregion Geração do Html OffLine
 
         public Image GeraImagemCodigoBarras(Boleto boleto)
