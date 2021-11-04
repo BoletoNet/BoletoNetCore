@@ -211,10 +211,10 @@ namespace BoletoNetCore
         public string RegistroArquivoRetorno { get; set; } = string.Empty;
 
         /// <summary>
-        /// Quantidade de dias para recebimento após o vencimento (exclusivo BB)
+        /// Quantidade de dias para recebimento após o vencimento (exclusivo BB / Caixa)
         /// Prazo permitido para recebimento do boleto após o vencimento. Após este prazo, o boleto será baixado.
-        /// Este registro deve ser utilizado somente quando o campo 21.2 (Carteira de Cobrança) – Comando – for igual a "01" - Registro de Título
-        /// Este Registro deve, obrigatoriamente, ser inserido após o Registro Detalhe Obrigatório correspondente ao título
+        /// (BB) Este registro deve ser utilizado somente quando o campo 21.2 (Carteira de Cobrança) – Comando – for igual a "01" - Registro de Título
+        /// (BB) Este Registro deve, obrigatoriamente, ser inserido após o Registro Detalhe Obrigatório correspondente ao título
         /// </summary>
         public int? DiasLimiteRecebimento { get; set; } = null;
         public int Distribuicao { get; set; } = 0;
