@@ -110,7 +110,8 @@ namespace BoletoNetCore.Testes
                 AvisoDebitoAutomaticoContaCorrente = "2",
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
                 NumeroControleParticipante = "CHAVEPRIMARIA" + _proximoNossoNumero,
-                ParcelaInformativo = informativoParcelas
+                //ParcelaInformativo = informativoParcelas,
+                ImprimirValoresAuxiliares = true
             };
             // Mensagem - Instruções do Caixa
             StringBuilder msgCaixa = new StringBuilder();
