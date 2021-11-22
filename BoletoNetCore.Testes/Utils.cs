@@ -77,11 +77,11 @@ namespace BoletoNetCore.Testes
                 Banco = banco
             };
             for (var i = 1; i <= quantidadeBoletos; i++)
-                boletos.Add(GerarBoleto(banco, i, aceite, NossoNumeroInicial));
+                boletos.Add(GerarBoleto(banco, i, aceite, NossoNumeroInicial, $"{i}/{quantidadeBoletos}"));
             return boletos;
         }
 
-        internal static Boleto GerarBoleto(IBanco banco, int i, string aceite, int NossoNumeroInicial)
+        internal static Boleto GerarBoleto(IBanco banco, int i, string aceite, int NossoNumeroInicial, string informativoParcelas)
         {
             if (aceite == "?")
                 aceite = _contador % 2 == 0 ? "N" : "A";
@@ -109,7 +109,9 @@ namespace BoletoNetCore.Testes
                 ValorJurosDia = (decimal)(100 * i * (0.2 / 100)),
                 AvisoDebitoAutomaticoContaCorrente = "2",
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
-                NumeroControleParticipante = "CHAVEPRIMARIA" + _proximoNossoNumero
+                NumeroControleParticipante = "CHAVEPRIMARIA" + _proximoNossoNumero,
+                ParcelaInformativo = informativoParcelas,
+                ImprimirValoresAuxiliares = true
             };
             // Mensagem - Instruções do Caixa
             StringBuilder msgCaixa = new StringBuilder();
