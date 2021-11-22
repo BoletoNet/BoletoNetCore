@@ -274,7 +274,7 @@ namespace BoletoNetCore
                 // Identificação de Ocorrência - Código Auxiliar
                 boleto.CodigoMotivoOcorrencia = registro.Substring(318, 10);
                 boleto.ListMotivosOcorrencia = Cnab.MotivoOcorrenciaCnab240(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
-               
+
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
             }
@@ -332,6 +332,8 @@ namespace BoletoNetCore
                     return "Devolução, liquidado anteriormente";
                 case "26":
                     return "Devolvido pelo cartório – erro de informação";
+                case "28":
+                    return "Tarifa";
                 case "30":
                     return "Cobrança a creditar (liquidação em trânsito)";
                 case "31":
