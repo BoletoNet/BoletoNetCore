@@ -33,7 +33,7 @@ namespace BoletoNetCore.QuestPdf
 
                     row.RelativeColumn().Stack(st =>
                     {
-                        st.Item().Text("Vncimento", BoletoPdfConstants.LabelStyle);
+                        st.Item().Text("Vencimento", BoletoPdfConstants.LabelStyle);
                         st.Item().Text(this.boleto.DataVencimento.ToDateStr(), BoletoPdfConstants.BoldFieldStyle);
                     });
                 });
