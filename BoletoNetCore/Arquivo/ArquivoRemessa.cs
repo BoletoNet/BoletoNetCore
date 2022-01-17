@@ -50,7 +50,7 @@ namespace BoletoNetCore
                         tamanhoRegistro = 150;
                         break;
                     default:
-                        throw new Exception("Layout n�o encontrado");
+                        throw new Exception("Layout não encontrado");
                 }
 
                 StreamWriter arquivoRemessa = new StreamWriter(stream, Encoding.GetEncoding("ISO-8859-1"));
@@ -59,20 +59,20 @@ namespace BoletoNetCore
                 // Header do Arquivo
                 strline = Banco.GerarHeaderRemessa(TipoArquivo, NumeroArquivoRemessa, ref numeroRegistroGeral);
                 if (string.IsNullOrWhiteSpace(strline))
-                    throw new Exception("Registro HEADER obrigat�rio.");
+                    throw new Exception("Registro HEADER obrigatório.");
                 strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                 arquivoRemessa.WriteLine(strline);
 
                 foreach (Boleto boleto in boletos)
                 {
-                    // Todos os boletos da cole��o devem ser do mesmo banco da gera��o do arquivo remessa
-                    // A solu��o aqui � for�ar essa rela��o, mas talvez seja melhor subir uma exce��o detalhando o erro.
+                    // Todos os boletos da coleção devem ser do mesmo banco da geração do arquivo remessa
+                    // A solução aqui é forçar essa relação, mas talvez seja melhor subir uma exceção detalhando o erro.
                     boleto.Banco = Banco;
 
                     // Detalhe do arquivo
                     strline = boleto.Banco.GerarDetalheRemessa(TipoArquivo, boleto, ref numeroRegistroGeral);
                     if (string.IsNullOrWhiteSpace(strline))
-                        throw new Exception("Registro DETALHE obrigat�rio.");
+                        throw new Exception("Registro DETALHE obrigatório.");
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
 
