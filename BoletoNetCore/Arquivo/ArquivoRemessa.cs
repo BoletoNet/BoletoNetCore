@@ -4,19 +4,21 @@ using System.Text;
 
 namespace BoletoNetCore
 {
-    public class ArquivoRemessa 
+    public class ArquivoRemessa
     {
         public IBanco Banco { get; set; }
         public TipoArquivo TipoArquivo { get; set; }
         public int NumeroArquivoRemessa { get; set; }
+        public int? NumeroArquivoRemessaNoDia { get; set; }
 
-        public string NomeArquivo => Banco?.FormatarNomeArquivoRemessa(NumeroArquivoRemessa); //
+        public string NomeArquivo => Banco?.FormatarNomeArquivoRemessa(NumeroArquivoRemessaNoDia ?? NumeroArquivoRemessa); //
 
-        public ArquivoRemessa(IBanco banco, TipoArquivo tipoArquivo, int numeroArquivoRemessa)
+        public ArquivoRemessa(IBanco banco, TipoArquivo tipoArquivo, int numeroArquivoRemessa, int? numeroArquivoRemessaNoDia = null)
         {
             Banco = banco;
             TipoArquivo = tipoArquivo;
             NumeroArquivoRemessa = numeroArquivoRemessa;
+            NumeroArquivoRemessaNoDia = numeroArquivoRemessaNoDia;
         }
 
         public void GerarArquivoRemessa(Boletos boletos, Stream stream, bool fecharRemessa = true)
@@ -48,7 +50,7 @@ namespace BoletoNetCore
                         tamanhoRegistro = 150;
                         break;
                     default:
-                        throw new Exception("Layout não encontrado");
+                        throw new Exception("Layout nï¿½o encontrado");
                 }
 
                 StreamWriter arquivoRemessa = new StreamWriter(stream, Encoding.GetEncoding("ISO-8859-1"));
@@ -57,20 +59,20 @@ namespace BoletoNetCore
                 // Header do Arquivo
                 strline = Banco.GerarHeaderRemessa(TipoArquivo, NumeroArquivoRemessa, ref numeroRegistroGeral);
                 if (string.IsNullOrWhiteSpace(strline))
-                    throw new Exception("Registro HEADER obrigatório.");
+                    throw new Exception("Registro HEADER obrigatï¿½rio.");
                 strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                 arquivoRemessa.WriteLine(strline);
 
                 foreach (Boleto boleto in boletos)
                 {
-                    // Todos os boletos da coleção devem ser do mesmo banco da geração do arquivo remessa
-                    // A solução aqui é forçar essa relação, mas talvez seja melhor subir uma exceção detalhando o erro.
+                    // Todos os boletos da coleï¿½ï¿½o devem ser do mesmo banco da geraï¿½ï¿½o do arquivo remessa
+                    // A soluï¿½ï¿½o aqui ï¿½ forï¿½ar essa relaï¿½ï¿½o, mas talvez seja melhor subir uma exceï¿½ï¿½o detalhando o erro.
                     boleto.Banco = Banco;
 
                     // Detalhe do arquivo
                     strline = boleto.Banco.GerarDetalheRemessa(TipoArquivo, boleto, ref numeroRegistroGeral);
                     if (string.IsNullOrWhiteSpace(strline))
-                        throw new Exception("Registro DETALHE obrigatório.");
+                        throw new Exception("Registro DETALHE obrigatï¿½rio.");
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
 
