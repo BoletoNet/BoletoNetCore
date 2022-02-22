@@ -226,6 +226,11 @@ namespace BoletoNetCore
         public ObservableCollection<GrupoDemonstrativo> Demonstrativos { get; } = new ObservableCollection<GrupoDemonstrativo>();
         public string ParcelaInformativo { get; set; } = string.Empty;
 
+        /// <summary>
+        /// Atribua um objeto ao boleto para auxílio da implementação do boleto em diferentes sistemas
+        /// </summary>
+        public object Tag { get; set; }
+
         public void ValidarDados()
         {
             // Banco Obrigatório
