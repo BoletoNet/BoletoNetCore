@@ -20,11 +20,11 @@ namespace BoletoNetCore
             if (beneficiario.ContaBancaria.TipoImpressaoBoleto == TipoImpressaoBoleto.Empresa & boleto.NossoNumero == Empty)
                 throw new Exception("Nosso Número não informado.");
             
-            // Nosso número não pode ter mais de 8 dígitos
-            if (boleto.NossoNumero.Length > 8)
-                throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve conter 8 dígitos.");
+            // Nosso número não pode ter mais de 7 dígitos
+            if (boleto.NossoNumero.Length > 7)
+                throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve conter 7 dígitos.");
 
-            boleto.NossoNumero = boleto.NossoNumero.PadLeft(8, '0');
+            boleto.NossoNumero = boleto.NossoNumero.PadLeft(7, '0');
 
             // Base para calcular DV: Agencia (4 caracteres) Código do Beneficiário com dígito (10 caracteres) Nosso Número (7 caracteres)
             var baseCalculoDV = $"{beneficiario.ContaBancaria.Agencia}{beneficiario.Codigo.PadLeft(9, '0')}{beneficiario.CodigoDV}{boleto.NossoNumero}";
