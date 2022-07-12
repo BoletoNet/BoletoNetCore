@@ -57,7 +57,7 @@ namespace BoletoNetCore
             emissao.Agencia = boleto.Banco.Beneficiario.ContaBancaria.Agencia;
             emissao.Posto = boleto.Banco.Beneficiario.ContaBancaria.DigitoAgencia;
             emissao.Cedente = boleto.Banco.Beneficiario.Codigo;
-            emissao.NossoNumero = boleto.NossoNumero;
+            emissao.NossoNumero = boleto.NossoNumero+boleto.NossoNumeroDV;
             emissao.TipoPessoa = boleto.Pagador.TipoCPFCNPJ("0");
             emissao.CpfCnpj = boleto.Pagador.CPFCNPJ;
             emissao.Nome = boleto.Pagador.Nome;
@@ -124,7 +124,7 @@ namespace BoletoNetCore
             var agencia = boleto.Banco.Beneficiario.ContaBancaria.Agencia;
             var posto = boleto.Banco.Beneficiario.ContaBancaria.DigitoAgencia;
             var cedente = boleto.Banco.Beneficiario.Codigo;
-            var nossoNumero = boleto.NossoNumero;
+            var nossoNumero = boleto.NossoNumero+boleto.NossoNumeroDV;
 
             // existem outros parametros no manual para consulta de multiplos boletos
             var url = string.Format("consulta?agencia={0}&cedente={1}&posto={2}&nossoNumero={3}", agencia, cedente, posto, nossoNumero);
