@@ -338,9 +338,14 @@ namespace BoletoNetCore
                 // string tmp = registro.Substring(37, 20);
                 // boleto.NossoNumero = tmp.Substring(8, 11);
                 // essa implementação sugere dessa maneira, ou seja, aproveitando a classe base mas alterando a posicao do nosso numero
-                boleto.NossoNumero = registro.Substring(37, 20).OnlyNumber();
+
+                //Ajustado para separar o DV do Nossonumero mantendo o padrao dos outros bancos.
+                //Alterando a propriedade NossoNumeroFormatado para realmente ficar fomatada
+
+                boleto.NossoNumero = registro.Substring(37, 20).OnlyNumber().Substring(0,8);
                 boleto.NossoNumeroDV = boleto.NossoNumero.Substring(boleto.NossoNumero.Length - 1, 1);
-                boleto.NossoNumeroFormatado = boleto.NossoNumero;
+                boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.NossoNumero.Substring(0, 2), boleto.NossoNumero.Substring(2, 6), boleto.NossoNumeroDV); 
+                //boleto.NossoNumeroFormatado = boleto.NossoNumero;
             }
             catch (Exception ex)
             {
