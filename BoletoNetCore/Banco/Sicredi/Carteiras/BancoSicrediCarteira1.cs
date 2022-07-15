@@ -15,7 +15,7 @@ namespace BoletoNetCore
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
             string CampoLivre = boleto.Carteira + "1" +
-                boleto.NossoNumero + boleto.NossoNumeroDV + 
+                boleto.NossoNumero + boleto.NossoNumeroDV +
                 boleto.Banco.Beneficiario.ContaBancaria.Agencia +
                 boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta +
                 boleto.Banco.Beneficiario.Codigo + "10";
@@ -27,14 +27,17 @@ namespace BoletoNetCore
 
         public void FormataNossoNumero(Boleto boleto)
         {
+            if (boleto.NossoNumeroFormatado.Length != 11)
+            {
+                var DataDocumento = boleto.DataEmissao.ToString("yy");
 
-            var DataDocumento = boleto.DataEmissao.ToString("yy");
-            var nossoNumero = boleto.NossoNumero;
+                var nossoNumero = boleto.NossoNumero;
 
-            boleto.NossoNumero = string.Format("{0}2{1}", DataDocumento, nossoNumero.PadLeft(5, '0'));
+                boleto.NossoNumero = string.Format("{0}2{1}", DataDocumento, nossoNumero.PadLeft(5, '0'));
 
-            boleto.NossoNumeroDV = Mod11(Sequencial(boleto)).ToString();
-            //boleto.NossoNumero = string.Concat(boleto.NossoNumero, Mod11(Sequencial(boleto)));
+                boleto.NossoNumeroDV = Mod11(Sequencial(boleto)).ToString();
+                //boleto.NossoNumero = string.Concat(boleto.NossoNumero, Mod11(Sequencial(boleto)));
+            }
 
             boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.NossoNumero.Substring(0, 2), boleto.NossoNumero.Substring(2, 6), boleto.NossoNumeroDV);
         }
