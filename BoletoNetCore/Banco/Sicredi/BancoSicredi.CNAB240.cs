@@ -108,7 +108,7 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0024, 012, 0, this.Beneficiario.ContaBancaria.Conta.OnlyNumber(), '0'); // 024 a 035 - Número da conta corrente
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0036, 001, 0, this.Beneficiario.ContaBancaria.DigitoConta.OnlyNumber(), '0'); // 036 a 036 - Digito da conta
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0037, 001, 0, "", ' '); // 037 a 037 - Dígito verificador da coop/ag/conta
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 020, 0, boleto.NossoNumero.OnlyNumber()+boleto.NossoNumeroDV, '0'); // 038 a 057 - Identificação do título no banco
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 020, 0, boleto.NossoNumero.OnlyNumber() + boleto.NossoNumeroDV, '0'); // 038 a 057 - Identificação do título no banco
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0058, 001, 0, boleto.Carteira.OnlyNumber(), '1'); // 058 a 058 - Código da carteira
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0059, 001, 0, "1", '1'); // 059 a 059 - Forma de cadastro do título no banco
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0060, 001, 0, "1", '1'); // 060 a 060 - Tipo de documento
@@ -342,16 +342,15 @@ namespace BoletoNetCore
                 //Ajustado para separar o DV do Nossonumero mantendo o padrao dos outros bancos.
                 //Alterando a propriedade NossoNumeroFormatado para realmente ficar fomatada
 
-                boleto.NossoNumero = registro.Substring(37, 20).OnlyNumber().Substring(0,8);
-                boleto.NossoNumeroDV = boleto.NossoNumero.Substring(boleto.NossoNumero.Length - 1, 1);
-                boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.NossoNumero.Substring(0, 2), boleto.NossoNumero.Substring(2, 6), boleto.NossoNumeroDV); 
-                //boleto.NossoNumeroFormatado = boleto.NossoNumero;
+                var nossoNumero = registro.Substring(37, 20).Trim();
+                boleto.NossoNumero = nossoNumero.Substring(0, nossoNumero.Length - 1);
+                boleto.NossoNumeroDV = nossoNumero.Substring(nossoNumero.Length - 1, 1);
+                boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.NossoNumero.Substring(0, 2), boleto.NossoNumero.Substring(2, 6), boleto.NossoNumeroDV);
             }
             catch (Exception ex)
             {
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO SICREDI / CNAB 240 / T.", ex);
             }
-
         }
     }
 }
