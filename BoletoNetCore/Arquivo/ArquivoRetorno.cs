@@ -24,9 +24,8 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Neste construtor o boleto2net � respons�vel por atribuir o TipoArquivo e o Banco de acordo com o conte�do do arquivo de retorno.
-        /// O pr�prio construtor chama o m�todo LerArquivoRetorno2 respons�vel por carregar/atribuir os boletos e demais informa��es do arquivo de retorno
-        /// </summary>
+        /// Neste construtor o boleto2net é responsável por atribuir o TipoArquivo e o Banco de acordo com o conteúdo do arquivo de retorno.
+        /// O próprio construtor chama o método LerArquivoRetorno2 responsável por carregar/atribuir os boletos e demais informações do arquivo de retorno        /// </summary>
         /// <param name="arquivo">Stream do arquivo de retorno</param>
         public ArquivoRetorno(Stream arquivo)
         {
@@ -41,7 +40,7 @@ namespace BoletoNetCore
             try
             {
                 if (TipoArquivo == TipoArquivo.CNAB400 && Banco.IdsRetornoCnab400RegistroDetalhe.Count == 0)
-                    throw new Exception("Banco " + Banco.Codigo.ToString() + " n�o implementou os Ids do Registro Retorno do CNAB400.");
+                    throw new Exception("Banco " + Banco.Codigo.ToString() + " não implementou os Ids do Registro Retorno do CNAB400.");
 
                 using (StreamReader arquivoRetorno = new StreamReader(arquivo, System.Text.Encoding.UTF8))
                 {
@@ -80,16 +79,16 @@ namespace BoletoNetCore
                     //busca o primeiro registro do arquivo
                     var registro = arquivoRetorno.ReadLine();
 
-                    //atribui o tipo de acordo com o conte�do do arquivo
+                    //atribui o tipo de acordo com o conteúdo do arquivo
                     TipoArquivo = registro.Length == 240 ? TipoArquivo.CNAB240 : TipoArquivo.CNAB400;
 
                     //instacia o banco de acordo com o codigo/id do banco presente no arquivo de retorno
                     Banco = BoletoNetCore.Banco.Instancia(Utils.ToInt32(registro.Substring(TipoArquivo == TipoArquivo.CNAB240 ? 0 : 76, 3)));
 
                     if (TipoArquivo == TipoArquivo.CNAB400 && Banco.IdsRetornoCnab400RegistroDetalhe.Count == 0)
-                        throw new Exception("Banco " + Banco.Codigo.ToString() + " n�o implementou os Ids do Registro Retorno do CNAB400.");
+                        throw new Exception("Banco " + Banco.Codigo.ToString() + " não implementou os Ids do Registro Retorno do CNAB400.");
 
-                    //define a posicao do reader para o in�cio
+                    //define a posicao do reader para o início
                     arquivoRetorno.DiscardBufferedData();
                     arquivoRetorno.BaseStream.Seek(0, SeekOrigin.Begin);
 
@@ -118,7 +117,7 @@ namespace BoletoNetCore
         private void LerLinhaDoArquivoRetornoCNAB240(string registro)
         {
             IBancoCNAB240 b = (IBancoCNAB240)Banco;
-            if (b == null) throw new Exception("Leitura CNAB240 n�o implementada para este banco.");
+            if (b == null) throw new Exception("Leitura CNAB240 não implementada para este banco.");
 
             var tipoRegistro = registro.Substring(7, 1);
             var tipoSegmento = registro.Substring(13, 1);
@@ -141,11 +140,11 @@ namespace BoletoNetCore
 
             if (tipoRegistro == "3" & tipoSegmento == "U")
             {
-                // Segmento U - Continua��o do segmento T anterior (localiza o �ltimo boleto da lista)
+                // Segmento U - Continuação do segmento T anterior (localiza o último boleto da lista)
                 Boleto boleto = Boletos.LastOrDefault();
-                // Se n�o encontrou um boleto v�lido, ocorreu algum problema, pois deveria ter criado um novo objeto no registro que foi analisado anteriormente.
+                // Se não encontrou um boleto válido, ocorreu algum problema, pois deveria ter criado um novo objeto no registro que foi analisado anteriormente.
                 if (boleto == null)
-                    throw new Exception("Objeto boleto n�o identificado");
+                    throw new Exception("Objeto boleto não identificado");
                 b.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
                 return;
             }
@@ -163,9 +162,9 @@ namespace BoletoNetCore
         private void LerLinhaDoArquivoRetornoCNAB400(string registro)
         {
             IBancoCNAB400 b = (IBancoCNAB400)Banco;
-            if (b == null) throw new Exception("Leitura CNAB400 n�o implementada para este banco.");
+            if (b == null) throw new Exception("Leitura CNAB400 não implementada para este banco.");
 
-            // Identifica o tipo do registro (primeira posi��o da linha)
+            // Identifica o tipo do registro (primeira posição da linha)
             var tipoRegistro = registro.Substring(0, 1);
 
             // Registro HEADER
@@ -182,7 +181,7 @@ namespace BoletoNetCore
                 return;
             }
 
-            // Se o registro n�o estiver na lista a ser processada pelo banco selecionado, ignora o registro
+            // Se o registro não estiver na lista a ser processada pelo banco selecionado, ignora o registro
             if (!Banco.IdsRetornoCnab400RegistroDetalhe.Contains(tipoRegistro))
                 return;
 
@@ -195,8 +194,8 @@ namespace BoletoNetCore
             if (tipoRegistro == Banco.IdsRetornoCnab400RegistroDetalhe.First())
                 novoBoleto = true;
 
-            // Se for um novo boleto, cria um novo objeto, caso contr�rio, seleciona o �ltimo boleto
-            // Estamos considerando que, quando houver mais de um registro para o mesmo boleto, no arquivo retorno, os registros ser�o apresentados na sequencia.
+            // Se for um novo boleto, cria um novo objeto, caso contrário, seleciona o último boleto
+            // Estamos considerando que, quando houver mais de um registro para o mesmo boleto, no arquivo retorno, os registros serão apresentados na sequencia.
             Boleto boleto = null;
             if (novoBoleto)
             {
@@ -207,9 +206,9 @@ namespace BoletoNetCore
                 if (Boletos.Count > 0)
                     boleto = Boletos[Boletos.Count - 1];
 
-                // Se n�o encontrou um boleto v�lido, ocorreu algum problema, pois deveria ter criado um novo objeto no registro que foi analisado anteriormente.
+                // Se não encontrou um boleto válido, ocorreu algum problema, pois deveria ter criado um novo objeto no registro que foi analisado anteriormente.
                 if (boleto == null)
-                    throw new Exception("Objeto boleto n�o identificado");
+                    throw new Exception("Objeto boleto não identificado");
             }
 
 
