@@ -12,6 +12,9 @@ namespace BoletoNetCore
         public int Codigo { get; protected set; }
         public string Nome { get; protected set; }
         public string Digito { get; protected set; }
+        public int TamanhoAgencia => 4;
+        public int TamanhoConta => 10;
+
         public List<string> IdsRetornoCnab400RegistroDetalhe { get; protected set; }
         public bool RemoveAcentosArquivoRemessa { get; protected set; }
 
