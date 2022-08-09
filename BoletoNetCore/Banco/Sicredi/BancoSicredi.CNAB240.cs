@@ -148,7 +148,14 @@ namespace BoletoNetCore
 
             // 0 - Sem Desconto / 1 - Valor / 2 - Percentual / 3 - Valor por Atencipacao / 7 - Cancelamento de Desconto
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0142, 001, 0, boleto.ValorDesconto != 0 ? "1" : "0", '0'); // 142 a 142 - Código do desconto 1
-            reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0143, 008, 0, boleto.DataDesconto, '0'); // 143 a 150 - Data do desconto 1
+
+            // Apesar de no manual nao especificar, quando passa pela homogalogação recebe-se a seguinte oritentação:
+            // "Valor divergente, ao informar o valor 0, 3 ou 7 no código de desconto 1 no DETALHE segmento P posição 142, é necessário preencher este campo com zeros("00000000")"
+            if (boleto.ValorDesconto != 0)
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0143, 008, 0, boleto.DataDesconto, '0'); // 143 a 150 - Data do desconto 1
+            else
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0143, 008, 0, "0", '0'); // 143 a 150 - Data do desconto 1
+
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0151, 015, 2, boleto.ValorDesconto, '0');  // 151 a 165 - Valor percentual a ser concedido
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0166, 015, 2, boleto.ValorIOF, '0'); // 166 a 180 - Valor do IOF a ser recolhido
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0181, 015, 2, boleto.ValorAbatimento, '0'); // 181 a 195 - Valor do abatimento
