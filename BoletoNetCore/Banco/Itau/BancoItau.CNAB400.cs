@@ -233,12 +233,29 @@ namespace BoletoNetCore
             }
         }
 
+        public override void CompletarHeaderRetornoCNAB400(string registro)
+        {
+            // 01 - cpf / 02 - cnpj
+            if (registro.Substring(1, 2) == "01")
+                this.Beneficiario.CPFCNPJ = registro.Substring(6, 11);
+            else
+                this.Beneficiario.CPFCNPJ = registro.Substring(3, 14);
+        }
+
         public override void LerHeaderRetornoCNAB400(string registro)
         {
             try
             {
                 if (registro.Substring(0, 9) != "02RETORNO")
                     throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+
+                this.Beneficiario = new Beneficiario();
+                this.Beneficiario.ContaBancaria = new ContaBancaria();
+
+                this.Beneficiario.ContaBancaria.Agencia = registro.Substring(26, 4);
+                this.Beneficiario.ContaBancaria.Conta = registro.Substring(32, 5);
+                this.Beneficiario.ContaBancaria.DigitoConta = registro.Substring(37, 1);
+                this.Beneficiario.Nome = registro.Substring(46, 30).Trim();
             }
             catch (Exception ex)
             {
@@ -290,6 +307,9 @@ namespace BoletoNetCore
 
                 // Data do Crédito
                 boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
+
+                boleto.Pagador = new Pagador();
+                boleto.Pagador.Nome = registro.Substring(324, 30).Trim();
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
