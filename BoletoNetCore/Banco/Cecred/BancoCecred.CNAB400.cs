@@ -62,11 +62,13 @@ namespace BoletoNetCore
                 tregistroEdi.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 180, 13, 2, boleto.ValorDesconto, '0'));
                 tregistroEdi.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 193, 13, 0, "000000", '0'));
                 tregistroEdi.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 206, 13, 2, boleto.ValorAbatimento, '0'));
-                string str3 = "02";
+
+                // variavel causando warning pois nunca é utilizada (apenas atribuida em dois locais)
+                //string str3 = "02";
                 string str4 = "02";
                 num = Beneficiario.CPFCNPJ.Length;
-                if (num.Equals(11))
-                    str3 = "01";
+                //if (num.Equals(11))
+                //    str3 = "01";
                 num = boleto.Pagador.CPFCNPJ.Length;
                 if (num.Equals(11))
                     str4 = "01";
@@ -172,7 +174,7 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
             }
         }
-        
+
         private string DescricaoOcorrenciaCnab400(string codigo)
         {
             switch (codigo)
