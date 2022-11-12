@@ -369,6 +369,8 @@ namespace BoletoNetCore
                     return "Baixa Rejeitada";
                 case "28":
                     return "Débito de tarifas/custas";
+                case "29":
+                    return "Tarifa de Manutenção de Título Vencido";
                 case "30":
                     return "Alteração de Outros Dados Rejeitados";
                 case "32":
