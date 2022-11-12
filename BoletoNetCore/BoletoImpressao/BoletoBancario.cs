@@ -422,7 +422,7 @@ namespace BoletoNetCore
                 .Replace("@ENDERECOPAGADOR", enderecoPagador)
                 .Replace("@AVALISTA", avalista)
                 .Replace("@AGENCIACODIGOBENEFICIARIO", Boleto.Banco.Beneficiario.CodigoFormatado)
-                .Replace("@CPFCNPJ", Boleto.Banco.Beneficiario.CPFCNPJ)
+                .Replace("@CPFCNPJ", Utils.FormataCPFCPPJ(Boleto.Banco.Beneficiario.CPFCNPJ))
                 .Replace("@AUTENTICACAOMECANICA", "")
                 .Replace("@USODOBANCO", Boleto.UsoBanco)
                 .Replace("@IMAGEMCODIGOBARRA", imagemCodigoBarras)
