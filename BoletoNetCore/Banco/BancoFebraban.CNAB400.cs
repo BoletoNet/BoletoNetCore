@@ -12,18 +12,7 @@ namespace BoletoNetCore
         ///
         public virtual void CompletarHeaderRetornoCNAB400(string registro)
         {
-            this.Beneficiario.ContaBancaria = new ContaBancaria();
-            this.Beneficiario.ContaBancaria.Agencia = registro.Substring(25, this.TamanhoAgencia);
-
-            var conta = registro.Substring(30, this.TamanhoConta).Trim();
-            this.Beneficiario.ContaBancaria.Conta = conta.Substring(0, conta.Length - 1);
-            this.Beneficiario.ContaBancaria.DigitoConta = conta.Substring(conta.Length - 1, 1);
-
-            // 01 - cpf / 02 - cnpj
-            if (registro.Substring(1, 2) == "01")
-                this.Beneficiario.CPFCNPJ = registro.Substring(6, 11);
-            else
-                this.Beneficiario.CPFCNPJ = registro.Substring(3, 14);
+            //implementar cada um especificamente! Pois muda o modelo de cada banco...
         }
 
         public virtual void LerHeaderRetornoCNAB400(string registro)
