@@ -43,8 +43,14 @@ namespace BoletoNetCore.Exceptions
         public static Exception AgenciaInvalida(string agencia, int digitos)
             => new BoletoNetCoreException($"O número da agência ({agencia}) deve conter {digitos} dígitos.");
 
+        public static Exception AgenciaDigitoInvalido(string agenciaDigito, int digitos)
+            => new BoletoNetCoreException($"O dígito da agência({agenciaDigito}) deve contar {digitos} dígitos.");
+
         public static Exception ContaInvalida(string conta, int digitos)
             => new BoletoNetCoreException($"O número da conta ({conta}) deve conter {digitos} dígitos.");
+
+        public static Exception ContaDigitoInvalido(string contaDigito, int digitos)
+            => new BoletoNetCoreException($"O dígito da conta ({contaDigito}) deve conter {digitos} dígitos.");
 
         public static Exception CodigoBeneficiarioInvalido(string codigoBeneficiario, int digitos)
             => new BoletoNetCoreException($"O código do beneficiário ({codigoBeneficiario}) deve conter {digitos} dígitos.");
@@ -57,5 +63,11 @@ namespace BoletoNetCore.Exceptions
 
         public static Exception NumeroSequencialInvalido(int numeroSequencial)
             => new BoletoNetCoreException($"Número sequencial é inválido: {numeroSequencial}");
+        
+        public static Exception NossoNumeroInvalido(string nossoNumero, int digitos)
+            => new BoletoNetCoreException($"O nosso número ({nossoNumero}) deve conter {digitos} dígitos.");
+
+        public static Exception NossoNumeroDigitoInvalido(string nossoNumeroDigito, int digitos)
+            => new BoletoNetCoreException($"O dígito do nosso número ({nossoNumeroDigito}) deve conter {digitos} dígitos.");
     }
 }
