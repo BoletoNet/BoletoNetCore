@@ -1,3 +1,4 @@
+using BoletoNetCore.Enums;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -76,7 +77,7 @@ namespace BoletoNetCore
         // Valores do Boleto
         public decimal ValorTitulo { get; set; }
 
-        public bool ImprimirValoresAuxiliares { get; set; } = false;        
+        public bool ImprimirValoresAuxiliares { get; set; } = false;
         public decimal ValorPago { get; set; } // ValorPago deve ser preenchido com o valor que o pagador pagou. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorPagoCredito { get; set; } // ValorPagoCredito deve ser preenchido com o valor que será creditado na conta corrente. Se não existir essa informação no arquivo retorno, deixar zerada.
         public decimal ValorDesconto { get; set; }
@@ -88,7 +89,7 @@ namespace BoletoNetCore
 
         // Juros
         public decimal ValorJurosDia { get; set; }
-       
+
         public decimal PercentualJurosDia { get; set; }
 
         public DateTime DataJuros { get; set; }
@@ -101,6 +102,12 @@ namespace BoletoNetCore
         public decimal PercentualMulta { get; set; }
 
         public DateTime DataMulta { get; set; }
+
+        /// <summary>
+        /// Código adotado para identificar o critério de pagamento de multa(valor, percentual ou sem cobrançã de multa), a ser aplicada pelo atraso do pagamento do Título.
+        /// </summary>
+        //TODO: Precisa ajustar os arquivos de remessa dos bancos para usar essa propriedade, que informa o critério de pagamento de multa. Cecred/Ailos (085) - Carteira 1 ajustado
+        public TipoCodigoMulta TipoCodigoMulta { get; set; } = TipoCodigoMulta.Valor;
 
         // Desconto
         public DateTime DataDesconto { get; set; }
@@ -129,7 +136,7 @@ namespace BoletoNetCore
         /// Banco no qual o boleto/título foi quitado/recolhido
         /// </summary>
         public string BancoCobradorRecebedor { get; set; }
-        
+
         /// <summary>
         /// Agência na qual o boleto/título foi quitado/recolhido
         /// </summary>
