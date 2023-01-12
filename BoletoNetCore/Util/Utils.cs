@@ -89,12 +89,15 @@ namespace BoletoNetCore
         /// <returns></returns>
         internal static string FormataCPFCPPJ(string value)
         {
-            if (value.Trim().Length == 11)
-                return FormataCPF(value);
-            if (value.Trim().Length == 14)
-                return FormataCNPJ(value);
-
-            throw new Exception($"O CPF ou CNPJ: {value} é inválido.");
+            switch (value.Trim().Length)
+            {
+                case 11:
+                    return FormataCPF(value);
+                case 14:
+                    return FormataCNPJ(value);
+                default:
+                    return value;
+            }
         }
 
         /// <summary>
@@ -106,7 +109,7 @@ namespace BoletoNetCore
         {
             try
             {
-                return $"{cpf.Substring(0, 3)}.{cpf.Substring(3, 3)}.{cpf.Substring(6, 3)}-{cpf.Substring(9, 2)}";
+                return cpf != null && cpf.Length == 11 ? $"{cpf.Substring(0, 3)}.{cpf.Substring(3, 3)}.{cpf.Substring(6, 3)}-{cpf.Substring(9, 2)}" : cpf;
             }
             catch
             {
@@ -123,7 +126,7 @@ namespace BoletoNetCore
         {
             try
             {
-                return $"{cnpj.Substring(0, 2)}.{cnpj.Substring(2, 3)}.{cnpj.Substring(5, 3)}/{cnpj.Substring(8, 4)}-{cnpj.Substring(12, 2)}";
+                return cnpj != null && cnpj.Length == 14 ? $"{cnpj.Substring(0, 2)}.{cnpj.Substring(2, 3)}.{cnpj.Substring(5, 3)}/{cnpj.Substring(8, 4)}-{cnpj.Substring(12, 2)}" : cnpj;
             }
             catch
             {
@@ -140,7 +143,7 @@ namespace BoletoNetCore
         {
             try
             {
-                return $"{cep.Substring(0, 2)}{cep.Substring(2, 3)}-{cep.Substring(5, 3)}";
+                return cep != null && cep.Length == 8 ? $"{cep.Substring(0, 2)}{cep.Substring(2, 3)}-{cep.Substring(5, 3)}" : cep;
             }
             catch
             {
