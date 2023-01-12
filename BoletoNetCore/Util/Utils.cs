@@ -6,7 +6,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace BoletoNetCore
 {
-    static class Utils
+    public static class Utils
     {
         internal static string FormatCode(string text, int length) => text.PadLeft(length, '0');
 
@@ -209,14 +209,14 @@ namespace BoletoNetCore
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        public static byte[] ConvertImageToByte(SKImage image)
+        public static byte[] ConvertImageToByte(SKBitmap image)
         {
             if (image == null)
             {
                 return null;
             }
 
-            if (image.GetType().ToString() == "System.Drawing.Bitmap")
+            if (image.GetType().ToString() == "SkiaSharp.SKBitmap")
             {
                 using (SKData encoded = image.Encode(SKEncodedImageFormat.Jpeg, 100))
                 {
@@ -229,26 +229,29 @@ namespace BoletoNetCore
             }
         }
 
-        internal static SKBitmap DrawText(string text, float textSizeFont, SKTypeface font, SKColor textColor, SKColor backColor)
+        public static SKBitmap DrawText(string text, float textSizeFont, SKTypeface font, SKColor textColor, SKColor backColor)
         {
-            //first, create a dummy bitmap just to get a graphics object
-            var img = new SKBitmap(1, 1);
+            const int pixelsAdicionalAltura = 12;//folga de altura (dividido em acima e abaixo [Ex: 12/2 = 6 em cima, 6 em baixo])
+
+            SKBitmap img;
             using (var textPaint = new SKPaint(font.ToFont(textSizeFont)))
             {
-                //measure the string to see how big the image needs to be
+                textPaint.Color = textColor;//cor texto
+                textPaint.IsAntialias = true;//melhora nas bordas da imagem (mais bonito)
+
+                //verifica a altura e largura do texto
                 var bounds = new SKRect();
                 textPaint.MeasureText(text, ref bounds);
 
-                //create a new image of the right size
-                //new Bitmap((int)textSize.Width - Convert.ToInt32(font.Size * 1.5), (int)textSize.Height, PixelFormat.Format24bppRgb);
-                img.Dispose();
-                img = new SKBitmap((int)bounds.Right, (int)bounds.Height);
+                //cria uma imagem com altura e largura do texto corretos + folga de altura(acima e abaixo)
+                img = new SKBitmap((int)bounds.Right, (int)bounds.Height + pixelsAdicionalAltura);
 
+                //gera um canvas para desenhar
                 using (var canvas = new SKCanvas(img))
                 {
-                    canvas.Clear(backColor);
-                    canvas.DrawText(text, 0, -bounds.Top, textPaint);
-                    canvas.Save();
+                    canvas.Clear(backColor);//define cor de tras
+                    canvas.DrawText(text, 0, -bounds.Top + (pixelsAdicionalAltura/2), textPaint);//escreve o texto
+                    canvas.Save();//salva o canvas (aplicando no img)
                 }
             }
             return img;

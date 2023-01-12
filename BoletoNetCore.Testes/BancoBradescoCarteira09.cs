@@ -22,19 +22,19 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.Bradesco);
-            _banco.Beneficiario = Utils.GerarBeneficiario("1213141", "", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("1213141", "", "", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
         [Test]
         public void Bradesco_09_REM240()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoBradescoCarteira09), 5, true, "?", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoBradescoCarteira09), 5, true, "?", 223344);
         }
         [Test]
         public void Bradesco_09_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBradescoCarteira09), 5, true, "?", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBradescoCarteira09), 5, true, "?", 223344);
         }
 
 
@@ -57,7 +57,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

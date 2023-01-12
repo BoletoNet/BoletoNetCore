@@ -25,20 +25,20 @@ namespace BoletoNetCore.Testes
 
             };
             _banco = Banco.Instancia(Bancos.Sicredi);
-            _banco.Beneficiario = Utils.GerarBeneficiario("85305", "", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("85305", "", "", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
         [Test]
         public void Sicredi_1_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSicrediCarteira1Tests), 9, true, "N", 00001);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSicrediCarteira1Tests), 9, true, "N", 00001);
         }
 
         [Test]
         public void Sicredi_1_REM240()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSicrediCarteira1Tests), 9, true, "N", 00001);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSicrediCarteira1Tests), 9, true, "N", 00001);
         }
 
         [TestCase(500, "4", "4", "4", "19/200004-8", "74894629800000500001119200004801560585305103", "74891.11927 00004.801569 05853.051034 4 62980000050000", 2015, 01, 04)]
@@ -62,7 +62,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DMI,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

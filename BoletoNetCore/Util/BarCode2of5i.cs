@@ -10,13 +10,14 @@ namespace BoletoNetCore
         private const string START = "0000";
         private const string STOP = "1000";
         private SKBitmap _bitmap;
-        private Graphics _g;
+        private SKCanvas _canvas;
         #endregion
 
         #region Constructor
         public BarCode2of5i()
         {
         }
+
         /// <summary>
         /// Code 2 of 5 intrelaced Constructor
         /// </summary>
@@ -79,6 +80,7 @@ namespace BoletoNetCore
                 }
             }
         }
+
         /// <summary>
         /// Generate the Bitmap of Barcode.
         /// </summary>
@@ -103,10 +105,10 @@ namespace BoletoNetCore
             int width = (2 * Full + 3 * Thin) * (Digits) + 7 * Thin + Full;
 
             _bitmap = new SKBitmap(width, Height);
-            _g = Graphics.FromImage(_bitmap);
+            _canvas = new SKCanvas(_bitmap);
 
             //Start Pattern
-            DrawPattern(ref _g, START);
+            DrawPattern(ref _canvas, START);
 
             //Draw code
             FillPatern();
@@ -117,21 +119,25 @@ namespace BoletoNetCore
                     Code = Code.Substring(2, Code.Length - 2);
                 else
                     Code = "";
-                DrawPattern(ref _g, _cPattern[i]);
+                DrawPattern(ref _canvas, _cPattern[i]);
             }
 
             //Stop Patern
-            DrawPattern(ref _g, STOP);
+            DrawPattern(ref _canvas, STOP);
 
             return _bitmap;
         }
+
         /// <summary>
         /// Returns the byte array of Barcode
         /// </summary>
         /// <returns>byte[]</returns>
         public byte[] ToByte()
         {
-            return base.ToByte(ToBitmap());
+            using (SKData encoded = ToBitmap().Encode(SKEncodedImageFormat.Jpeg, 100))
+            {
+                return encoded.ToArray();
+            }
         }
     }
 }
