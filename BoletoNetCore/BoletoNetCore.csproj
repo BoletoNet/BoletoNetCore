@@ -19,16 +19,13 @@
     <EmbeddedResource Include="BoletoImpressao\**\*.html" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="System.Drawing.Common" Version="4.5.1" />
-  </ItemGroup>
-
   <ItemGroup>
     <None Remove="BoletoImpressao\Parts\Pix.html" />
     <None Remove="Imagens\085.jpg" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="2.88.3" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0" />
   </ItemGroup>
 

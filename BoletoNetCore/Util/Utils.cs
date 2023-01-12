@@ -1,9 +1,8 @@
+using SkiaSharp;
 using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BoletoNetCore
 {
@@ -210,7 +209,7 @@ namespace BoletoNetCore
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        public static byte[] ConvertImageToByte(Image image)
+        public static byte[] ConvertImageToByte(SKImage image)
         {
             if (image == null)
             {
@@ -219,10 +218,9 @@ namespace BoletoNetCore
 
             if (image.GetType().ToString() == "System.Drawing.Bitmap")
             {
-                using (var ms = new MemoryStream())
+                using (SKData encoded = image.Encode(SKEncodedImageFormat.Jpeg, 100))
                 {
-                    image.Save(ms, ImageFormat.Jpeg);
-                    return ms.ToArray();
+                    return encoded.ToArray();
                 }
             }
             else
@@ -231,37 +229,28 @@ namespace BoletoNetCore
             }
         }
 
-        internal static Image DrawText(string text, Font font, Color textColor, Color backColor)
+        internal static SKBitmap DrawText(string text, float textSizeFont, SKTypeface font, SKColor textColor, SKColor backColor)
         {
             //first, create a dummy bitmap just to get a graphics object
-            Image img = new Bitmap(1, 1);
-            Graphics drawing = Graphics.FromImage(img);
+            var img = new SKBitmap(1, 1);
+            using (var textPaint = new SKPaint(font.ToFont(textSizeFont)))
+            {
+                //measure the string to see how big the image needs to be
+                var bounds = new SKRect();
+                textPaint.MeasureText(text, ref bounds);
 
-            //measure the string to see how big the image needs to be
-            SizeF textSize = drawing.MeasureString(text, font);
+                //create a new image of the right size
+                //new Bitmap((int)textSize.Width - Convert.ToInt32(font.Size * 1.5), (int)textSize.Height, PixelFormat.Format24bppRgb);
+                img.Dispose();
+                img = new SKBitmap((int)bounds.Right, (int)bounds.Height);
 
-            //free up the dummy image and old graphics object
-            img.Dispose();
-            drawing.Dispose();
-
-            //create a new image of the right size
-            img = new Bitmap((int)textSize.Width - Convert.ToInt32(font.Size * 1.5), (int)textSize.Height, PixelFormat.Format24bppRgb);
-
-            drawing = Graphics.FromImage(img);
-
-            //paint the background
-            drawing.Clear(backColor);
-
-            //create a brush for the text
-            Brush textBrush = new SolidBrush(textColor);
-
-            drawing.DrawString(text, font, textBrush, 0, 0);
-
-            drawing.Save();
-
-            textBrush.Dispose();
-            drawing.Dispose();
-
+                using (var canvas = new SKCanvas(img))
+                {
+                    canvas.Clear(backColor);
+                    canvas.DrawText(text, 0, -bounds.Top, textPaint);
+                    canvas.Save();
+                }
+            }
             return img;
         }
     }

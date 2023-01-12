@@ -1,5 +1,5 @@
 using System;
-using System.Drawing;
+using SkiaSharp;
 
 namespace BoletoNetCore
 {
@@ -9,7 +9,7 @@ namespace BoletoNetCore
         private readonly string[] _cPattern = new string[100];
         private const string START = "0000";
         private const string STOP = "1000";
-        private Bitmap _bitmap;
+        private SKBitmap _bitmap;
         private Graphics _g;
         #endregion
 
@@ -82,8 +82,8 @@ namespace BoletoNetCore
         /// <summary>
         /// Generate the Bitmap of Barcode.
         /// </summary>
-        /// <returns>Return System.Drawing.Bitmap</returns>
-        public Bitmap ToBitmap()
+        /// <returns>Return Bitmap Image</returns>
+        public SKBitmap ToBitmap()
         {
             XPos = 0;
             YPos = 0;
@@ -102,7 +102,7 @@ namespace BoletoNetCore
 
             int width = (2 * Full + 3 * Thin) * (Digits) + 7 * Thin + Full;
 
-            _bitmap = new Bitmap(width, Height);
+            _bitmap = new SKBitmap(width, Height);
             _g = Graphics.FromImage(_bitmap);
 
             //Start Pattern
