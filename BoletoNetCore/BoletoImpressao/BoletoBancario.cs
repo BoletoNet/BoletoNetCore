@@ -844,7 +844,7 @@ namespace BoletoNetCore
                 var linhaDigitavel = Boleto.CodigoBarra.LinhaDigitavel.Replace("  ", " ").Trim();
 
                 var font = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
-                var imagemLinha = Utils.DrawText(linhaDigitavel, 32, font, SKColors.Black, SKColors.White);
+                var imagemLinha = Utils.DrawText(linhaDigitavel, 40, font, SKColors.Black, SKColors.White);
                 var base64Linha = Convert.ToBase64String(Utils.ConvertImageToByte(imagemLinha));
 
                 var fnLinha = string.Format("data:image/gif;base64,{0}", base64Linha);
