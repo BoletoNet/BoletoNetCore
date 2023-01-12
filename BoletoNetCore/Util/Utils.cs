@@ -89,6 +89,11 @@ namespace BoletoNetCore
         /// <returns></returns>
         internal static string FormataCPFCPPJ(string value)
         {
+            if (value == null)
+            {
+                return string.Empty;
+            }
+
             switch (value.Trim().Length)
             {
                 case 11:
