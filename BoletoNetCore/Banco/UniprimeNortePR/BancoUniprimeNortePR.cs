@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using BoletoNetCore.Extensions;
 
 namespace BoletoNetCore
 {
@@ -18,6 +20,11 @@ namespace BoletoNetCore
             var contaBancaria = this.Beneficiario.ContaBancaria;
             contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO.", "", "", 7);
             this.Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia}/{contaBancaria.Conta}-{contaBancaria.DigitoConta}";
+        }
+
+        public override string FormatarNomeArquivoRemessa(int numeroSequencial)
+        {
+            return $"cb{DateTime.Now.ToString("ddMM")}{numeroSequencial.ToString("00")}.rem"; ;
         }
     }
 }
