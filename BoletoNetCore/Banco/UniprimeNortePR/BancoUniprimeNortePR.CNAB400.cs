@@ -95,7 +95,7 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0275, 040, 0, boleto.Pagador.Endereco.FormataLogradouro(40), ' ');   // 274-314 Endereço Completo
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0315, 012, 0, "", ' ');   // 315-326 Brancos
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0327, 008, 0, boleto.Pagador.Endereco.CEP, '0');   // 327-334 CEP
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0335, 020, 0, boleto.Pagador.Nome, ' ');   // 335-354 Bairro do Pagador
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0335, 020, 0, boleto.Pagador.Endereco.Bairro, ' ');   // 335-354 Bairro do Pagador
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0355, 038, 0, boleto.Pagador.Endereco.Cidade, ' ');   // 355-392 Cidade do Pagador
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0393, 002, 0, boleto.Pagador.Endereco.UF, ' ');   // 393-394 UF do Pagador
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0'); // 395-400 No Sequencial do Registro
