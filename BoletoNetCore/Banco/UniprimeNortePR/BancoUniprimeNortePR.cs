@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BoletoNetCore.Extensions;
 
 namespace BoletoNetCore
 {
@@ -23,7 +24,7 @@ namespace BoletoNetCore
 
         public override string FormatarNomeArquivoRemessa(int numeroSequencial)
         {
-            return $"cb{DateTime.Now.ToString("ddMMyy")}.rem"; ;
+            return $"cb{DateTime.Now.ToString("ddMM")}{numeroSequencial.ToString().PadLeft(9, '0').Right(2)}.rem"; ;
         }
     }
 }
