@@ -33,7 +33,7 @@ namespace BoletoNetCore
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0066, 001, 0, boleto.PercentualMulta > 0 ? "2" : "0", ' '));    // 066-066 Campo de Multa (Se = 2 considerar percentual de multa. Se = 0, sem multa)
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0067, 004, 2, boleto.PercentualMulta, '0'));                    // 067-070 Percentual de Multa
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0071, 011, 0, boleto.NossoNumero, '0'));                        // 071-081 Identificação do Título no Banco
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0082, 001, 0, boleto.NossoNumeroDV, '0'));                      // 082-082 Digito de Auto Conferência do Número Bancário
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0082, 001, 0, boleto.NossoNumeroDV, '0'));                      // 082-082 Digito de Auto Conferência do Número Bancário
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0083, 010, 0, "", ' '));                                        // 083-092 Brancos
 
                 // 093-093 Condição para Emissão da Papeleta de Cobrança
