@@ -17,7 +17,7 @@ namespace BoletoNetCore
                 numeroRegistroGeral++;
                 var reg = new TRegistroEDI();
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "1", ' '));   // 001-001 Identificação do Registro
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 019, 0, "1", ' '));   // 002-020 Brancos
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 019, 0, "", ' '));    // 002-020 Brancos
 
                 // 021-037 Identificação da Empresa Beneficiária no Banco (Zero, Carteira, Agência e Conta Corrente)
                 // no manual é indicado como um unico campo, estou separando para facilitar
@@ -50,12 +50,12 @@ namespace BoletoNetCore
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0094, 015, 0, "", ' '));   // 094-108 Brancos
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0109, 002, 0, String.IsNullOrWhiteSpace(boleto.CodigoMotivoOcorrencia) ? "01" : boleto.CodigoMotivoOcorrencia, '0')); // 109-110 Codigo de Ocorrência na Remessa (01 - Remessa, tem outros)
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NumeroDocumento, ' '));   // 111-120 Número do Documento
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0121, 006, 0, boleto.DataVencimento.ToString("ddMMaa"), ' '));   // 121-126 Data do Vencimento do Titulo
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0121, 006, 0, boleto.DataVencimento.ToString("ddMMyy"), ' '));   // 121-126 Data do Vencimento do Titulo
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 013, 2, boleto.ValorTitulo, '0'); // 127 - 139 Valor do Titulo
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0140, 008, 0, "", ' '));   // 140-147 Brancos
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0148, 002, 0, AjustaEspecieCnab400(boleto.EspecieDocumento), '0'); // 148-149 Especie do Titulo
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0150, 001, 0, boleto.Aceite, ' '); // 150 - 150 Aceite (No manual esta como "Sempre N")
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0151, 006, 0, boleto.DataEmissao.ToString("ddMMaa"), ' '));   // 151-156 Data de Emissao do Titulo
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0151, 006, 0, boleto.DataEmissao.ToString("ddMMyy"), ' '));   // 151-156 Data de Emissao do Titulo
 
                 // 157-158 indicacao de protesto / negativacao
                 // 01 – Protestar dias corridos
@@ -85,7 +85,7 @@ namespace BoletoNetCore
 
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0159, 002, 0, boleto.DiasProtesto, '0'); // 159-160 Quantidade de dias para protesto / Negativação
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0161, 013, 2, boleto.ValorJurosDia, '0'); // 161 - 173 Valor a ser cobrado por Dia de Atraso
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0174, 006, 0, boleto.ValorDesconto > 0 ? boleto.DataDesconto.ToString("ddMMaa") : "000000", ' ');   // 174-179 Data Limite P/Concessão de Desconto
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0174, 006, 0, boleto.ValorDesconto > 0 ? boleto.DataDesconto.ToString("ddMMyy") : "000000", ' ');   // 174-179 Data Limite P/Concessão de Desconto
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0180, 013, 2, boleto.ValorDesconto, '0'); // 180 - 192 Valor do Desconto
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0193, 013, 0, "", ' ');   // 193-205 Brancos
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0206, 013, 2, boleto.ValorAbatimento, '0'); // 206 - 218 Valor do Abatimento a ser concedido ou cancelado

@@ -24,7 +24,7 @@ namespace BoletoNetCore
 
         public override string FormatarNomeArquivoRemessa(int numeroSequencial)
         {
-            return $"cb{DateTime.Now.ToString("ddMM")}{numeroSequencial.ToString().PadLeft(9, '0').Right(2)}.rem"; ;
+            return $"cb{DateTime.Now.ToString("ddMM")}{numeroSequencial.ToString("00")}.rem"; ;
         }
     }
 }
