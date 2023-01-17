@@ -85,7 +85,7 @@ namespace BoletoNetCore
 
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0159, 002, 0, boleto.DiasProtesto, '0'); // 159-160 Quantidade de dias para protesto / Negativação
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0161, 013, 2, boleto.ValorJurosDia, '0'); // 161 - 173 Valor a ser cobrado por Dia de Atraso
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0174, 006, 0, boleto.DataDesconto.ToString("ddMMaa"), ' ');   // 174-179 Data Limite P/Concessão de Desconto
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0174, 006, 0, boleto.ValorDesconto > 0 ? boleto.DataDesconto.ToString("ddMMaa") : "000000", ' ');   // 174-179 Data Limite P/Concessão de Desconto
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0180, 013, 2, boleto.ValorDesconto, '0'); // 180 - 192 Valor do Desconto
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0193, 013, 0, "", ' ');   // 193-205 Brancos
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0206, 013, 2, boleto.ValorAbatimento, '0'); // 206 - 218 Valor do Abatimento a ser concedido ou cancelado
