@@ -48,7 +48,7 @@ namespace BoletoNetCore
                 }
 
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0094, 015, 0, "", ' '));   // 094-108 Brancos
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0109, 002, 0, String.IsNullOrWhiteSpace(boleto.CodigoMotivoOcorrencia) ? "02" : boleto.CodigoMotivoOcorrencia, '0'));
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0109, 002, 0, String.IsNullOrWhiteSpace(boleto.CodigoMotivoOcorrencia) ? "01" : boleto.CodigoMotivoOcorrencia, '0')); // 109-110 Codigo de Ocorrência na Remessa (01 - Remessa, tem outros)
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NumeroDocumento, ' '));   // 111-120 Número do Documento
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0121, 006, 0, boleto.DataVencimento.ToString("ddMMaa"), ' '));   // 121-126 Data do Vencimento do Titulo
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 013, 2, boleto.ValorTitulo, '0'); // 127 - 139 Valor do Titulo
