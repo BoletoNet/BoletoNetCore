@@ -1,16 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 //Envio por email
 using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text;
+using SkiaSharp;
 
 namespace BoletoNetCore
 {
-    using System.Drawing.Imaging;
     using System.Linq;
 
     [Serializable()]
@@ -97,20 +96,6 @@ namespace BoletoNetCore
 
         private string GetCodBarraCode(string code)
         {
-            //System.Drawing.Bitmap img = new BarCode2of5i(code, 1, 50, code.Length).ToBitmap();
-
-            ////img = img.GetThumbnailImage(460, 61, null, new IntPtr()) as System.Drawing.Bitmap;
-            //using (MemoryStream s = new MemoryStream(10000))
-            //{
-            //    img.Save(s, ImageFormat.Jpeg);
-            //    s.Position = 0;
-            //    using (BinaryReader reader = new BinaryReader(s))
-            //    {
-            //        return Convert.ToBase64String(reader.ReadBytes((int)s.Length));
-            //    }
-            //}
-
-            //img = img.GetThumbnailImage(460, 61, null, new IntPtr()) as System.Drawing.Bitmap;
             return Convert.ToBase64String(new BarCode2of5i(code, 1, 50, code.Length).ToByte());
         }
 
@@ -858,7 +843,8 @@ namespace BoletoNetCore
 
                 var linhaDigitavel = Boleto.CodigoBarra.LinhaDigitavel.Replace("  ", " ").Trim();
 
-                var imagemLinha = Utils.DrawText(linhaDigitavel, new Font("Arial", 30, FontStyle.Bold), Color.Black, Color.White);
+                var font = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
+                var imagemLinha = Utils.DrawText(linhaDigitavel, 40, font, SKColors.Black, SKColors.White);
                 var base64Linha = Convert.ToBase64String(Utils.ConvertImageToByte(imagemLinha));
 
                 var fnLinha = string.Format("data:image/gif;base64,{0}", base64Linha);
@@ -884,7 +870,7 @@ namespace BoletoNetCore
 
         #endregion Geração do Html OffLine
 
-        public Image GeraImagemCodigoBarras(Boleto boleto)
+        public SKBitmap GeraImagemCodigoBarras(Boleto boleto)
         {
             var cb = new BarCode2of5i(boleto.CodigoBarra.CodigoDeBarras, 1, 50, boleto.CodigoBarra.CodigoDeBarras.Length);
             return cb.ToBitmap();

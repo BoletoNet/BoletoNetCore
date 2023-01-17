@@ -23,20 +23,20 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.Sicoob);
-            _banco.Beneficiario = Utils.GerarBeneficiario("17227", "8", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("17227", "8", "", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
         [Test]
         public void Sicoob_1_01_REM240()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSicoobCarteira101Tests), 5, true, "?", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSicoobCarteira101Tests), 5, true, "?", 223344);
         }
 
         [Test]
         public void Sicoob_1_01_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSicoobCarteira101Tests), 5, true, "?", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSicoobCarteira101Tests), 5, true, "?", 223344);
         }
 
 
@@ -59,7 +59,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

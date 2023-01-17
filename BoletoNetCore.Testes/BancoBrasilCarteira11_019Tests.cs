@@ -23,7 +23,7 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Banco
             };
             _banco = Banco.Instancia(Bancos.BancoDoBrasil);
-            _banco.Beneficiario = Utils.GerarBeneficiario("1234567", "", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("1234567", "", "", contaBancaria);
             _banco.FormataBeneficiario();
 
 
@@ -32,13 +32,13 @@ namespace BoletoNetCore.Testes
         [Test]
         public void Brasil_11_019_REM240()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoBrasilCarteira11019Tests), 5, true, "?", 0);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoBrasilCarteira11019Tests), 5, true, "?", 0);
         }
 
         [Test]
         public void Brasil_11_019_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBrasilCarteira11019Tests), 5, true, "?", 0);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBrasilCarteira11019Tests), 5, true, "?", 0);
         }
 
         [TestCase(800d, "12345670000000001", "BAN789A123", "1", "12345670000000001", "00191781400000800000000001234567000000000111", "00190.00009 01234.567004 00000.001115 1 78140000080000", 2019, 2, 28)]
@@ -63,7 +63,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

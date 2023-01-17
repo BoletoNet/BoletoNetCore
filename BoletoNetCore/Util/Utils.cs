@@ -1,13 +1,12 @@
+using SkiaSharp;
 using System;
-using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace BoletoNetCore
 {
-    static class Utils
+    public static class Utils
     {
         internal static string FormatCode(string text, int length) => text.PadLeft(length, '0');
 
@@ -89,12 +88,20 @@ namespace BoletoNetCore
         /// <returns></returns>
         internal static string FormataCPFCPPJ(string value)
         {
-            if (value.Trim().Length == 11)
-                return FormataCPF(value);
-            if (value.Trim().Length == 14)
-                return FormataCNPJ(value);
+            if (value == null)
+            {
+                return string.Empty;
+            }
 
-            throw new Exception($"O CPF ou CNPJ: {value} é inválido.");
+            switch (value.Trim().Length)
+            {
+                case 11:
+                    return FormataCPF(value);
+                case 14:
+                    return FormataCNPJ(value);
+                default:
+                    return value;
+            }
         }
 
         /// <summary>
@@ -106,7 +113,7 @@ namespace BoletoNetCore
         {
             try
             {
-                return $"{cpf.Substring(0, 3)}.{cpf.Substring(3, 3)}.{cpf.Substring(6, 3)}-{cpf.Substring(9, 2)}";
+                return cpf != null && cpf.Length == 11 ? $"{cpf.Substring(0, 3)}.{cpf.Substring(3, 3)}.{cpf.Substring(6, 3)}-{cpf.Substring(9, 2)}" : cpf;
             }
             catch
             {
@@ -123,7 +130,7 @@ namespace BoletoNetCore
         {
             try
             {
-                return $"{cnpj.Substring(0, 2)}.{cnpj.Substring(2, 3)}.{cnpj.Substring(5, 3)}/{cnpj.Substring(8, 4)}-{cnpj.Substring(12, 2)}";
+                return cnpj != null && cnpj.Length == 14 ? $"{cnpj.Substring(0, 2)}.{cnpj.Substring(2, 3)}.{cnpj.Substring(5, 3)}/{cnpj.Substring(8, 4)}-{cnpj.Substring(12, 2)}" : cnpj;
             }
             catch
             {
@@ -140,7 +147,7 @@ namespace BoletoNetCore
         {
             try
             {
-                return $"{cep.Substring(0, 2)}{cep.Substring(2, 3)}-{cep.Substring(5, 3)}";
+                return cep != null && cep.Length == 8 ? $"{cep.Substring(0, 2)}{cep.Substring(2, 3)}-{cep.Substring(5, 3)}" : cep;
             }
             catch
             {
@@ -202,19 +209,18 @@ namespace BoletoNetCore
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        public static byte[] ConvertImageToByte(Image image)
+        public static byte[] ConvertImageToByte(SKBitmap image)
         {
             if (image == null)
             {
                 return null;
             }
 
-            if (image.GetType().ToString() == "System.Drawing.Bitmap")
+            if (image.GetType().ToString() == "SkiaSharp.SKBitmap")
             {
-                using (var ms = new MemoryStream())
+                using (SKData encoded = image.Encode(SKEncodedImageFormat.Jpeg, 100))
                 {
-                    image.Save(ms, ImageFormat.Jpeg);
-                    return ms.ToArray();
+                    return encoded.ToArray();
                 }
             }
             else
@@ -223,37 +229,31 @@ namespace BoletoNetCore
             }
         }
 
-        internal static Image DrawText(string text, Font font, Color textColor, Color backColor)
+        public static SKBitmap DrawText(string text, float textSizeFont, SKTypeface font, SKColor textColor, SKColor backColor)
         {
-            //first, create a dummy bitmap just to get a graphics object
-            Image img = new Bitmap(1, 1);
-            Graphics drawing = Graphics.FromImage(img);
+            const int pixelsAdicionalAltura = 12;//folga de altura (dividido em acima e abaixo [Ex: 12/2 = 6 em cima, 6 em baixo])
 
-            //measure the string to see how big the image needs to be
-            SizeF textSize = drawing.MeasureString(text, font);
+            SKBitmap img;
+            using (var textPaint = new SKPaint(font.ToFont(textSizeFont)))
+            {
+                textPaint.Color = textColor;//cor texto
+                textPaint.IsAntialias = true;//melhora nas bordas da imagem (mais bonito)
 
-            //free up the dummy image and old graphics object
-            img.Dispose();
-            drawing.Dispose();
+                //verifica a altura e largura do texto
+                var bounds = new SKRect();
+                textPaint.MeasureText(text, ref bounds);
 
-            //create a new image of the right size
-            img = new Bitmap((int)textSize.Width - Convert.ToInt32(font.Size * 1.5), (int)textSize.Height, PixelFormat.Format24bppRgb);
+                //cria uma imagem com altura e largura do texto corretos + folga de altura(acima e abaixo)
+                img = new SKBitmap((int)bounds.Right, (int)bounds.Height + pixelsAdicionalAltura);
 
-            drawing = Graphics.FromImage(img);
-
-            //paint the background
-            drawing.Clear(backColor);
-
-            //create a brush for the text
-            Brush textBrush = new SolidBrush(textColor);
-
-            drawing.DrawString(text, font, textBrush, 0, 0);
-
-            drawing.Save();
-
-            textBrush.Dispose();
-            drawing.Dispose();
-
+                //gera um canvas para desenhar
+                using (var canvas = new SKCanvas(img))
+                {
+                    canvas.Clear(backColor);//define cor de tras
+                    canvas.DrawText(text, 0, -bounds.Top + (pixelsAdicionalAltura/2), textPaint);//escreve o texto
+                    canvas.Save();//salva o canvas (aplicando no img)
+                }
+            }
             return img;
         }
     }

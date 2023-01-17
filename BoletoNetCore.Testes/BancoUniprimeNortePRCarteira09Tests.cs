@@ -22,7 +22,7 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.UniprimeNortePR);
-            _banco.Beneficiario = Utils.GerarBeneficiario("", "", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("", "", "", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
@@ -62,7 +62,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

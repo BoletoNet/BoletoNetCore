@@ -1,8 +1,5 @@
-using System;
-using System.Drawing;
-using System.Globalization;
 using BoletoNetCore.Util;
-using Microsoft.VisualBasic;
+using System;
 
 namespace BoletoNetCore
 {
@@ -95,7 +92,7 @@ namespace BoletoNetCore
 
                 if (resto <= 1 || resto > 9)
                     return "1";
-                
+
                 return (11 - resto).ToString();
 
             }
