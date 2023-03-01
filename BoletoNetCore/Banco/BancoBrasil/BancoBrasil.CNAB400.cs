@@ -305,6 +305,8 @@ namespace BoletoNetCore
                     return TipoEspecieDocumento.DAE;
                 case "27":
                     return TipoEspecieDocumento.DAM;
+                case "32":
+                    return TipoEspecieDocumento.BP;
                 default:
                     return TipoEspecieDocumento.OU;
             }
@@ -338,6 +340,8 @@ namespace BoletoNetCore
                     return "26";
                 case TipoEspecieDocumento.DAM:
                     return "27";
+                case TipoEspecieDocumento.BP:
+                    return "32";
                 default:
                     return "99";
             }
