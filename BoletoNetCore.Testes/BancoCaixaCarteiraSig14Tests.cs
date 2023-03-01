@@ -23,7 +23,7 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.Caixa);
-            _banco.Beneficiario = Utils.GerarBeneficiario("123456", "0", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("123456", "0", "", contaBancaria);
 
             //para testar com beneficiário 7 digitos
             //_banco.Beneficiario = Utils.GerarBeneficiario("1234567", "", "", contaBancaria);
@@ -33,13 +33,13 @@ namespace BoletoNetCore.Testes
         [Test]
         public void Caixa_SIG14_REM240()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCaixaCarteiraSig14Tests), 5, true, "?", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCaixaCarteiraSig14Tests), 5, true, "?", 223344);
         }
 
         [Test]
         public void Caixa_SIG14_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoCaixaCarteiraSig14Tests), 5, true, "?", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoCaixaCarteiraSig14Tests), 5, true, "?", 223344);
         }
 
 
@@ -62,7 +62,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

@@ -31,6 +31,8 @@ namespace BoletoNetCore
                     return "Confirmação do Recebimento do Cancelamento do Desconto";
                 case "09":
                     return "Baixa";
+                case "11":
+                    return "Título em Carteira (em ser)";
                 case "12":
                     return "Confirmação Recebimento Instrução de Abatimento";
                 case "13":

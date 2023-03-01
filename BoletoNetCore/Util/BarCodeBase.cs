@@ -1,7 +1,4 @@
-using System;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
+using SkiaSharp;
 
 namespace BoletoNetCore
 {
@@ -19,9 +16,6 @@ namespace BoletoNetCore
         protected int YPos = 0;
 
         private string _contenttype;
-
-        protected Brush Black = Brushes.Black;
-        protected Brush White = Brushes.White;
 
         #endregion
 
@@ -203,32 +197,8 @@ namespace BoletoNetCore
             }
         }
         #endregion
-        protected virtual byte[] ToByte(Bitmap bitmap)
-        {
-            MemoryStream mstream = new MemoryStream();
-            ImageCodecInfo myImageCodecInfo = GetEncoderInfo(ContentType);
 
-            EncoderParameter myEncoderParameter0 = new EncoderParameter(Encoder.Quality, (long)100);
-            EncoderParameters myEncoderParameters = new EncoderParameters(1);
-            myEncoderParameters.Param[0] = myEncoderParameter0;
-
-            bitmap.Save(mstream, myImageCodecInfo, myEncoderParameters);
-
-            return mstream.GetBuffer();
-        }
-        private ImageCodecInfo GetEncoderInfo(string mimeType)
-        {
-            int j;
-            ImageCodecInfo[] encoders;
-            encoders = ImageCodecInfo.GetImageEncoders();
-            for (j = 0; j < encoders.Length; ++j)
-            {
-                if (encoders[j].MimeType == mimeType)
-                    return encoders[j];
-            }
-            return null;
-        }
-        protected virtual void DrawPattern(ref Graphics g, string pattern)
+        protected virtual void DrawPattern(ref SKCanvas g, string pattern)
         {
             int tempWidth;
 
@@ -240,9 +210,9 @@ namespace BoletoNetCore
                     tempWidth = _full;
 
                 if (i % 2 == 0)
-                    g.FillRectangle(Black, XPos, YPos, tempWidth, _height);
+                    g.DrawRect(XPos, YPos, tempWidth, _height, new SKPaint() { Color = SKColors.Black });
                 else
-                    g.FillRectangle(White, XPos, YPos, tempWidth, _height);
+                    g.DrawRect(XPos, YPos, tempWidth, _height, new SKPaint() { Color = SKColors.White });
 
                 XPos += tempWidth;
             }

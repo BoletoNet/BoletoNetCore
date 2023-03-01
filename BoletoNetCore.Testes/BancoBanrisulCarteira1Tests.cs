@@ -22,7 +22,7 @@ namespace BoletoNetCore.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro
             };
             _banco = Banco.Instancia(Bancos.Banrisul);
-            _banco.Beneficiario = Utils.GerarBeneficiario("0340123456063", "", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("0340123456063", "", "", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
@@ -30,13 +30,13 @@ namespace BoletoNetCore.Testes
         public void Banrisul_1_REM400_BancoEmite()
         {
             _banco.Beneficiario.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Banco;
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBanrisulCarteira1Tests) + "_BancoEmite", 5, true, "?", 0);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBanrisulCarteira1Tests) + "_BancoEmite", 5, true, "?", 0);
         }
         [Test]
         public void Banrisul_1_REM400_EmpresaEmite()
         {
             _banco.Beneficiario.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa;
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBanrisulCarteira1Tests) + "_EmpresaEmite", 5, true, "?", 12345);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBanrisulCarteira1Tests) + "_EmpresaEmite", 5, true, "?", 12345);
         }
 
         [TestCase(276.15, "458", "BB874A", "1", "00000458-02", "04191693400000276152103401234560000004584090", "04192.10349 01234.560009 00045.840907 1 69340000027615", 2016, 10, 1)]
@@ -59,7 +59,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

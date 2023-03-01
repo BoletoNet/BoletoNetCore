@@ -22,7 +22,7 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Banco
             };
             _banco = Banco.Instancia(Bancos.Itau);
-            _banco.Beneficiario = Utils.GerarBeneficiario("", "", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("", "", "", contaBancaria);
 
             _banco.FormataBeneficiario();
         }
@@ -30,7 +30,7 @@ namespace BoletoNetCore.Testes
         [Test]
         public void Itau_112_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoItauCarteira112Tests), 5, true, "N", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoItauCarteira112Tests), 5, true, "N", 223344);
         }
 
         
@@ -55,7 +55,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

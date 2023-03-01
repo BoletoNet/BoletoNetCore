@@ -1,5 +1,5 @@
 using System;
-using System.Drawing;
+using SkiaSharp;
 
 namespace BoletoNetCore
 {
@@ -9,14 +9,15 @@ namespace BoletoNetCore
         private readonly string[] _cPattern = new string[100];
         private const string START = "0000";
         private const string STOP = "1000";
-        private Bitmap _bitmap;
-        private Graphics _g;
+        private SKBitmap _bitmap;
+        private SKCanvas _canvas;
         #endregion
 
         #region Constructor
         public BarCode2of5i()
         {
         }
+
         /// <summary>
         /// Code 2 of 5 intrelaced Constructor
         /// </summary>
@@ -79,11 +80,12 @@ namespace BoletoNetCore
                 }
             }
         }
+
         /// <summary>
         /// Generate the Bitmap of Barcode.
         /// </summary>
-        /// <returns>Return System.Drawing.Bitmap</returns>
-        public Bitmap ToBitmap()
+        /// <returns>Return Bitmap Image</returns>
+        public SKBitmap ToBitmap()
         {
             XPos = 0;
             YPos = 0;
@@ -102,11 +104,11 @@ namespace BoletoNetCore
 
             int width = (2 * Full + 3 * Thin) * (Digits) + 7 * Thin + Full;
 
-            _bitmap = new Bitmap(width, Height);
-            _g = Graphics.FromImage(_bitmap);
+            _bitmap = new SKBitmap(width, Height);
+            _canvas = new SKCanvas(_bitmap);
 
             //Start Pattern
-            DrawPattern(ref _g, START);
+            DrawPattern(ref _canvas, START);
 
             //Draw code
             FillPatern();
@@ -117,21 +119,25 @@ namespace BoletoNetCore
                     Code = Code.Substring(2, Code.Length - 2);
                 else
                     Code = "";
-                DrawPattern(ref _g, _cPattern[i]);
+                DrawPattern(ref _canvas, _cPattern[i]);
             }
 
             //Stop Patern
-            DrawPattern(ref _g, STOP);
+            DrawPattern(ref _canvas, STOP);
 
             return _bitmap;
         }
+
         /// <summary>
         /// Returns the byte array of Barcode
         /// </summary>
         /// <returns>byte[]</returns>
         public byte[] ToByte()
         {
-            return base.ToByte(ToBitmap());
+            using (SKData encoded = ToBitmap().Encode(SKEncodedImageFormat.Jpeg, 100))
+            {
+                return encoded.ToArray();
+            }
         }
     }
 }

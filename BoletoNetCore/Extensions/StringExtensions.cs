@@ -169,5 +169,28 @@ namespace BoletoNetCore.Extensions
             return digito;
         }
 
+        public static string CalcularDVUniprimeNortePR(this string texto)
+        {
+            int pesoMaximo = 7, soma = 0, peso = 2;
+            for (var i = texto.Length - 1; i >= 0; i--)
+            {
+                soma = soma + (int)char.GetNumericValue(texto[i]) * peso;
+                if (peso == pesoMaximo)
+                    peso = 2;
+                else
+                    peso = peso + 1;
+            }
+            var moduloFinal = soma % 11;
+            int digitoFinal;
+            if (moduloFinal < 2)
+                digitoFinal = 0;
+            else
+                digitoFinal = 11 - moduloFinal;
+
+            if (moduloFinal == 1)
+                return "P";
+
+            return digitoFinal.ToString();
+        }
     }
 }

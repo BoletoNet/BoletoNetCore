@@ -22,20 +22,20 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.Cecred);
-            _banco.Beneficiario = Utils.GerarBeneficiario("101104", "", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("101104", "", "", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
         [Test]
         public void Cecred_1_REM240()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCecredCarteira1Tests), 5, true, "?", 1);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCecredCarteira1Tests), 5, true, "?", 1);
         }
 
         [Test]
         public void Cecred_1_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoCecredCarteira1Tests), 5, true, "?", 1);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoCecredCarteira1Tests), 5, true, "?", 1);
         }
 
         [TestCase(80.21, "74644", "02315602/74644", "1", "02315602000074644", "08591875700000080211011040231560200007464401", "08591.01107 40231.560208 00074.644014 1 87570000008021", 2021, 9, 28)]
@@ -57,7 +57,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

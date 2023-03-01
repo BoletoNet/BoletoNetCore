@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using BoletoNetCore.Exceptions;
 using static System.String;
 
@@ -108,7 +109,8 @@ namespace BoletoNetCore
                         reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 030, 0, boleto.Avalista.Nome, ' ');
                     }
                     reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0382, 004, 0, Empty, ' ');
-                    reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0386, 006, 0, "0", '0');
+                    var dataJuros = boleto.DataJuros >= boleto.DataVencimento ? boleto.DataJuros : boleto.DataVencimento;
+                    reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0386, 006, 0, dataJuros, '0');
                 }
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0392, 002, 0, boleto.DiasProtesto, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0394, 001, 0, Empty, ' ');
@@ -232,12 +234,29 @@ namespace BoletoNetCore
             }
         }
 
+        public override void CompletarHeaderRetornoCNAB400(string registro)
+        {
+            // 01 - cpf / 02 - cnpj
+            if (registro.Substring(1, 2) == "01")
+                this.Beneficiario.CPFCNPJ = registro.Substring(6, 11);
+            else
+                this.Beneficiario.CPFCNPJ = registro.Substring(3, 14);
+        }
+
         public override void LerHeaderRetornoCNAB400(string registro)
         {
             try
             {
                 if (registro.Substring(0, 9) != "02RETORNO")
                     throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+
+                this.Beneficiario = new Beneficiario();
+                this.Beneficiario.ContaBancaria = new ContaBancaria();
+
+                this.Beneficiario.ContaBancaria.Agencia = registro.Substring(26, 4);
+                this.Beneficiario.ContaBancaria.Conta = registro.Substring(32, 5);
+                this.Beneficiario.ContaBancaria.DigitoConta = registro.Substring(37, 1);
+                this.Beneficiario.Nome = registro.Substring(46, 30).Trim();
             }
             catch (Exception ex)
             {
@@ -265,6 +284,7 @@ namespace BoletoNetCore
                 boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
                 boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
                 boleto.CodigoMotivoOcorrencia = registro.Substring(377, 8);
+                boleto.ListMotivosOcorrencia = MotivoOcorrenciaCnab400(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
 
                 //Número do Documento
                 boleto.NumeroDocumento = registro.Substring(116, 10);
@@ -289,6 +309,9 @@ namespace BoletoNetCore
 
                 // Data do Crédito
                 boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
+
+                boleto.Pagador = new Pagador();
+                boleto.Pagador.Nome = registro.Substring(324, 30).Trim();
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
@@ -346,6 +369,8 @@ namespace BoletoNetCore
                     return "Baixa Rejeitada";
                 case "28":
                     return "Débito de tarifas/custas";
+                case "29":
+                    return "Tarifa de Manutenção de Título Vencido";
                 case "30":
                     return "Alteração de Outros Dados Rejeitados";
                 case "32":
@@ -432,6 +457,110 @@ namespace BoletoNetCore
         {
             return (valorMulta / valorTitulo) * 100;
         }
+
+        /// <summary>
+        /// Recupera a Lista dos Motivos de Ocorrência na Cobrança
+        /// </summary>
+        /// <remarks> Poderão ser
+        /// informados até quatro ocorrências distintas, incidente sobre o título
+        /// </remarks>
+        /// <param name="codigo"></param>
+        /// <returns></returns>
+        public static IEnumerable<string> MotivoOcorrenciaCnab400(string codigo, string codigoMovimentoRetorno)
+        {
+            //define qual o domínio que será utilizado, conforme C047
+            var funcaoDominio = new string[] {  "02"  }.Contains(codigoMovimentoRetorno) ? MotivoOcorrenciaTabela10 :
+                          new string[] { "03" }.Contains(codigoMovimentoRetorno) ? MotivoOcorrenciaTabela1 : null;
+
+            //retorna uma lista vazia caso ele não encontre um domínio de motivos de ocorrência
+            if (funcaoDominio == null) return Enumerable.Empty<string>();
+
+            //classifica os motivos e inclui na lista de resultados
+            List<string> motivos = new List<string>(4);
+            for (int posicao = 0; posicao < codigo.Length - 1; posicao = posicao + 2)
+            {
+                var entrada = codigo.Substring(posicao, 2);
+                if (entrada.Equals("00")) continue;
+                motivos.Add(funcaoDominio(entrada)); //inclui o motivo a partir 
+            }
+            return motivos;
+        }
+
+        public static Func<string, string> MotivoOcorrenciaTabela1 { get; set; } =
+            (q) =>
+            {
+                switch (q)
+                {
+                    case "03": return "Cep sem Atendimento de Protesto no Momento";
+                    case "04": return "Sigla do Estado Inválida";
+                    case "05": return "Data de Vencimento Inválida";
+                    case "07": return "Valor do Título Maior que 10.000.000,00";
+                    case "08": return "Nome do Pagador Não Informado";
+                    case "09": return "Agencia Encerrada";
+                    case "10": return "Endereço do Pagador Não Informado";
+                    case "11": return "CEP Inválido";
+                    case "12": return "Avalista Não Informado";
+                    case "13": return "CEP Incompatível Com a Unidade da Federação";
+                    case "14": return "Nosso Número Duplicado ou Fora da Faixa";
+                    case "15": return "Nosso Número Duplicado no Mesmo Movimento";
+                    case "18": return "Data de Entrada Inválida Para Esta Carteira";
+                    case "19": return "Ocorrência Inválida";
+                    case "21": return "Carteira Não Aceita Depositária Correspondente";
+                    case "22": return "Carteira Não Permitida";
+                    case "26": return "Agência / Conta Não Liberada Para Operar Com Cobrança";
+                    case "27": return "CNPJ do Beneficiário Inapto";
+                    case "29": return "Categoria da Conta Inválida";
+                    case "30": return "Entradas Bloqueadas, Conta Suspensa em Cobrança";
+                    case "31": return "Conta Não Tem Permissão Para Protestar";
+                    case "35": return "IOF Maior que 5%";
+                    case "36": return "Quantidade de Moeda Incompatível Com Valor do Título";
+                    case "37": return "Número do Documento do Pagador Não Informado ou Inválido";
+                    case "42": return "Nosso Número Fora da Faixa";
+                    case "52": return "Empresa Não Aceita Banco Correspondente";
+                    case "53": return "Empresa Não Aceita Banco Correspondente - Cobrança Mensagem";
+                    case "54": return "Banco Correspondente - Título Com Vencimento Inferior a 15 Dias";
+                    case "55": return "CEP Não Pertence à Depositária Informada";
+                    case "56": return "Vencimento Superior a 180 Dias da Data de Entrada";
+                    case "57": return "CEP Só Despositária Banco do Brasil Com Vencimento Inferior a 8 Dias";
+                    case "60": return "Valor do Abatimento Inválido";
+                    case "61": return "Juros de Mora Maior que o Permitido";
+                    case "62": return "Valor do Desconto Maior que o Valor do Título";
+                    case "63": return "Valor da Importância por Dia de Desconto Não Permitido";
+                    case "64": return "Data de Emissão do Título Inválida";
+                    case "65": return "Taxa Inválida";
+                    case "66": return "Data de Vencimento Inválida / Fora de Prazo de Operação";
+                    case "67": return "Valor do Título / Quantidade de Moeda Inválido";
+                    case "68": return "Carteira Inválida ou Não Cadastrada no Intercâmbio da Cobrança";
+                    case "69": return "Carteira Inválida Para Títulos Com Rateio de Crédito";
+                    case "70": return "Beneficiário Não Cadastrado Para Fazer Rateio de Crédito";
+                    case "78": return "Duplicidade de Agência / Conta Beneficiária do Rateio de Crédito";
+                    case "80": return "Quantidade de Contas Beneficiárias do Rateio Maior do que o Permitido";
+                    case "81": return "Conta Para Rateio de Crédito Inválida / Não Pertence ao Itaú";
+                    case "82": return "Desconto / Abatimento Não Permitido Para Títulos Com Rateio de Crédito";
+                    case "83": return "Valor do Título Menor que a Soma dos Valores Estipulados para Rateio";
+                    case "84": return "Agência / Conta Beneficiária do Rateio é a Centralizadora de Crédito do Beneficiário";
+                    case "85": return "Agência / Conta do Beneficiário é Contratual / Rateio de Crédito Não Permitido";
+                    case "86": return "Código do Tipo de Valor Inválido / Não Previsto Para Títulos Com Rateio de Crédito";
+                    case "87": return "Registro Tipo 4 Sem Informação de Agências / Contas Beneficiárias do Rateio";
+                    case "90": return "Cobrança Mensagem - Número da Linha da Mensagem Inválido ou Quantidade de Linhas Excedidas";
+                    case "97": return "Cobrança Mensagem Sem Mensagem, Porém Com Registro do Tipo 7 ou 8";
+                    case "98": return "Registro Mensagem Sem Flash Cadastrado ou Flash Informado Diferente do Cadastrado";
+                    case "99": return "Conta de Cobrança Com Flash Cadastrado e Sem Registro de Mensagem Correspondente";
+                    default: return "";
+                }
+            };
+
+        public static Func<string, string> MotivoOcorrenciaTabela10 { get; set; } =
+            (q) =>
+            {
+                switch (q)
+                {
+                    case "01": return "Cep Sem Atendimento de Protesto no Momento";
+                    case "02": return "Estado Com Determinação Legal que Impede a Incrição de Inadimplentes nos Cadastros de Proteção ao Crédito no Prazo Solicitado";
+                    case "03": return "Boleto Não Liquidado no Desconto de Duplicatas e Transferido Para Cobrança Simples";
+                    default: return "";
+                }
+            };
     }
 }
 

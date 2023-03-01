@@ -5,6 +5,9 @@
 [![Coverage Status](https://coveralls.io/repos/github/BoletoNet/boletonetcore/badge.svg?branch=master)](https://coveralls.io/github/BoletoNet/boletonetcore?branch=master)
 [![MyGet Ultimo PR](https://img.shields.io/myget/boletonetcorebuild/v/boletonetcore.svg)](https://www.myget.org/gallery/boletonetcorebuild)
 
+# Status
+![Alt](https://repobeats.axiom.co/api/embed/624e926e9d7b272a2137660ee27c9575d5aec3ac.svg "Repobeats analytics image")
+
 # BoletoNetCore
 Esta é uma versão baseado no Boleto2Net, mas para funcionar com .NET Core
 

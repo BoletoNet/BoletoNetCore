@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 //Envio por email
 using System.IO;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Reflection;
 using System.Text;
+using SkiaSharp;
 
 namespace BoletoNetCore
 {
-    using System.Drawing.Imaging;
+    using System.Globalization;
     using System.Linq;
 
     [Serializable()]
@@ -97,20 +97,6 @@ namespace BoletoNetCore
 
         private string GetCodBarraCode(string code)
         {
-            //System.Drawing.Bitmap img = new BarCode2of5i(code, 1, 50, code.Length).ToBitmap();
-
-            ////img = img.GetThumbnailImage(460, 61, null, new IntPtr()) as System.Drawing.Bitmap;
-            //using (MemoryStream s = new MemoryStream(10000))
-            //{
-            //    img.Save(s, ImageFormat.Jpeg);
-            //    s.Position = 0;
-            //    using (BinaryReader reader = new BinaryReader(s))
-            //    {
-            //        return Convert.ToBase64String(reader.ReadBytes((int)s.Length));
-            //    }
-            //}
-
-            //img = img.GetThumbnailImage(460, 61, null, new IntPtr()) as System.Drawing.Bitmap;
             return Convert.ToBase64String(new BarCode2of5i(code, 1, 50, code.Length).ToByte());
         }
 
@@ -286,13 +272,13 @@ namespace BoletoNetCore
 
                         grupoDemonstrativo = grupoDemonstrativo.Replace("@DESCRICAOITEM", item.Descricao);
                         grupoDemonstrativo = grupoDemonstrativo.Replace("@REFERENCIAITEM", item.Referencia);
-                        grupoDemonstrativo = grupoDemonstrativo.Replace("@VALORITEM", item.Valor.ToString("R$ ##,##0.00"));
+                        grupoDemonstrativo = grupoDemonstrativo.Replace("@VALORITEM", item.Valor.ToString("C", CultureInfo.GetCultureInfo("pt-BR")));
                     }
 
                     grupoDemonstrativo.Append(GetResourceHypertext("BoletoNetCore.BoletoImpressao.Parts.TotalDemonstrativo.html"));
                     grupoDemonstrativo = grupoDemonstrativo.Replace(
                         "@VALORTOTALGRUPO",
-                        relatorio.Itens.Sum(c => c.Valor).ToString("R$ ##,##0.00"));
+                        relatorio.Itens.Sum(c => c.Valor).ToString("C", CultureInfo.GetCultureInfo("pt-BR")));
                 }
 
                 html = html.Replace("@ITENSDEMONSTRATIVO", grupoDemonstrativo.ToString());
@@ -411,18 +397,18 @@ namespace BoletoNetCore
                 .Replace("@ESPECIE", Boleto.EspecieMoeda)
                 .Replace("@QUANTIDADE", (Boleto.QuantidadeMoeda == 0 ? "" : Boleto.QuantidadeMoeda.ToString()))
                 .Replace("@VALORDOCUMENTO", Boleto.ValorMoeda)
-                .Replace("@=VALORDOCUMENTO", (Boleto.ValorTitulo == 0 ? "" : Boleto.ValorTitulo.ToString("R$ ##,##0.00")))
-                .Replace("@DESCONTOS", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorDesconto == 0 ? "" : Boleto.ValorDesconto.ToString("R$ ##,##0.00")))
-                .Replace("@OUTRASDEDUCOES", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorAbatimento == 0 ? "" : Boleto.ValorAbatimento.ToString("R$ ##,##0.00")))
-                .Replace("@MORAMULTA", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorMulta == 0 ? "" : Boleto.ValorMulta.ToString("R$ ##,##0.00")))
-                .Replace("@OUTROSACRESCIMOS", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorOutrasDespesas == 0 ? "" : Boleto.ValorOutrasDespesas.ToString("R$ ##,##0.00")))
-                .Replace("@VALORCOBRADO", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorPago == 0 ? "" : Boleto.ValorPago.ToString("R$ ##,##0.00")))
+                .Replace("@=VALORDOCUMENTO", (Boleto.ValorTitulo == 0 ? "" : Boleto.ValorTitulo.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))))
+                .Replace("@DESCONTOS", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorDesconto == 0 ? "" : Boleto.ValorDesconto.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))))
+                .Replace("@OUTRASDEDUCOES", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorAbatimento == 0 ? "" : Boleto.ValorAbatimento.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))))
+                .Replace("@MORAMULTA", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorMulta == 0 ? "" : Boleto.ValorMulta.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))))
+                .Replace("@OUTROSACRESCIMOS", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorOutrasDespesas == 0 ? "" : Boleto.ValorOutrasDespesas.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))))
+                .Replace("@VALORCOBRADO", (Boleto.ImprimirValoresAuxiliares == false || Boleto.ValorPago == 0 ? "" : Boleto.ValorPago.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))))
                 .Replace("@AGENCIACONTA", Boleto.Banco.Beneficiario.CodigoFormatado)
                 .Replace("@PAGADOR", pagador)
                 .Replace("@ENDERECOPAGADOR", enderecoPagador)
                 .Replace("@AVALISTA", avalista)
                 .Replace("@AGENCIACODIGOBENEFICIARIO", Boleto.Banco.Beneficiario.CodigoFormatado)
-                .Replace("@CPFCNPJ", Boleto.Banco.Beneficiario.CPFCNPJ)
+                .Replace("@CPFCNPJ", Utils.FormataCPFCPPJ(Boleto.Banco.Beneficiario.CPFCNPJ))
                 .Replace("@AUTENTICACAOMECANICA", "")
                 .Replace("@USODOBANCO", Boleto.UsoBanco)
                 .Replace("@IMAGEMCODIGOBARRA", imagemCodigoBarras)
@@ -858,7 +844,8 @@ namespace BoletoNetCore
 
                 var linhaDigitavel = Boleto.CodigoBarra.LinhaDigitavel.Replace("  ", " ").Trim();
 
-                var imagemLinha = Utils.DrawText(linhaDigitavel, new Font("Arial", 30, FontStyle.Bold), Color.Black, Color.White);
+                var font = SKTypeface.FromFamilyName("Arial", SKFontStyleWeight.Bold, SKFontStyleWidth.Normal, SKFontStyleSlant.Upright);
+                var imagemLinha = Utils.DrawText(linhaDigitavel, 40, font, SKColors.Black, SKColors.White);
                 var base64Linha = Convert.ToBase64String(Utils.ConvertImageToByte(imagemLinha));
 
                 var fnLinha = string.Format("data:image/gif;base64,{0}", base64Linha);
@@ -884,7 +871,7 @@ namespace BoletoNetCore
 
         #endregion Geração do Html OffLine
 
-        public Image GeraImagemCodigoBarras(Boleto boleto)
+        public SKBitmap GeraImagemCodigoBarras(Boleto boleto)
         {
             var cb = new BarCode2of5i(boleto.CodigoBarra.CodigoDeBarras, 1, 50, boleto.CodigoBarra.CodigoDeBarras.Length);
             return cb.ToBitmap();

@@ -22,14 +22,14 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.Safra);
-            _banco.Beneficiario = Utils.GerarBeneficiario("", "", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("", "", "", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
         [Test]
         public void Safra_1_REM400()
         {
-            Utils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSafraCarteira1), 5, true, "?", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSafraCarteira1), 5, true, "?", 223344);
         }
 
 
@@ -53,7 +53,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação

@@ -47,6 +47,7 @@ namespace BoletoNetCore
 
             arquivoRetorno.Banco.Beneficiario.ContaBancaria = new ContaBancaria();
 
+            arquivoRetorno.Banco.Beneficiario.Codigo = Utils.ToInt32(registro.Substring(32, 9)).ToString();
             arquivoRetorno.Banco.Beneficiario.ContaBancaria.Agencia = registro.Substring(52, 5);
             arquivoRetorno.Banco.Beneficiario.ContaBancaria.DigitoAgencia = registro.Substring(57, 1);
             arquivoRetorno.Banco.Beneficiario.ContaBancaria.Conta = registro.Substring(58, 12);
@@ -119,7 +120,8 @@ namespace BoletoNetCore
                 string str = registro.Substring(133, 15);
                 boleto.Pagador.CPFCNPJ = str.Substring(str.Length - 14, 14);
                 boleto.Pagador.Nome = registro.Substring(148, 40);
-
+                if (boleto.Pagador.Nome.Trim() == Utils.FormatCode("0", boleto.Pagador.Nome.Trim().Length))
+                    boleto.Pagador.Nome = "";
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
@@ -408,11 +410,8 @@ namespace BoletoNetCore
         {
             try
             {
-                var codMulta = "0";
-                if (boleto.ValorMulta > 0)
-                    codMulta = "1";
                 var msg3 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(00, 40).FitStringLength(40, ' ');
-                if ((codMulta == "0") & string.IsNullOrWhiteSpace(msg3))
+                if (boleto.ValorMulta == 0 & string.IsNullOrWhiteSpace(msg3))
                     return "";
 
                 numeroRegistroGeral++;
@@ -430,7 +429,7 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0042, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0043, 008, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 0, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 001, 0, codMulta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 001, 0, (int)boleto.TipoCodigoMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0067, 008, 0, boleto.DataMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, boleto.ValorMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0090, 010, 0, string.Empty, ' ');
