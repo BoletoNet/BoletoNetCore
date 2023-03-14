@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using BoletoNetCore.Exceptions;
+using BoletoNetCore.Extensions;
 using static System.String;
 
 namespace BoletoNetCore
 {
-    internal sealed partial class BancoSicoob : BancoFebraban<BancoSicoob> , IBanco
+    internal sealed partial class BancoSicoob : BancoFebraban<BancoSicoob>, IBanco
     {
         public BancoSicoob()
         {
@@ -29,14 +30,14 @@ namespace BoletoNetCore
 
             contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.", "", "", 8);
 
-            Beneficiario.Codigo = codigoBeneficiario.Length <= 6 ? codigoBeneficiario.PadLeft(6, '0'): throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, 6);
+            Beneficiario.Codigo = codigoBeneficiario.Length <= 6 ? codigoBeneficiario.PadLeft(6, '0') : throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, 6);
 
             Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoBeneficiario}-{Beneficiario.CodigoDV}";
         }
 
         public override string FormatarNomeArquivoRemessa(int numeroSequencial)
         {
-            return numeroSequencial.ToString();
+            return $"CB{DateTime.Now.Date.Day:00}{DateTime.Now.Date.Month:00}{numeroSequencial.ToString().PadLeft(9, '0').Right(2)}.rem";
         }
 
     }
