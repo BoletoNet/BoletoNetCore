@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using BoletoNetCore.Exceptions;
 using BoletoNetCore.Extensions;
 using static System.String;
@@ -386,12 +387,20 @@ namespace BoletoNetCore
 
         public override void CompletarHeaderRetornoCNAB400(string registro)
         {
-            this.Beneficiario.ContaBancaria = new ContaBancaria();
-            this.Beneficiario.ContaBancaria.Agencia = registro.Substring(25, this.TamanhoAgencia);
+            //021 a 037 - Identificações da Empresa Beneficiária no Banco
+            //Deverá ser preenchido(esquerda para direita), da seguinte maneira:
+            //21 a 21 - Zero
+            //22 a 24 - códigos da carteira
+            //25 a 29 - códigos da Agência Beneficiários, sem o dígito.
+            //30 a 36 - Contas Corrente
+            //37 a 37 - dígitos da Conta
 
-            var conta = registro.Substring(30, this.TamanhoConta).Trim();
-            this.Beneficiario.ContaBancaria.Conta = conta.Substring(0, conta.Length - 1);
-            this.Beneficiario.ContaBancaria.DigitoConta = conta.Substring(conta.Length - 1, 1);
+            this.Beneficiario.ContaBancaria = new ContaBancaria();
+            this.Beneficiario.ContaBancaria.Agencia = registro.Substring(24, 5);
+
+            var conta = registro.Substring(29, 8).Trim();
+            this.Beneficiario.ContaBancaria.Conta = conta.Substring(0, 7);
+            this.Beneficiario.ContaBancaria.DigitoConta = conta.Substring(7, 1);
 
             // 01 - cpf / 02 - cnpj
             if (registro.Substring(1, 2) == "01")
