@@ -86,10 +86,9 @@ namespace BoletoNetCore
                 for (int i = (codigoSemDv.Length - 1); i >= 0; i--)
                 {
                     soma = soma + (Convert.ToInt32(codigoSemDv.Substring(i, 1)) * peso);
-                    if (peso == pesoMaximo)
-                        peso = 2;
-                    else
-                        peso = peso + 1;
+                   
+                    peso = peso == pesoMaximo ? 2 : peso + 1;
+                   
                 }
                 var resto = (soma % 11);
 
