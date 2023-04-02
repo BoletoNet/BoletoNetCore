@@ -64,7 +64,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas
-            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}"); 
+            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
         }
 
         [TestCase(80.21, "74644", "02315602/74644", "1", "02315602000074644", "08591875700000080211011040231560200007464401", "08591.01107 40231.560208 00074.644014 1 87570000008021", 2021, 9, 28)]
@@ -93,7 +93,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas
-            Assert.That(boleto.NossoNumero, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido"); 
+            Assert.That(boleto.NossoNumero, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
         }
 
 
@@ -151,7 +151,7 @@ namespace BoletoNetCore.Testes
 
             //Ação
             boleto.ValidarDados();
-             
+
             Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
         }
     }

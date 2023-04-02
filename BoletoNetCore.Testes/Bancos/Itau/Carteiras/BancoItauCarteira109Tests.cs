@@ -65,7 +65,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas
-            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}"); 
+            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
         }
 
 
@@ -95,7 +95,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas 
-            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido"); 
+            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
         }
 
 
@@ -123,8 +123,8 @@ namespace BoletoNetCore.Testes
 
             //Ação
             boleto.ValidarDados();
-             
-            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido"); 
+
+            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
         }
 
 
@@ -152,7 +152,7 @@ namespace BoletoNetCore.Testes
 
             //Ação
             boleto.ValidarDados();
- 
+
             //Assertivas
             Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
         }
