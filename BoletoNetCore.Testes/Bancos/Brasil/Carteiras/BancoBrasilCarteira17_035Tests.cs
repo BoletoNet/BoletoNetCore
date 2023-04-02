@@ -4,11 +4,11 @@ using NUnit.Framework;
 namespace BoletoNetCore.Testes
 {
     [TestFixture]
-    [Category("Brasil Carteira 17 Var 027")]
-    public class BancoBrasilCarteira17027Tests
+    [Category("Brasil Carteira 17 Var 035")]
+    public class BancoBrasilCarteira17_035Tests
     {
         readonly IBanco _banco;
-        public BancoBrasilCarteira17027Tests()
+        public BancoBrasilCarteira17_035Tests()
         {
             var contaBancaria = new ContaBancaria
             {
@@ -17,7 +17,7 @@ namespace BoletoNetCore.Testes
                 Conta = "123456",
                 DigitoConta = "X",
                 CarteiraPadrao = "17",
-                VariacaoCarteiraPadrao = "027",
+                VariacaoCarteiraPadrao = "035",
                 TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
@@ -28,15 +28,15 @@ namespace BoletoNetCore.Testes
         }
 
         [Test]
-        public void Brasil_17_027_REM240()
+        public void Brasil_17_035_REM240()
         {
-            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoBrasilCarteira17027Tests), 5, true, "?", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoBrasilCarteira17_035Tests), 5, true, "?", 223344);
         }
 
         [Test]
-        public void Brasil_17_027_REM400()
+        public void Brasil_17_035_REM400()
         {
-            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBrasilCarteira17027Tests), 5, true, "?", 223344);
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoBrasilCarteira17_035Tests), 5, true, "?", 223344);
         }
 
 
@@ -50,7 +50,7 @@ namespace BoletoNetCore.Testes
         [TestCase(300, "4", "BO123456D", "7", "12345670000000004", "00197695900000300000000001234567000000000417", "00190.00009 01234.567004 00000.004176 7 69590000030000", 2016, 10, 26)]
         [TestCase(609, "7", "BO123456G", "8", "12345670000000007", "00198705200000609000000001234567000000000717", "00190.00009 01234.567004 00000.007179 8 70520000060900", 2017, 1, 27)]
         [TestCase(600, "7", "BO123456G", "9", "12345670000000007", "00199705200000600000000001234567000000000717", "00190.00009 01234.567004 00000.007179 9 70520000060000", 2017, 1, 27)]
-        public void Deve_criar_boleto_brasil_17_027_com_digito_verificador_valido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        public void Deve_criar_boleto_brasil_17_035_com_digito_verificador_valido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
             var boleto = new Boleto(_banco)
@@ -67,7 +67,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas
-            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}"); 
+            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
         }
 
 
@@ -80,7 +80,7 @@ namespace BoletoNetCore.Testes
         [TestCase(300, "4", "BO123456D", "7", "12345670000000004", "00197695900000300000000001234567000000000417", "00190.00009 01234.567004 00000.004176 7 69590000030000", 2016, 10, 26)]
         [TestCase(609, "7", "BO123456G", "8", "12345670000000007", "00198705200000609000000001234567000000000717", "00190.00009 01234.567004 00000.007179 8 70520000060900", 2017, 1, 27)]
         [TestCase(600, "7", "BO123456G", "9", "12345670000000007", "00199705200000600000000001234567000000000717", "00190.00009 01234.567004 00000.007179 9 70520000060000", 2017, 1, 27)]
-        public void Deve_criar_boleto_brasil_17_027_com_nosso_numero_formatado_valido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        public void Deve_criar_boleto_brasil_17_035_com_nosso_numero_formatado_valido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
             var boleto = new Boleto(_banco)
@@ -97,7 +97,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas 
-            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido"); 
+            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
         }
 
 
@@ -110,7 +110,7 @@ namespace BoletoNetCore.Testes
         [TestCase(300, "4", "BO123456D", "7", "12345670000000004", "00197695900000300000000001234567000000000417", "00190.00009 01234.567004 00000.004176 7 69590000030000", 2016, 10, 26)]
         [TestCase(609, "7", "BO123456G", "8", "12345670000000007", "00198705200000609000000001234567000000000717", "00190.00009 01234.567004 00000.007179 8 70520000060900", 2017, 1, 27)]
         [TestCase(600, "7", "BO123456G", "9", "12345670000000007", "00199705200000600000000001234567000000000717", "00190.00009 01234.567004 00000.007179 9 70520000060000", 2017, 1, 27)]
-        public void Deve_criar_boleto_brasil_17_027_com_codigo_de_barras_valido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        public void Deve_criar_boleto_brasil_17_035_com_codigo_de_barras_valido(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
             var boleto = new Boleto(_banco)
@@ -127,7 +127,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas 
-            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido"); 
+            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
         }
 
 
@@ -140,7 +140,7 @@ namespace BoletoNetCore.Testes
         [TestCase(300, "4", "BO123456D", "7", "12345670000000004", "00197695900000300000000001234567000000000417", "00190.00009 01234.567004 00000.004176 7 69590000030000", 2016, 10, 26)]
         [TestCase(609, "7", "BO123456G", "8", "12345670000000007", "00198705200000609000000001234567000000000717", "00190.00009 01234.567004 00000.007179 8 70520000060900", 2017, 1, 27)]
         [TestCase(600, "7", "BO123456G", "9", "12345670000000007", "00199705200000600000000001234567000000000717", "00190.00009 01234.567004 00000.007179 9 70520000060000", 2017, 1, 27)]
-        public void Deve_criar_boleto_brasil_17_027_com_linha_digitavel_valida(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        public void Deve_criar_boleto_brasil_17_035_com_linha_digitavel_valida(decimal valorTitulo, string nossoNumero, string numeroDocumento, string digitoVerificador, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
         {
             //Ambiente
             var boleto = new Boleto(_banco)
@@ -156,8 +156,9 @@ namespace BoletoNetCore.Testes
             //Ação
             boleto.ValidarDados();
 
-            //Assertivas 
             Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
         }
+
+
     }
 }

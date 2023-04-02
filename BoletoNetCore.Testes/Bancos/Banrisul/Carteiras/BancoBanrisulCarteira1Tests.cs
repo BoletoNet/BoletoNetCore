@@ -97,7 +97,7 @@ namespace BoletoNetCore.Testes
 
             //Ação
             boleto.ValidarDados();
-             
+
             Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
         }
 

@@ -69,7 +69,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas
-            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}"); 
+            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
         }
 
         [TestCase(500, "6", "BO123456F", "1", "14000000000000006-5", "10491703000000500001234560000100040000000064", "10491.23456 60000.100044 00000.000646 1 70300000050000", 2017, 01, 05)]
@@ -156,7 +156,7 @@ namespace BoletoNetCore.Testes
 
             //Ação
             boleto.ValidarDados();
-             
+
             Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
         }
 

@@ -66,7 +66,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas
-            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}"); 
+            Assert.That(boleto.CodigoBarra.DigitoVerificador, Is.EqualTo(digitoVerificador), $"Dígito Verificador diferente de {digitoVerificador}");
         }
 
         [TestCase(300, "4", "BO123456D", "1", "0000004-0", "75691697400000300001427701017227800000040001", "75691.42776 01017.227800 00000.400010 1 69740000030000", 2016, 11, 10)]
@@ -95,7 +95,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas 
-            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido"); 
+            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
         }
 
         [TestCase(300, "4", "BO123456D", "1", "0000004-0", "75691697400000300001427701017227800000040001", "75691.42776 01017.227800 00000.400010 1 69740000030000", 2016, 11, 10)]
@@ -124,7 +124,7 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             //Assertivas 
-            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido"); 
+            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
         }
 
         [TestCase(300, "4", "BO123456D", "1", "0000004-0", "75691697400000300001427701017227800000040001", "75691.42776 01017.227800 00000.400010 1 69740000030000", 2016, 11, 10)]
