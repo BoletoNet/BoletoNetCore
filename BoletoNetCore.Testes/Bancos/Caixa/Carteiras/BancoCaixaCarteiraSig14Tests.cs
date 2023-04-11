@@ -26,7 +26,7 @@ namespace BoletoNetCore.Testes
             _banco.Beneficiario = TestUtils.GerarBeneficiario("123456", "0", "", contaBancaria);
 
             //para testar com beneficiário 7 digitos
-            //_banco.Beneficiario = Utils.GerarBeneficiario("1234567", "", "", contaBancaria);
+            //_banco.Beneficiario = TestUtils.GerarBeneficiario("1234567", "", "", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
@@ -62,7 +62,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação
@@ -121,7 +121,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação
@@ -151,7 +151,7 @@ namespace BoletoNetCore.Testes
                 NossoNumero = nossoNumero,
                 NumeroDocumento = numeroDocumento,
                 EspecieDocumento = TipoEspecieDocumento.DM,
-                Pagador = Utils.GerarPagador()
+                Pagador = TestUtils.GerarPagador()
             };
 
             //Ação
