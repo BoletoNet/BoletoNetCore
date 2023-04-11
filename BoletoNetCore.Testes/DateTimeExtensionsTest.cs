@@ -29,18 +29,31 @@ namespace BoletoNetCore.Testes
 
         }
 
+        /// <summary>
+        /// Em 21/02/2025 o fator atingirá o limite 9999
+        /// Em 22/02/2025 deverá retornar para o fator 1000.
+        /// Nessa transição, a data base de cálculo será 29/05/2022.
+        /// Obs: Somente poderá emitir boleto com vencimento até 10 anos a posterior.
+        /// </summary>
         [Test]
-        public void GeracaoCorretaDeFatorVencimentoLimite9999()
-        {
-            // Em 21/02/2025 o fator atingirá o limite 9999
-            // Em 22/02/2025 deverá retornar para o fator 1000.
-            // Nessa transição, a data base de cálculo será 29/05/2022.
-            // Obs: Somente poderá emitir boleto com vencimento até 10 anos a posterior.
+        public void Deve_retornar_fator_9999_em_21_02_2025()
+        { 
             var vencimentoFator9999 = new DateTime(2025, 02, 21, 0, 0, 0);
             Assert.AreEqual(9999, vencimentoFator9999.FatorVencimento());
+            
+        }
+
+        /// <summary>
+        /// Em 21/02/2025 o fator atingirá o limite 9999
+        /// Em 22/02/2025 deverá retornar para o fator 1000.
+        /// Nessa transição, a data base de cálculo será 29/05/2022.
+        /// Obs: Somente poderá emitir boleto com vencimento até 10 anos a posterior.
+        /// </summary>
+        [Test]
+        public void Deve_retornar_fator_1000_em_22_02_2025()
+        { 
             var vencimentoFator1000 = new DateTime(2025, 02, 22, 0, 0, 0);
             Assert.AreEqual(1000, vencimentoFator1000.FatorVencimento());
         }
-
     }
 }
