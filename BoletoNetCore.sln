@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30523.141
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoletoNetCore", "BoletoNetCore\BoletoNetCore.csproj", "{F173E80B-E36B-48AD-B483-A27F8CA86F3C}"
 EndProject
@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoletoNetCore.Pdf", "Boleto
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoletoNetCore.QuestPdf", "BoletoNetCore.QuestPdf\BoletoNetCore.QuestPdf.csproj", "{CF92E047-9D27-434E-AD1E-8CB07EACCF42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoletoNetCore.QuestPDF.AppTeste", "BoletoNetCore.QuestPDF.AppTeste\BoletoNetCore.QuestPDF.AppTeste.csproj", "{D5332CA6-4354-40C9-BDB3-337B4BDC7C9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoletoNetCore.QuestPDF.AppTeste", "BoletoNetCore.QuestPDF.AppTeste\BoletoNetCore.QuestPDF.AppTeste.csproj", "{D5332CA6-4354-40C9-BDB3-337B4BDC7C9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoletoNetCore.WebAPI", "BoletoNetCore.WebAPI\BoletoNetCore.WebAPI.csproj", "{47694BE9-A995-4358-95AC-69F300568A9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{D5332CA6-4354-40C9-BDB3-337B4BDC7C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5332CA6-4354-40C9-BDB3-337B4BDC7C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5332CA6-4354-40C9-BDB3-337B4BDC7C9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47694BE9-A995-4358-95AC-69F300568A9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47694BE9-A995-4358-95AC-69F300568A9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47694BE9-A995-4358-95AC-69F300568A9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47694BE9-A995-4358-95AC-69F300568A9C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
