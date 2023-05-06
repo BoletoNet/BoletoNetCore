@@ -57,8 +57,8 @@ namespace BoletoNetCore.WebAPI.Extensions
                     ImprimirValoresAuxiliares = true,
                 };
 
+                //  Para teste não é preciso validar os dados, pois com dados falso nunca vai gerar um boleto que dê para pagar
                 boleto.ValidarDados();
-
                 return boleto;
             }
             catch (Exception)

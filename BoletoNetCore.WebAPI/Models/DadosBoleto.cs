@@ -19,6 +19,6 @@
 
         public string NumeroDocumento { get; set; } = string.Empty;
 
-        public string CampoLivre { get; set; } = String.Empty;
+        public string CampoLivre { get; set; } = string.Empty;
     }
 }
