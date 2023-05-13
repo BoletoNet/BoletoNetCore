@@ -28,9 +28,10 @@ namespace BoletoNetCore.WebAPI.Controllers
         [ProducesResponseType(typeof(DadosBoleto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        [HttpPost("BoletoItau")]
-        public async Task<IActionResult> PostBoletoItau(DadosBoleto dadosBoleto)
+        [HttpPost("GerarBoletos")]
+        public async Task<IActionResult> PostGerarBoletos(DadosBoleto dadosBoleto, int tipoBancoEmissor)
         {
+
             try
             {
                 if(dadosBoleto.BeneficiarioResponse.CPFCNPJ == null || (dadosBoleto.BeneficiarioResponse.CPFCNPJ.Length != 11 && dadosBoleto.BeneficiarioResponse.CPFCNPJ.Length != 14))
@@ -45,7 +46,7 @@ namespace BoletoNetCore.WebAPI.Controllers
                     return BadRequest(retorno);
                 }
 
-                GerarBoletoBancos gerarBoletoBancos = new GerarBoletoBancos(Banco.Instancia(Bancos.Itau));
+                GerarBoletoBancos gerarBoletoBancos = new GerarBoletoBancos(Banco.Instancia(metodosUteis.RetornarBancoEmissor(tipoBancoEmissor)));
                 var htmlBoleto = gerarBoletoBancos.RetornarHtmlBoleto(dadosBoleto);
 
                 return Content(htmlBoleto, "text/html");
