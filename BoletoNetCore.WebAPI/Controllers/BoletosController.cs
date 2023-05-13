@@ -21,8 +21,32 @@ namespace BoletoNetCore.WebAPI.Controllers
         /// Endpoint para retornar o HTML do boleto do banco ITAU.
         /// </summary>
         /// <remarks>
-        ///- **Carteira Itau:** 109, 112, 138, 153, 157
-        ///- **Código do banco:** 341 
+        /// ## Carteiras:
+        ///- Banrisul (041) - Carteira 1
+        ///- Bradesco (237) - Carteira 09
+        ///- Brasil (001) - Carteira 17 (Variações 019 027 035)
+        ///- Caixa Econômica Federal (104) - Carteira SIG14
+        ///- Cecred/Ailos (085) - Carteira 1
+        ///- Itau (341) - Carteira 109, 112
+        ///- Safra (422) - Carteira 1
+        ///- Santander (033) - Carteira 101
+        ///- Sicoob (756) - Carteira 1-01
+        ///- Sicredi (748) - Carteira 1-A
+        ///
+        /// ## Tipo de banco emissor
+        /// O tipo de banco deve ser informado dentro do parâmetro para que nossa API possa identificar de que banco se trata
+        /// - BancoDoBrasil = 001
+        /// - BancoDoNordeste = 004
+        /// - Santander = 033
+        /// - Banrisul = 041
+        /// - UniprimeNortePR = 084
+        /// - Cecred = 085
+        /// - Caixa = 104
+        /// - Bradesco = 237
+        /// - Itau = 341
+        /// - Safra = 422
+        /// - Sicredi = 748
+        /// - Sicoob = 756
         /// </remarks>
         /// <returns>Retornar o HTML do boleto.</returns>
         [ProducesResponseType(typeof(DadosBoleto), StatusCodes.Status200OK)]
