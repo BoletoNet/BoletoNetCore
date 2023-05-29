@@ -27,7 +27,7 @@ Foi criado um novo projeto para não quebrar a compatibilidade com aplicações 
 
 ### Carteiras Implementadas (Não foi homologada. Falta teste unitário)
 * Banco do Brasil (001) - Carteira 11 (Variação 019)
-
+* Bnaco CrediSIS (097) - Carteira 18
 > Atenção: Para manter a ordem do projeto, qualquer solicitação de Pull Request de um novo banco ou carteira implementada, deverá seguir o formato dos bancos/carteiras já implementados e vir acompanhado de teste unitário da geração do boleto (PDF), arquivo remessa e geração de 9 boletos, com dígitos da linha digitável variando de 1 a 9, checando além do próprio dígito verificador, o cálculo do nosso número, linha digitável e código de barras.
 
 ### Pre requisitos

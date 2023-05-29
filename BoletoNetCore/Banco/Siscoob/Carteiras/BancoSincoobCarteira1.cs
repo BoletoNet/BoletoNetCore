@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using BoletoNetCore.Extensions;
 using static System.String;
 
@@ -19,7 +20,11 @@ namespace BoletoNetCore
             var beneficiario = boleto.Banco.Beneficiario;
             if (beneficiario.ContaBancaria.TipoImpressaoBoleto == TipoImpressaoBoleto.Empresa & boleto.NossoNumero == Empty)
                 throw new Exception("Nosso Número não informado.");
-            
+
+            // Nao informou nosso numero
+            if (string.IsNullOrEmpty(boleto.NossoNumero))
+                throw new Exception("Nosso número não informado");
+
             // Nosso número não pode ter mais de 7 dígitos
             if (boleto.NossoNumero.Length > 7)
                 throw new Exception("Nosso Número (" + boleto.NossoNumero + ") deve conter 7 dígitos.");
