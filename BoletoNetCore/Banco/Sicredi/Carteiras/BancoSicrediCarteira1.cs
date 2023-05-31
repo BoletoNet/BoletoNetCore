@@ -1,5 +1,4 @@
-﻿using BoletoNetCore.Extensions;
-using System;
+﻿using System;
 
 namespace BoletoNetCore
 {
@@ -37,7 +36,7 @@ namespace BoletoNetCore
             //B = Byte de geração(0 a 9). O Byte 1 só poderá ser informado pela Cooperativa
             //XXXXX = Número livre de 00000 a 99999
             //D = Dígito verificador pelo módulo 11
-
+            
             // Nosso número não pode ter mais de 8 dígitos
             if (boleto.NossoNumero.Length == 7 || boleto.NossoNumero.Length > 8)
                 throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter até 5 dígitos ou exatamente 6 ou 8 dígitos.");
