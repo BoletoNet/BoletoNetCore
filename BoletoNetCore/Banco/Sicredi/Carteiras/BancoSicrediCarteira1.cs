@@ -21,7 +21,7 @@ namespace BoletoNetCore
                 boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta +
                 boleto.Banco.Beneficiario.Codigo + "10";
 
-            CampoLivre += CampoLivre.CalcularDVSicredi();
+            CampoLivre += Mod11(CampoLivre);
 
             return CampoLivre;
         }
@@ -37,7 +37,7 @@ namespace BoletoNetCore
             //B = Byte de geração(0 a 9). O Byte 1 só poderá ser informado pela Cooperativa
             //XXXXX = Número livre de 00000 a 99999
             //D = Dígito verificador pelo módulo 11
-            
+
             // Nosso número não pode ter mais de 8 dígitos
             if (boleto.NossoNumero.Length == 7 || boleto.NossoNumero.Length > 8)
                 throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter até 5 dígitos ou exatamente 6 ou 8 dígitos.");
@@ -61,14 +61,53 @@ namespace BoletoNetCore
                 }
             }
 
-            if (string.IsNullOrEmpty(boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta))
+            boleto.NossoNumeroDV = Mod11(Sequencial(boleto)).ToString();
+
+            boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.NossoNumero.Substring(0, 2), boleto.NossoNumero.Substring(2, 6), boleto.NossoNumeroDV);
+        }
+
+        public int Mod11(string seq)
+        {
+            /* Variáveis
+             * -------------
+             * d - Dígito
+             * s - Soma
+             * p - Peso
+             * b - Base
+             * r - Resto
+             */
+
+            int d, s = 0, p = 2, b = 9;
+
+            for (int i = seq.Length - 1; i >= 0; i--)
+            {
+                s = s + (Convert.ToInt32(seq.Substring(i, 1)) * p);
+                if (p < b)
+                    p = p + 1;
+                else
+                    p = 2;
+            }
+
+            d = 11 - (s % 11);
+            if (d > 9)
+                d = 0;
+            return d;
+        }
+
+        public string Sequencial(Boleto boleto)
+        {
+            string agencia = boleto.Banco.Beneficiario.ContaBancaria.Agencia;     //código da cooperativa de crédito/agência beneficiária (aaaa)
+            string posto = boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta; //código do posto beneficiário (pp)
+
+            if (string.IsNullOrEmpty(posto))
             {
                 throw new Exception($"Posto beneficiário não preenchido");
             }
 
-            boleto.NossoNumeroDV = (boleto.Banco.Beneficiario.ContaBancaria.Agencia + boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta + boleto.Banco.Beneficiario.Codigo + boleto.NossoNumero).CalcularDVSicredi();
+            string beneficiario = boleto.Banco.Beneficiario.Codigo;                    //código do beneficiário (ccccc)
+            string nossoNumero = boleto.NossoNumero;                         //ano atual (yy), indicador de geração do nosso número (b) e o número seqüencial do beneficiário (nnnnn);
 
-            boleto.NossoNumeroFormatado = string.Format("{0}/{1}-{2}", boleto.NossoNumero.Substring(0, 2), boleto.NossoNumero.Substring(2, 6), boleto.NossoNumeroDV);
+            return string.Concat(agencia, posto, beneficiario, nossoNumero); // = aaaappcccccyybnnnnn
         }
     }
 }
