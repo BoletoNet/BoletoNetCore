@@ -61,10 +61,6 @@ namespace BoletoNetCore
 
         private string GerarDetalheRemessaCNAB240_SegmentoQ(Boleto boleto, ref int registro)
         {
-            var numero = boleto.Pagador.Endereco.LogradouroNumero;
-            var ender = boleto.Pagador.Endereco.LogradouroEndereco;
-            ender = (string.IsNullOrWhiteSpace(numero) ? ender : string.Format("{0}, {1}", ender, numero)).Trim();
-
             registro++;
             var reg = new TRegistroEDI();
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 003, 0, "748", ' '); // 001 a 003 - Código do banco na compensação "748" SCIREDI
@@ -77,7 +73,7 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0018, 001, 0, boleto.Pagador.TipoCPFCNPJ("0"), '1');  // 018 a 018 - Tipo de inscrição
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0019, 015, 0, boleto.Pagador.CPFCNPJ.OnlyNumber(), '0'); // 019 a 033 - Número de inscrição
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0034, 040, 0, boleto.Pagador.Nome, ' '); // 034 a 073 - Nome
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0074, 040, 0, ender, ' '); // 074 a 113 - Endereço
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0074, 040, 0, boleto.Pagador.Endereco.FormataLogradouro(40), ' '); // 074 a 113 - Endereço
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0114, 015, 0, boleto.Pagador.Endereco.Bairro, ' '); // 114 a 128 - Bairro
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0129, 008, 0, boleto.Pagador.Endereco.CEP.OnlyNumber(), '0'); // 129 a 133 - CEP + 134 a 136 - Sufixo do CEP
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0137, 015, 0, boleto.Pagador.Endereco.Cidade, ' '); // 137 a 151 - Cidade
