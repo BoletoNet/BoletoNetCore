@@ -72,6 +72,25 @@ namespace BoletoNetCore.Extensions
             return digito;
         }
 
+        public static string CalcularDVSicredi(this string texto)
+        {
+            int digito, soma = 0, peso = 2, pesoMaximo = 9;
+
+            for (int i = texto.Length - 1; i >= 0; i--)
+            {
+                soma = soma + (Convert.ToInt32(texto.Substring(i, 1)) * peso);
+                if (peso < pesoMaximo)
+                    peso = peso + 1;
+                else
+                    peso = 2;
+            }
+
+            digito = 11 - (soma % 11);
+            if (digito > 9)
+                digito = 0;
+            return digito.ToString();
+        }
+
         public static string CalcularDVSicoob(this string texto)
         {
             string digito, fatorMultiplicacao = "319731973197319731973";
