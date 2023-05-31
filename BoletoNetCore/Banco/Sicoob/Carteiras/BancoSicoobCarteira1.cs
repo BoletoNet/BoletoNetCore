@@ -6,11 +6,11 @@ using static System.String;
 namespace BoletoNetCore
 {
     [CarteiraCodigo("1/01")]
-    internal class BancoSincoobCarteira1: ICarteira<BancoSicoob>
+    internal class BancoSicoobCarteira1: ICarteira<BancoSicoob>
     {
-        internal static Lazy<ICarteira<BancoSicoob>> Instance { get; } = new Lazy<ICarteira<BancoSicoob>>(() => new BancoSincoobCarteira1());
+        internal static Lazy<ICarteira<BancoSicoob>> Instance { get; } = new Lazy<ICarteira<BancoSicoob>>(() => new BancoSicoobCarteira1());
 
-        private BancoSincoobCarteira1()
+        private BancoSicoobCarteira1()
         {
 
         }
