@@ -61,10 +61,6 @@ namespace BoletoNetCore
 
         private string GerarDetalheRemessaCNAB240_SegmentoQ(Boleto boleto, ref int registro)
         {
-            var numero = boleto.Pagador.Endereco.LogradouroNumero;
-            var ender = boleto.Pagador.Endereco.LogradouroEndereco;
-            ender = (string.IsNullOrWhiteSpace(numero) ? ender : string.Format("{0}, {1}", ender, numero)).Trim();
-
             registro++;
             var reg = new TRegistroEDI();
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 003, 0, "748", ' '); // 001 a 003 - Código do banco na compensação "748" SCIREDI
@@ -77,7 +73,7 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0018, 001, 0, boleto.Pagador.TipoCPFCNPJ("0"), '1');  // 018 a 018 - Tipo de inscrição
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0019, 015, 0, boleto.Pagador.CPFCNPJ.OnlyNumber(), '0'); // 019 a 033 - Número de inscrição
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0034, 040, 0, boleto.Pagador.Nome, ' '); // 034 a 073 - Nome
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0074, 040, 0, ender, ' '); // 074 a 113 - Endereço
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0074, 040, 0, boleto.Pagador.Endereco.FormataLogradouro(40), ' '); // 074 a 113 - Endereço
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0114, 015, 0, boleto.Pagador.Endereco.Bairro, ' '); // 114 a 128 - Bairro
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0129, 008, 0, boleto.Pagador.Endereco.CEP.OnlyNumber(), '0'); // 129 a 133 - CEP + 134 a 136 - Sufixo do CEP
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0137, 015, 0, boleto.Pagador.Endereco.Cidade, ' '); // 137 a 151 - Cidade
@@ -137,7 +133,7 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0086, 015, 2, boleto.ValorTitulo, '0'); // 086 a 100 - Valor nominal do título
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0101, 005, 0, "00000", '0'); // 101 a 105 - Coop./Ag. encarregada da cobrança
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0106, 001, 0, "", ' '); // 106 a 106 - Dígito verificador da coop./agência
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0107, 002, 0, this.EspecieDocumentoSicrediCNAB240(boleto.EspecieDocumento), ' '); // 107 a 108 - Espécie do título
+            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0107, 002, 0, (int)boleto.EspecieDocumento, '0'); // 107 a 108 - Espécie do título
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0109, 001, 0, boleto.Aceite, 'N'); // 109 a 109 - Identificação de título aceito/não aceito
             reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0110, 008, 0, boleto.DataEmissao, '0'); // 110 a 117 - Data da emissão do título
 
@@ -196,33 +192,6 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0240, 001, 0, "", ' '); // 240 a 240 - Uso exclusivo FEBRABAN/CNAB
             reg.CodificarLinha();
             return Utils.SubstituiCaracteresEspeciais(reg.LinhaRegistro);
-        }
-
-        private string EspecieDocumentoSicrediCNAB240(TipoEspecieDocumento EspecieDocumento)
-        {
-            switch (EspecieDocumento)
-            {
-                case TipoEspecieDocumento.DMI:
-                    return "03";
-                case TipoEspecieDocumento.DR:
-                    return "06";
-                case TipoEspecieDocumento.NP:
-                    return "12";
-                case TipoEspecieDocumento.NPR:
-                    return "13";
-                case TipoEspecieDocumento.NS:
-                    return "16";
-                case TipoEspecieDocumento.RC:
-                    return "17";
-                case TipoEspecieDocumento.LC:
-                    return "07";
-                case TipoEspecieDocumento.DSI:
-                    return "05";
-                case TipoEspecieDocumento.OU:
-                    return "99";
-            }
-
-            return "99"; // outros
         }
 
         public string GerarHeaderLoteRemessaCNAB240(ref int numeroArquivoRemessa, ref int numeroRegistro)

@@ -132,7 +132,7 @@ namespace BoletoNetCore
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediDataDDMMAA___________, 0121, 006, 0, boleto.DataVencimento, ' '));                                 //121-126
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 013, 2, boleto.ValorTitulo, '0'));                                    //127-139
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0140, 009, 0, string.Empty, ' '));                                          //140-148
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0149, 001, 0, EspecieDocumentoSicrediCNAB400(boleto.EspecieDocumento), ' '));      //149-149
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0149, 001, 0, AjustaEspecieCnab400(boleto.EspecieDocumento), ' '));         //149-149
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0150, 001, 0, boleto.Aceite, ' '));                                         //150-150
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediDataDDMMAA___________, 0151, 006, 0, boleto.DataProcessamento, ' '));                              //151-156
 
@@ -174,7 +174,7 @@ namespace BoletoNetCore
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0220, 001, 0, "0", '0'));                                                   //220-220
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0221, 014, 0, boleto.Pagador.CPFCNPJ, '0'));                                 //221-234
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0235, 040, 0, boleto.Pagador.Nome.ToUpper(), ' '));                          //235-274
-                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0275, 040, 0, boleto.Pagador.Endereco.LogradouroEndereco.ToUpper(), ' '));   //275-314
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0275, 040, 0, boleto.Pagador.Endereco.FormataLogradouro(40).ToUpper(), ' '));//275-314
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0315, 005, 0, 0, '0'));                                                     //315-319
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0320, 006, 0, 0, '0'));                                                     //320-325
                 reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0326, 001, 0, string.Empty, ' '));                                          //326-326
@@ -196,9 +196,40 @@ namespace BoletoNetCore
             }
         }
 
-        private string EspecieDocumentoSicrediCNAB400(TipoEspecieDocumento EspecieDocumento)
+        private TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie)
         {
-            switch (EspecieDocumento)
+            switch (codigoEspecie)
+            {
+                case "A":
+                    return TipoEspecieDocumento.DMI;
+                case "B":
+                    return TipoEspecieDocumento.DR;
+                case "C":
+                    return TipoEspecieDocumento.NP;
+                case "D":
+                    return TipoEspecieDocumento.NPR;
+                case "E":
+                    return TipoEspecieDocumento.NS;
+                case "G":
+                    return TipoEspecieDocumento.RC;
+                case "H":
+                    return TipoEspecieDocumento.LC;
+                case "I":
+                    return TipoEspecieDocumento.ND;
+                case "J":
+                    return TipoEspecieDocumento.DSI;
+                case "K":
+                    return TipoEspecieDocumento.OU;
+                case "O":
+                    return TipoEspecieDocumento.BP;
+                default:
+                    return TipoEspecieDocumento.OU;
+            }
+        }
+
+        private string AjustaEspecieCnab400(TipoEspecieDocumento especieDocumento)
+        {
+            switch (especieDocumento)
             {
                 case TipoEspecieDocumento.DMI:
                     return "A";
@@ -214,13 +245,17 @@ namespace BoletoNetCore
                     return "G";
                 case TipoEspecieDocumento.LC:
                     return "H";
+                case TipoEspecieDocumento.ND:
+                    return "I";
                 case TipoEspecieDocumento.DSI:
                     return "J";
                 case TipoEspecieDocumento.OU:
                     return "K";
+                case TipoEspecieDocumento.BP:
+                    return "O";
+                default:
+                    return "K";
             }
-
-            return string.Empty;
         }
 
         private string GerarDetalheRemessaCNAB400_C1(Boleto boleto, int numeroRegistro)
@@ -251,6 +286,7 @@ namespace BoletoNetCore
 
                 // Número do Documento
                 boleto.NumeroDocumento = registro.Substring(116, 10).Trim();
+                boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(174, 1));
 
                 // Seu número - Seu número enviado na Remessa
                 boleto.NumeroControleParticipante = registro.Substring(116, 10).Trim();
