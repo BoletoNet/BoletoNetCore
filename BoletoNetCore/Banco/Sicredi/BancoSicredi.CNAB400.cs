@@ -417,6 +417,9 @@ namespace BoletoNetCore
             {
                 if (registro.Substring(0, 9) != "02RETORNO")
                     throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+
+                this.Beneficiario = new Beneficiario();
+                this.Beneficiario.Codigo = registro.Substring(26, 5);
             }
             catch (Exception ex)
             {
