@@ -442,10 +442,18 @@ namespace BoletoNetCore
 
         public override void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
         {
-            ////144 - 151 Data de geração do arquivo N 008 DDMMAAAA
-            //arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
-            ////158 - 163 Nº seqüencial do arquivo N 006
-            //arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
+            arquivoRetorno.Banco.Beneficiario = new Beneficiario();
+            arquivoRetorno.Banco.Beneficiario.CPFCNPJ = registro.Substring(17, 1) == "1" ? registro.Substring(21, 11) : registro.Substring(18, 14);
+            arquivoRetorno.Banco.Beneficiario.Codigo = registro.Substring(58, 7);
+            arquivoRetorno.Banco.Beneficiario.Nome = registro.Substring(72, 30).Trim();
+
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria = new ContaBancaria();
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria.Agencia = registro.Substring(52, 5);
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria.DigitoAgencia = registro.Substring(57, 1);
+
+            arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
+            
+            arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
         }
 
         public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
