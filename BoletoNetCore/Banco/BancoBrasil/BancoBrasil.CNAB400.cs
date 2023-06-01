@@ -201,6 +201,30 @@ namespace BoletoNetCore
 
         #region Retorno - CNAB400
 
+        public override void LerHeaderRetornoCNAB400(string registro)
+        {
+            try
+            {
+                if (registro.Substring(0, 9) != "02RETORNO")
+                    throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
+
+                this.Beneficiario = new Beneficiario();
+                this.Beneficiario.ContaBancaria = new ContaBancaria();
+
+                this.Beneficiario.ContaBancaria.Agencia = registro.Substring(26, 4);
+                this.Beneficiario.ContaBancaria.DigitoAgencia = registro.Substring(30, 1);
+                this.Beneficiario.ContaBancaria.Conta = registro.Substring(31, 8);
+                this.Beneficiario.ContaBancaria.DigitoConta = registro.Substring(39, 1);
+                this.Beneficiario.Nome = registro.Substring(46, 30).Trim();
+                
+                this.Beneficiario.Codigo = registro.Substring(149, 7).Trim();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
+            }
+        }
+
         public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
