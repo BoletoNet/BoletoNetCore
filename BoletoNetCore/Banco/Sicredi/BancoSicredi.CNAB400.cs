@@ -325,81 +325,67 @@ namespace BoletoNetCore
             switch (codigo)
             {
                 case "02":
-                    return "Confirmação de entrada";
+                    return "Entrada confirmada";
                 case "03":
                     return "Entrada rejeitada";
-                case "04":
-                    return "Baixa de título liquidado por edital";
                 case "06":
                     return "Liquidação normal";
                 case "07":
-                    return "Liquidação parcial";
-                case "08":
-                    return "Baixa por pagamento, liquidação pelo saldo";
+                    return "Intenção de pagamento";
                 case "09":
-                    return "Devolução automática";
+                    return "Baixado automaticamente via arquivo";
                 case "10":
-                    return "Baixado conforme instruções";
-                case "11":
-                    return "Arquivo levantamento";
+                    return "Baixado conforme instruções da cooperativa";
                 case "12":
-                    return "Concessão de abatimento";
+                    return "Abatimento concedido";
                 case "13":
-                    return "Cancelamento de abatimento";
+                    return "Abatimento cancelado";
                 case "14":
                     return "Vencimento alterado";
                 case "15":
-                    return "Pagamento em cartório";
-                case "16":
-                    return "Alteração de dados";
-                case "18":
-                    return "Alteração de instruções";
+                    return "Liquidação em cartório";
+                case "17":
+                    return "Liquidação após baixa";
                 case "19":
-                    return "Confirmação de instrução protesto";
+                    return "Confirmação de recebimento de instrução de protesto";
                 case "20":
-                    return "Confirmação de instrução para sustar protesto";
-                case "21":
-                    return "Aguardando autorização para protesto por edital";
-                case "22":
-                    return "Protesto sustado por alteração de vencimento e prazo de cartório";
+                    return "Confirmação de recebimento de instrução de sustação de protesto";
                 case "23":
-                    return "Confirmação da entrada em cartório";
-                case "25":
-                    return "Devolução, liquidado anteriormente";
-                case "26":
-                    return "Devolvido pelo cartório – erro de informação";
+                    return "Entrada de título em cartório";
+                case "24":
+                    return "Entrada rejeitada por CEP irregular";
+                case "27":
+                    return "Baixa rejeitada";
                 case "28":
                     return "Tarifa";
+                case "29":
+                    return "Rejeição do pagador";
                 case "30":
-                    return "Cobrança a creditar (liquidação em trânsito)";
-                case "31":
-                    return "Título em trânsito pago em cartório";
+                    return "Alteração rejeitada";
                 case "32":
-                    return "Reembolso e transferência Desconto e Vendor ou carteira em garantia";
+                    return "Instrução rejeitada";
                 case "33":
-                    return "Reembolso e devolução Desconto e Vendor";
+                    return "Confirmação de pedido de alteração de outros dados";
                 case "34":
-                    return "Reembolso não efetuado por falta de saldo";
-                case "40":
-                    return "Baixa de títulos protestados";
-                case "41":
-                    return "Despesa de aponte";
-                case "42":
-                    return "Alteração de título";
-                case "43":
-                    return "Relação de títulos";
-                case "44":
-                    return "Manutenção mensal";
-                case "45":
-                    return "Sustação de cartório e envio de título a cartório";
-                case "46":
-                    return "Fornecimento de formulário pré-impresso";
-                case "47":
-                    return "Confirmação de entrada – Pagador DDA";
-                case "68":
-                    return "Acerto dos dados do rateio de crédito";
-                case "69":
-                    return "Cancelamento dos dados do rateio";
+                    return "Retirado de cartório e manutenção em carteira";
+                case "35":
+                    return "Aceite do pagador";
+                case "78":
+                    return "Confirmação de recebimento de pedido de negativação";
+                case "79":
+                    return "Confirmação de recebimento de pedido de exclusão de negativação";
+                case "80":
+                    return "Confirmação de entrada de negativação";
+                case "81":
+                    return "Entrada de negativação rejeitada";
+                case "82":
+                    return "Confirmação de exclusão de negativação";
+                case "83":
+                    return "Exclusão de negativação rejeitada";
+                case "84":
+                    return "Exclusão de negativação por outros motivos";
+                case "85":
+                    return "Ocorrência informacional por outros motivos";
                 default:
                     return "";
             }
