@@ -410,8 +410,21 @@ namespace BoletoNetCore
         {
             try
             {
+                string codMulta = "0";
+                decimal valorMulta = 0;
+                if (boleto.ValorMulta > 0)
+                {
+                    codMulta = "1";
+                    valorMulta = boleto.ValorMulta;
+                }
+                else if (boleto.PercentualMulta > 0)
+                {
+                    codMulta = "2";
+                    valorMulta = boleto.PercentualMulta;
+                }
+
                 var msg3 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(00, 40).FitStringLength(40, ' ');
-                if (boleto.ValorMulta == 0 & string.IsNullOrWhiteSpace(msg3))
+                if (codMulta == "0" & string.IsNullOrWhiteSpace(msg3))
                     return "";
 
                 numeroRegistroGeral++;
@@ -424,16 +437,19 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0015, 001, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0016, 002, 0, boleto.CodigoMovimentoRetorno, '0');
 
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, boleto.ValorDesconto == 0 ? "0" : "1", '0');
+                // Campo Desconto 3 no Boleto - Como não existe a previsão do banco na classe, conforme o manual, codigo deve ser zerado
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 008, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0027, 015, 2, "0", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0042, 001, 0, boleto.ValorDesconto == 0 ? "0" : "1", '0');
+
+                // Campo Desconto 3 no Boleto - Como não existe a previsão do banco na classe, conforme o manual, codigo deve ser zerado
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0042, 001, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0043, 008, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 2, "0", '0');
 
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 001, 0, (int)boleto.TipoCodigoMulta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 001, 0, codMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0067, 008, 0, boleto.DataMulta, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, boleto.ValorMulta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, valorMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0090, 010, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0100, 040, 0, msg3, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0140, 040, 0, string.Empty, ' ');

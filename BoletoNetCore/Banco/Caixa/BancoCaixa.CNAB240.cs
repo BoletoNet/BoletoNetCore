@@ -300,11 +300,19 @@ namespace BoletoNetCore
         {
             try
             {
-                string codMulta;
+                string codMulta = "0";
+                decimal valorMulta = 0;
                 if (boleto.ValorMulta > 0)
+                {
                     codMulta = "1";
-                else
-                    codMulta = "0";
+                    valorMulta = boleto.ValorMulta;
+                }
+                else if (boleto.PercentualMulta > 0)
+                {
+                    codMulta = "2";
+                    valorMulta = boleto.PercentualMulta;
+                }
+
                 var msg = boleto.MensagemArquivoRemessa.PadRight(500, ' ');
                 var msg3 = msg.Substring(00, 40).FitStringLength(40, ' ');
                 var msg4 = msg.Substring(40, 40).FitStringLength(40, ' ');
@@ -328,7 +336,7 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 0, "0", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 001, 0, codMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0067, 008, 0, boleto.DataMulta, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, boleto.ValorMulta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, valorMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0090, 010, 0, Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0100, 040, 0, msg3, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0140, 040, 0, msg4, ' ');
@@ -434,10 +442,18 @@ namespace BoletoNetCore
 
         public override void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
         {
-            ////144 - 151 Data de geração do arquivo N 008 DDMMAAAA
-            //arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
-            ////158 - 163 Nº seqüencial do arquivo N 006
-            //arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
+            arquivoRetorno.Banco.Beneficiario = new Beneficiario();
+            arquivoRetorno.Banco.Beneficiario.CPFCNPJ = registro.Substring(17, 1) == "1" ? registro.Substring(21, 11) : registro.Substring(18, 14);
+            arquivoRetorno.Banco.Beneficiario.Codigo = registro.Substring(58, 7);
+            arquivoRetorno.Banco.Beneficiario.Nome = registro.Substring(72, 30).Trim();
+
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria = new ContaBancaria();
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria.Agencia = registro.Substring(52, 5);
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria.DigitoAgencia = registro.Substring(57, 1);
+
+            arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
+            
+            arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
         }
 
         public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
