@@ -8,6 +8,131 @@ namespace BoletoNetCore
 {
     partial class BancoCrediSIS : IBancoCNAB240
     {
+
+        #region Retorno - CNAB240
+
+        public override void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
+        {
+            arquivoRetorno.Banco.Beneficiario = new Beneficiario();
+            //05.0	018	018	001 - Tipo de Inscrição da Empresa: '1' = CPF '2' = CGC / CNPJ
+            //06.0	019	032	014 - Número de Inscrição da Empresa
+            arquivoRetorno.Banco.Beneficiario.CPFCNPJ = registro.Substring(17, 1) == "1" ? registro.Substring(21, 11) : registro.Substring(18, 14);
+
+            //arquivoRetorno.Banco.Beneficiario.Codigo = ?;
+            //13.0	073	102	030 - Nome da Empresa
+            arquivoRetorno.Banco.Beneficiario.Nome = registro.Substring(72, 30).Trim();
+
+
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria = new ContaBancaria();
+            //08.0	053	057	005	- Prefixo da Cooperativa: vide planilha "Capa" deste arquivo
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria.Agencia = registro.Substring(52, 5);
+            //09.0	058	058	001 - Dígito Verificador do Prefixo: vide planilha "Capa" deste arquivo
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria.DigitoAgencia = registro.Substring(57, 1);
+            //10.0	059	070	012 - Conta Corrente: vide planilha "Capa" deste arquivo
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria.Conta = registro.Substring(58, 12);
+            //11.0	071	071	001 - Dígito Verificador da Conta: vide planilha "Capa" deste arquivo
+            arquivoRetorno.Banco.Beneficiario.ContaBancaria.DigitoConta = registro.Substring(70, 1);
+
+
+            //17.0 144 151 008 - Num - Data de Geração do Arquivo
+            arquivoRetorno.DataGeracao = Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####"));
+            //19.0 158 163 006 - Num - Seqüência (NSA)
+            arquivoRetorno.NumeroSequencial = Utils.ToInt32(registro.Substring(157, 6));
+        }
+
+        public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
+        {
+            try
+            {
+                //Nº Controle do Participante
+                boleto.NumeroControleParticipante = registro.Substring(105, 25);
+
+                //Carteira
+                boleto.Carteira = registro.Substring(57, 1);
+                switch (boleto.Carteira)
+                {
+                    case "3":
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
+                        break;
+                    default:
+                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                        break;
+                }
+
+                //Identificação do Título no Banco
+                // Nosso numero completo
+                boleto.NossoNumeroFormatado = registro.Substring(37, 20);
+                // Numero do nosso numero
+                boleto.NossoNumero = registro.Substring(51, 6); //Sem o DV
+
+                //Identificação de Ocorrência
+                boleto.CodigoMovimentoRetorno = registro.Substring(15, 2);
+                boleto.DescricaoMovimentoRetorno = Cnab.MovimentoRetornoCnab240(boleto.CodigoMovimentoRetorno);
+                boleto.CodigoMotivoOcorrencia = registro.Substring(213, 10);
+                boleto.ListMotivosOcorrencia = Cnab.MotivoOcorrenciaCnab240(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
+
+                //Número do Documento
+                boleto.NumeroDocumento = registro.Substring(58, 15);
+                boleto.EspecieDocumento = TipoEspecieDocumento.NaoDefinido;
+
+                //Valor do Título
+                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(81, 15)) / 100;
+                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(198, 15)) / 100;
+
+                //Data Vencimento do Título
+                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
+
+                //18.3T 97 99 3 - Num Banco Cobr./Receb.
+                boleto.BancoCobradorRecebedor = registro.Substring(96, 3);
+                //19.3T 100 104 5 - Num	Ag. Cobradora
+                boleto.AgenciaCobradoraRecebedora = registro.Substring(99, 6);
+
+                //Dados Pagador
+                boleto.Pagador = new Pagador();
+                string str = registro.Substring(133, 15).Trim();
+                boleto.Pagador.CPFCNPJ = str.Substring(str.Length - 14, 14);
+                boleto.Pagador.Nome = registro.Substring(148, 40);
+
+
+                // Registro Retorno
+                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
+            }
+        }
+        public override void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
+        {
+            try
+            {
+                //Valor do Título
+                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(17, 15)) / 100;
+                boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(32, 15)) / 100;
+                //boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(47, 15)) / 100;
+                //boleto.ValorIOF = Convert.ToDecimal(registro.Substring(62, 15)) / 100;
+                boleto.ValorPago = Convert.ToDecimal(registro.Substring(77, 15)) / 100;
+                boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(92, 15)) / 100;
+                boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(107, 15)) / 100;
+                boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(122, 15)) / 100;
+
+
+                //Data Ocorrência no Banco
+                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(137, 8)).ToString("##-##-####"));
+
+                // Data do Crédito
+                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(145, 8)).ToString("##-##-####"));
+
+                // Registro Retorno
+                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / U.", ex);
+            }
+        }
+        #endregion
+
         public string GerarHeaderRemessaCNAB240(ref int numeroArquivoRemessa, ref int numeroRegistro)
         {
             try
@@ -437,82 +562,6 @@ namespace BoletoNetCore
             }
         }
 
-        public override void LerHeaderRetornoCNAB240(ArquivoRetorno arquivoRetorno, string registro)
-        {
-            arquivoRetorno.Banco.Beneficiario = new Beneficiario();
-            arquivoRetorno.Banco.Beneficiario.CPFCNPJ = registro.Substring(17, 1) == "1" ? registro.Substring(21, 11) : registro.Substring(18, 14);
-            arquivoRetorno.Banco.Beneficiario.Nome = registro.Substring(72, 30).Trim();
-            arquivoRetorno.Banco.Beneficiario.ContaBancaria = new ContaBancaria();
-            arquivoRetorno.Banco.Beneficiario.ContaBancaria.Agencia = registro.Substring(52, 5);
-            arquivoRetorno.Banco.Beneficiario.ContaBancaria.DigitoAgencia = registro.Substring(57, 1);
-            arquivoRetorno.Banco.Beneficiario.ContaBancaria.Conta = registro.Substring(58, 12);
-            arquivoRetorno.Banco.Beneficiario.ContaBancaria.DigitoConta = registro.Substring(70, 1);
-            arquivoRetorno.DataGeracao = new DateTime?(Utils.ToDateTime(Utils.ToInt32(registro.Substring(143, 8)).ToString("##-##-####")));
-            arquivoRetorno.NumeroSequencial = new int?(Utils.ToInt32(registro.Substring(157, 6)));
-        }
-
-        public override void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro)
-        {
-            try
-            {
-                boleto.NumeroControleParticipante = registro.Substring(105, 25);
-                boleto.Carteira = registro.Substring(57, 1);
-                switch (boleto.Carteira)
-                {
-                    case "3":
-                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaCaucionada;
-                        break;
-                    default:
-                        boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
-                        break;
-                }
-                boleto.NossoNumero = registro.Substring(37, 18);
-                boleto.NossoNumeroDV = registro.Substring(54, 1);
-                boleto.NossoNumeroFormatado = boleto.NossoNumero + "-" + boleto.NossoNumeroDV;
-                boleto.CodigoMovimentoRetorno = registro.Substring(15, 2);
-                boleto.DescricaoMovimentoRetorno = Cnab.MovimentoRetornoCnab240(boleto.CodigoMovimentoRetorno);
-                boleto.CodigoMotivoOcorrencia = registro.Substring(213, 10);
-                boleto.ListMotivosOcorrencia = Cnab.MotivoOcorrenciaCnab240(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
-                boleto.NumeroDocumento = registro.Substring(58, 15);
-                boleto.EspecieDocumento = TipoEspecieDocumento.NaoDefinido;
-                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(81, 15)) / 100M;
-                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(198, 15)) / 100M;
-                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(73, 8)).ToString("##-##-####"));
-                boleto.BancoCobradorRecebedor = registro.Substring(96, 3);
-                boleto.AgenciaCobradoraRecebedora = registro.Substring(99, 6);
-                boleto.Pagador = new Pagador();
-                string str = registro.Substring(133, 15);
-                boleto.Pagador.CPFCNPJ = str.Substring(str.Length - 14, 14);
-                boleto.Pagador.Nome = registro.Substring(148, 40);
-                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / T.", ex);
-            }
-        }
-
-        public override void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro)
-        {
-            try
-            {
-                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(17, 15)) / 100M;
-                boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(32, 15)) / 100M;
-                boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(47, 15)) / 100M;
-                boleto.ValorIOF = Convert.ToDecimal(registro.Substring(62, 15)) / 100M;
-                boleto.ValorPago = Convert.ToDecimal(registro.Substring(77, 15)) / 100M;
-                boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(92, 15)) / 100M;
-                boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(107, 15)) / 100M;
-                boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(122, 15)) / 100M;
-                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(137, 8)).ToString("##-##-####"));
-                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(145, 8)).ToString("##-##-####"));
-                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / U.", ex);
-            }
-        }
 
     }
 }

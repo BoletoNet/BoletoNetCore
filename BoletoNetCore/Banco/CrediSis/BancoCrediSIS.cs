@@ -28,7 +28,6 @@ namespace BoletoNetCore
 
             Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {contaBancaria.Conta}{contaBancaria.DigitoConta}";
         }
-
         
     }
 }
