@@ -15,14 +15,14 @@ dotnet publish -f netstandard2.0 -c release $solutionFile
 dotnet pack -c release $solutionFile /p:NuspecFile=$nuspecPath -o $nupkgPath
 appveyor PushArtifact $nupkgPath
 
-# <#Pacote PDF#>
-# $solutionFilePDF = "$rootDir\BoletoNetCore.PDF\BoletoNetCore.PDF.csproj"
-# $nuspecPathPDF = "$rootDir\BoletoNetCore.PDF\BoletoNetCore.PDF.nuspec"
-# $nupkgPathPDF = "$rootDir\NuGet.PDF\"
+<#Pacote PDF#>
+$solutionFilePDF = "$rootDir\BoletoNetCore.PDF\BoletoNetCore.PDF.csproj"
+$nuspecPathPDF = "$rootDir\BoletoNetCore.PDF\BoletoNetCore.PDF.nuspec"
+$nupkgPathPDF = "$rootDir\NuGet.PDF\"
 
-# [xml]$xmlPDF = cat $nuspecPathPDF
-# $xmlPDF.package.metadata.version="3.0.1."+"$buildNumber"
-# $xmlPDF.Save($nuspecPathPDF)
+[xml]$xmlPDF = cat $nuspecPathPDF
+$xmlPDF.package.metadata.version="3.0.1."+"$buildNumber"
+$xmlPDF.Save($nuspecPathPDF)
 
-# dotnet pack -c Release $solutionFilePDF /p:NuspecFile=$nuspecPathPDF -o $nupkgPathPDF
-# appveyor PushArtifact $nupkgPathPDF
+dotnet pack -c Release $solutionFilePDF /p:NuspecFile=$nuspecPathPDF -o $nupkgPathPDF
+appveyor PushArtifact $nupkgPathPDF
