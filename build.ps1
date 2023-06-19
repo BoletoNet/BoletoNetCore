@@ -24,5 +24,6 @@ $nupkgPathPDF = "$rootDir\NuGet.PDF\"
 $xmlPDF.package.metadata.version="3.0.1."+"$buildNumber"
 $xmlPDF.Save($nuspecPathPDF)
 
+dotnet publish -f netstandard2.0 -c release $solutionFilePDF
 dotnet pack -c Release $solutionFilePDF /p:NuspecFile=$nuspecPathPDF -o $nupkgPathPDF
 appveyor PushArtifact $nupkgPathPDF
