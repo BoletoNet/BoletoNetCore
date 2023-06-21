@@ -69,7 +69,7 @@ namespace BoletoNetCore.Testes
             Assert.AreEqual(true, retorno, "GerarRemessa: " + mensagemErro);
 
             // Para gerar o arquivo PDF
-            classeProxy.GerarBoletos(nomePasta + @"ClasseProxy_Boleto.Pdf", ref mensagemErro);
+            classeProxy.GerarBoletos(nomePasta + @"ClasseProxy_Boleto.Pdf", ref mensagemErro, null);
             Assert.AreEqual(true, retorno, "GerarBoletos: " + mensagemErro);
 
         }
