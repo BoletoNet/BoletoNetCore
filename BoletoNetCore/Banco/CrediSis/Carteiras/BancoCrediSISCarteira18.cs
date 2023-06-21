@@ -12,7 +12,7 @@ namespace BoletoNetCore
 
         private BancoCrediSISCarteira18()
         {
-
+            
         }
         public void FormataCodigoCliente(Boleto boleto)
         {
