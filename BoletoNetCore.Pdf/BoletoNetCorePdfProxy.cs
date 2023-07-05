@@ -6,7 +6,7 @@ namespace BoletoNetCore.Pdf
 {
     public class BoletoNetCorePdfProxy : BoletoNetCoreProxy
     {
-        public override bool GerarBoletos(string nomeArquivo, ref string mensagemErro)
+        public override bool GerarBoletos(string nomeArquivo, ref string mensagemErro, string pixString = null)
         {
             
             mensagemErro = "";

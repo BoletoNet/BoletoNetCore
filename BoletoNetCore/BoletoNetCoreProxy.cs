@@ -511,7 +511,7 @@ namespace BoletoNetCore
                 return false;
             }
         }
-        public virtual bool GerarBoletos(string nomeArquivo, ref string mensagemErro)
+        public virtual bool GerarBoletos(string nomeArquivo, ref string mensagemErro, string pixString = null)
         {
             mensagemErro = "";
             try
@@ -549,7 +549,7 @@ namespace BoletoNetCore
                     };
                     {
                         html.Append("<div style=\"page-break-after: always;\">");
-                        html.Append(imprimeBoleto.MontaHtmlEmbedded());
+                        html.Append(imprimeBoleto.MontaHtmlEmbedded(pixString: pixString));
                         html.Append("</div>");
                     }
                 }
@@ -659,7 +659,7 @@ namespace BoletoNetCore
                 boletos.Clear();
 
                 var arquivoRetorno = new ArquivoRetorno(boletos.Banco, (TipoArquivo)formatoArquivo);
-                
+
                 boletos = arquivoRetorno.LerArquivoRetorno(nomeArquivo);
                 return true;
             }
@@ -686,7 +686,7 @@ namespace BoletoNetCore
                 }
             }
         }
-        
+
     }
 
 }
