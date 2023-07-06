@@ -424,7 +424,7 @@ namespace BoletoNetCore
                 }
 
                 var msg3 = boleto.MensagemArquivoRemessa.PadRight(500, ' ').Substring(00, 40).FitStringLength(40, ' ');
-                if (codMulta == "0" & string.IsNullOrWhiteSpace(msg3))
+                if (codMulta == "0" & string.IsNullOrWhiteSpace(msg3) && boleto.ValorDesconto2 == 0 && boleto.ValorDesconto3 == 0)
                     return "";
 
                 numeroRegistroGeral++;

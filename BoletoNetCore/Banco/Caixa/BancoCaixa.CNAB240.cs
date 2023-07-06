@@ -316,7 +316,7 @@ namespace BoletoNetCore
                 var msg = boleto.MensagemArquivoRemessa.PadRight(500, ' ');
                 var msg3 = msg.Substring(00, 40).FitStringLength(40, ' ');
                 var msg4 = msg.Substring(40, 40).FitStringLength(40, ' ');
-                if ((codMulta == "0") & IsNullOrWhiteSpace(msg3) & IsNullOrWhiteSpace(msg4))
+                if ((codMulta == "0") & IsNullOrWhiteSpace(msg3) & IsNullOrWhiteSpace(msg4) && boleto.ValorDesconto2 == 0 && boleto.ValorDesconto3 == 0)
                     return "";
 
                 numeroRegistroGeral++;

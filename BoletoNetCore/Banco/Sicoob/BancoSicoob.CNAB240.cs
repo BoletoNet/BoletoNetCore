@@ -325,7 +325,7 @@ namespace BoletoNetCore
                 else if (boleto.PercentualMulta > 0)
                     codMulta = "2";
 
-                if (codMulta == "0")
+                if (codMulta == "0" && boleto.ValorDesconto2 == 0 && boleto.ValorDesconto3 == 0)
                 {
                     // Se não tiver informação sobre Multa, não precisa gerar o registro.
                     return "";

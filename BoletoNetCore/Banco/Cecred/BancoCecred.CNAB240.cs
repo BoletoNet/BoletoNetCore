@@ -283,7 +283,7 @@ namespace BoletoNetCore
                     str = "1";
                 if (boleto.PercentualMulta > 0M)
                     str = "2";
-                if (str == "0")
+                if (str == "0" && boleto.ValorDesconto2 == 0 && boleto.ValorDesconto3 == 0)
                     return "";
                 ++numeroRegistroGeral;
                 TRegistroEDI tregistroEdi = new TRegistroEDI();
