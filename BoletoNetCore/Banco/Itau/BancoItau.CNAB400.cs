@@ -250,6 +250,9 @@ namespace BoletoNetCore
                 if (registro.Substring(0, 9) != "02RETORNO")
                     throw new Exception("O arquivo não é do tipo \"02RETORNO\"");
 
+                if (registro.Substring(9, 2) == "04") 
+                    this.DescontoDuplicatas = true; 
+
                 this.Beneficiario = new Beneficiario();
                 this.Beneficiario.ContaBancaria = new ContaBancaria();
 
@@ -268,50 +271,99 @@ namespace BoletoNetCore
         {
             try
             {
-                //Nº Controle do Participante
-                boleto.NumeroControleParticipante = registro.Substring(37, 25);
+                if (this.DescontoDuplicatas == false){
+                    //Nº Controle do Participante
+                    boleto.NumeroControleParticipante = registro.Substring(37, 25);
 
-                //Carteira
-                boleto.Carteira = registro.Substring(82, 3);
-                boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+                    //Carteira
+                    boleto.Carteira = registro.Substring(82, 3);
+                    boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
-                //Identificação do Título no Banco
-                boleto.NossoNumero = registro.Substring(85, 8);
-                boleto.NossoNumeroDV = registro.Substring(93, 1); //DV
-                boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+                    //Identificação do Título no Banco
+                    boleto.NossoNumero = registro.Substring(85, 8);
+                    boleto.NossoNumeroDV = registro.Substring(93, 1); //DV
+                    boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
 
-                //Identificação de Ocorrência
-                boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
-                boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
-                boleto.CodigoMotivoOcorrencia = registro.Substring(377, 8);
-                boleto.ListMotivosOcorrencia = MotivoOcorrenciaCnab400(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
+                    //Identificação de Ocorrência
+                    boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
+                    boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
+                    boleto.CodigoMotivoOcorrencia = registro.Substring(377, 8);
+                    boleto.ListMotivosOcorrencia = MotivoOcorrenciaCnab400(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
 
-                //Número do Documento
-                boleto.NumeroDocumento = registro.Substring(116, 10);
-                boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
+                    //Número do Documento
+                    boleto.NumeroDocumento = registro.Substring(116, 10);
+                    boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
 
-                //Valores do Título
-                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
-                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
-                boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(188, 13)) / 100;
-                boleto.ValorIOF = Convert.ToDecimal(registro.Substring(214, 13)) / 100;
-                boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
-                boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
-                boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
-                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
-                boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
+                    //Valores do Título
+                    boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
+                    boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
+                    boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(188, 13)) / 100;
+                    boleto.ValorIOF = Convert.ToDecimal(registro.Substring(214, 13)) / 100;
+                    boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
+                    boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
+                    boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
+                    boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
+                    boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
 
-                //Data Ocorrência no Banco
-                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
+                    //Data Ocorrência no Banco
+                    boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
 
-                //Data Vencimento do Título
-                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
+                    //Data Vencimento do Título
+                    boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
 
-                // Data do Crédito
-                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
+                    // Data do Crédito
+                    boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
 
-                boleto.Pagador = new Pagador();
-                boleto.Pagador.Nome = registro.Substring(324, 30).Trim();
+                    boleto.Pagador = new Pagador();
+                    boleto.Pagador.Nome = registro.Substring(324, 30).Trim();
+                }
+                else
+                {
+                    //Nº Controle do Participante
+                    boleto.NumeroControleParticipante = registro.Substring(37, 25);
+
+                    //Carteira
+                    boleto.Carteira = registro.Substring(82, 3);
+                    boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaDescontada;
+
+                    //Identificação do Título no Banco
+                    boleto.NossoNumero = registro.Substring(85, 8);
+                    boleto.NossoNumeroDV = registro.Substring(93, 1); //DV
+                    boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+
+                    //Identificação de Ocorrência
+                    boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
+                    boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
+                    boleto.CodigoMotivoOcorrencia = registro.Substring(377, 8);
+                    boleto.ListMotivosOcorrencia = MotivoOcorrenciaCnab400(boleto.CodigoMotivoOcorrencia, boleto.CodigoMovimentoRetorno);
+
+                    //Número do Documento
+                    boleto.NumeroDocumento = registro.Substring(116, 10);
+                    boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
+
+                    //Valores do Título
+                    boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
+                    boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
+                    boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(201, 13)) / 100;
+                    boleto.ValorIOF = Convert.ToDecimal(registro.Substring(214, 13)) / 100;
+                    boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
+                    boleto.ValorMulta = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
+                    boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(94, 13)) / 100;
+                    boleto.ValorOutrasDespesas += Convert.ToDecimal(registro.Substring(266, 13)) / 100;
+                    boleto.ValorOutrasDespesas += Convert.ToDecimal(registro.Substring(279, 13)) / 100;
+
+                    //Data Ocorrência no Banco
+                    boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
+
+                    // Data do Crédito
+                    boleto.DataCredito = boleto.DataProcessamento;
+
+                    //Data Vencimento do Título
+                    boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
+
+                    boleto.Pagador = new Pagador();
+                    boleto.Pagador.Nome = registro.Substring(324, 30).Trim();
+                }
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
@@ -329,64 +381,111 @@ namespace BoletoNetCore
 
         private string DescricaoOcorrenciaCnab400(string codigo)
         {
-            switch (codigo)
+            if (this.DescontoDuplicatas == false)
             {
-                case "02":
-                    return "Entrada Confirmada";
-                case "03":
-                    return "Entrada Rejeitada";
-                case "06":
-                    return "Liquidação normal";
-                case "09":
-                    return "Baixado Automaticamente via Arquivo";
-                case "10":
-                    return "Baixado conforme instruções da Agência";
-                case "11":
-                    return "Em Ser - Arquivo de Títulos pendentes";
-                case "12":
-                    return "Abatimento Concedido";
-                case "13":
-                    return "Abatimento Cancelado";
-                case "14":
-                    return "Vencimento Alterado";
-                case "15":
-                    return "Liquidação em Cartório";
-                case "17":
-                    return "Liquidação após baixa ou Título não registrado";
-                case "18":
-                    return "Acerto de Depositária";
-                case "19":
-                    return "Confirmação Recebimento Instrução de Protesto";
-                case "20":
-                    return "Confirmação Recebimento Instrução Sustação de Protesto";
-                case "21":
-                    return "Acerto do Controle do Participante";
-                case "23":
-                    return "Entrada do Título em Cartório";
-                case "24":
-                    return "Entrada rejeitada por CEP Irregular";
-                case "27":
-                    return "Baixa Rejeitada";
-                case "28":
-                    return "Débito de tarifas/custas";
-                case "29":
-                    return "Tarifa de Manutenção de Título Vencido";
-                case "30":
-                    return "Alteração de Outros Dados Rejeitados";
-                case "32":
-                    return "Instrução Rejeitada";
-                case "33":
-                    return "Confirmação Pedido Alteração Outros Dados";
-                case "34":
-                    return "Retirado de Cartório e Manutenção Carteira";
-                case "35":
-                    return "Desagendamento ) débito automático";
-                case "68":
-                    return "Acerto dos dados ) rateio de Crédito";
-                case "69":
-                    return "Cancelamento dos dados ) rateio";
-                default:
-                    return "";
+                switch (codigo)
+                {
+                    case "02":
+                        return "Entrada Confirmada";
+                    case "03":
+                        return "Entrada Rejeitada";
+                    case "06":
+                        return "Liquidação normal";
+                    case "09":
+                        return "Baixado Automaticamente via Arquivo";
+                    case "10":
+                        return "Baixado conforme instruções da Agência";
+                    case "11":
+                        return "Em Ser - Arquivo de Títulos pendentes";
+                    case "12":
+                        return "Abatimento Concedido";
+                    case "13":
+                        return "Abatimento Cancelado";
+                    case "14":
+                        return "Vencimento Alterado";
+                    case "15":
+                        return "Liquidação em Cartório";
+                    case "17":
+                        return "Liquidação após baixa ou Título não registrado";
+                    case "18":
+                        return "Acerto de Depositária";
+                    case "19":
+                        return "Confirmação Recebimento Instrução de Protesto";
+                    case "20":
+                        return "Confirmação Recebimento Instrução Sustação de Protesto";
+                    case "21":
+                        return "Acerto do Controle do Participante";
+                    case "23":
+                        return "Entrada do Título em Cartório";
+                    case "24":
+                        return "Entrada rejeitada por CEP Irregular";
+                    case "27":
+                        return "Baixa Rejeitada";
+                    case "28":
+                        return "Débito de tarifas/custas";
+                    case "29":
+                        return "Tarifa de Manutenção de Título Vencido";
+                    case "30":
+                        return "Alteração de Outros Dados Rejeitados";
+                    case "32":
+                        return "Instrução Rejeitada";
+                    case "33":
+                        return "Confirmação Pedido Alteração Outros Dados";
+                    case "34":
+                        return "Retirado de Cartório e Manutenção Carteira";
+                    case "35":
+                        return "Desagendamento ) débito automático";
+                    case "68":
+                        return "Acerto dos dados ) rateio de Crédito";
+                    case "69":
+                        return "Cancelamento dos dados ) rateio";
+                    default:
+                        return "";
+                }
+            }
+            else
+            {
+                switch (codigo)
+                {
+                    case "02":
+                        return "Desconto Aceito";
+                    case "03":
+                        return "Desconto Recusado";
+                    case "04":
+                        return "Alteração de Dados - Nova Entrada";
+                    case "05":
+                        return "Alteração de Dados - Baixa";
+                    case "06":
+                        return "Liquidação Normal";
+                    case "08":
+                        return "Liquidado em Cartório";
+                    case "09":
+                        return "Liquidado pelo Cedente";
+                    case "12":
+                        return "Abatimento";
+                    case "14":
+                        return "Vencimento Alterado";
+                    case "16":
+                        return "Instruções Rejeitadas";
+                    case "19":
+                        return "Confirmação Recebimento Instrução de Protesto";
+                    case "21":
+                        return "Confirmação Recebimento Instrução Não Protestar";
+                    case "22":
+                        return "Liquidação de Título Baixado";
+                    case "25":
+                        return "Alegação do Sacado";
+                    case "34":
+                        return "Custas de Sustação de Protesto";
+                    case "48":
+                        return "Liquidado pelo Cedente com Transferência para Cobrança";
+                    case "62":
+                        return "Débito Mensal de Tarifas";
+                    case "63":
+                        return "Título Enviado para Cobrança Simples";
+                    default:
+                        return "";
+                }
             }
         }
 
