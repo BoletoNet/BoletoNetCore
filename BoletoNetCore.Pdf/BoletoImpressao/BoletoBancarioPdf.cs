@@ -14,5 +14,10 @@ namespace BoletoNetCore.Pdf.BoletoImpressao
 
 
         }
+
+        public byte[] MontaBytesPDFLegacy(bool convertLinhaDigitavelToImage = false, string urlImagemLogoBeneficiario = null)
+        {
+            return (new NReco.PdfGenerator.HtmlToPdfConverter()).GeneratePdf(MontaHtmlEmbedded(convertLinhaDigitavelToImage, true, urlImagemLogoBeneficiario));
+        }
     }
 }

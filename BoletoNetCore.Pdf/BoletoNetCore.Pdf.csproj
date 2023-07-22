@@ -11,6 +11,7 @@
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="Wkhtmltopdf.NetCore" Version="1.1.3" />
+	<PackageReference Include="NReco.PdfGenerator" Version="1.2.1" />
   </ItemGroup>
 
   <ItemGroup>
