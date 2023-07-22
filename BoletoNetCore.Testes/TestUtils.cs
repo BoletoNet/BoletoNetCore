@@ -101,6 +101,10 @@ namespace BoletoNetCore.Testes
                 CodigoInstrucao2 = "22",
                 DataDesconto = DateTime.Now.AddMonths(i),
                 ValorDesconto = (decimal)(100 * i * 0.10),
+                DataDesconto2 = DateTime.Now.AddMonths(i).AddDays(2),
+                ValorDesconto2 = (decimal)(100 * i * 0.12),
+                DataDesconto3 = DateTime.Now.AddMonths(i).AddDays(3),
+                ValorDesconto3 = (decimal)(100 * i * 0.13),
                 DataMulta = DateTime.Now.AddMonths(i),
                 PercentualMulta = (decimal)2.00,
                 ValorMulta = (decimal)(100 * i * (2.00 / 100)),
@@ -117,6 +121,10 @@ namespace BoletoNetCore.Testes
             StringBuilder msgCaixa = new StringBuilder();
             if (boleto.ValorDesconto > 0)
                 msgCaixa.AppendLine($"Conceder desconto de {boleto.ValorDesconto.ToString("R$ ##,##0.00")} até {boleto.DataDesconto.ToString("dd/MM/yyyy")}. ");
+            if (boleto.ValorDesconto2 > 0)
+                msgCaixa.AppendLine($"Conceder desconto de {boleto.ValorDesconto2.ToString("R$ ##,##0.00")} até {boleto.DataDesconto2.ToString("dd/MM/yyyy")}. ");
+            if (boleto.ValorDesconto3 > 0)
+                msgCaixa.AppendLine($"Conceder desconto de {boleto.ValorDesconto3.ToString("R$ ##,##0.00")} até {boleto.DataDesconto3.ToString("dd/MM/yyyy")}. ");
             if (boleto.ValorMulta > 0)
                 msgCaixa.AppendLine($"Cobrar multa de {boleto.ValorMulta.ToString("R$ ##,##0.00")} após o vencimento. ");
             if (boleto.ValorJurosDia > 0)
