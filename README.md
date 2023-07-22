@@ -61,6 +61,7 @@ CNAB400, CNAB240 e OnlineRest (**Procuramos Implementadores**)
 Este projeto possui algumas diferenças relevantes em relação ao Boleto2Net que podem quebrar o seu código:
 - Retorno de Arquivos CNAB geram **CodMovimentoRetorno** no Lugar de **CodOcorrencia**.
 - Se você quer usar a impressão em PDF, use o **BoletoNetCorePdfProxy** e não **BoletoNetCoreProxy**.
+- Para imprimir PDF usando o pacote NReco igual ao Boleto2Net, chamar o método MontaBytesPDFLegacy()
 - Para a impressão em PDF, também é necessário a instalação do pacote [BoletoNetCore.Pdf](https://www.nuget.org/packages/BoletoNetCore.PDF/).
 - Este projeto não usa **System.Web** então, não existem componentes manipuláveis para WebForms para o Editor do VS. 
 - Cedente e Sacado foram substituidos em todo o projeto pelos termos atuais **Beneficiario** e **Pagador**
