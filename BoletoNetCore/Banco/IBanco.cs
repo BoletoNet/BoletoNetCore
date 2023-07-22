@@ -26,6 +26,11 @@ namespace BoletoNetCore
         int TamanhoConta { get; }
 
         /// <summary>
+        /// Define se o arquivo CNAB é de desconto de duplicatas
+        /// </summary>
+        bool DescontoDuplicatas { get; }
+
+        /// <summary>
         /// Formata o benefici�rio (Ag�ncia, Conta, C�digo)
         /// </summary>
         void FormataBeneficiario();
