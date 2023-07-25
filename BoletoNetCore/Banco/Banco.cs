@@ -90,6 +90,16 @@ namespace BoletoNetCore
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Conceder desconto de R$ {boleto.ValorDesconto.ToString("N2")} ATÉ {boleto.DataDesconto.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
+            //DESCONTO 2
+            if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorDesconto2 > 0)
+            {
+                boleto.MensagemInstrucoesCaixaFormatado += $"Conceder desconto de R$ {boleto.ValorDesconto2.ToString("N2")} ATÉ {boleto.DataDesconto2.ToString("dd/MM/yyyy")}{Environment.NewLine}";
+            }
+            //DESCONTO 3
+            if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorDesconto3 > 0)
+            {
+                boleto.MensagemInstrucoesCaixaFormatado += $"Conceder desconto de R$ {boleto.ValorDesconto3.ToString("N2")} ATÉ {boleto.DataDesconto3.ToString("dd/MM/yyyy")}{Environment.NewLine}";
+            }
 
             //Aqui, define se a mensagem de instrução manual deve ser impressa, 
             //na minha visão se o usuário passou uma instrução, esta deveria ser impressa sempre.

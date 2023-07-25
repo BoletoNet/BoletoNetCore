@@ -86,6 +86,8 @@ namespace BoletoNetCore
         public decimal ValorOutrosCreditos { get; set; }
         public decimal ValorIOF { get; set; }
         public decimal ValorAbatimento { get; set; }
+        public decimal ValorDesconto2 { get; set; }
+        public decimal ValorDesconto3 { get; set; }
 
         // Juros
         public decimal ValorJurosDia { get; set; }
@@ -111,6 +113,8 @@ namespace BoletoNetCore
 
         // Desconto
         public DateTime DataDesconto { get; set; }
+        public DateTime DataDesconto2 { get; set; }
+        public DateTime DataDesconto3 { get; set; }
 
         /// <summary>
         /// Identificação se emite Boleto para Debito Automatico
