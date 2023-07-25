@@ -61,7 +61,7 @@ namespace BoletoNetCore
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 17, 1, 0, Empty, ' ');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 18, 1, 0, Beneficiario.TipoCPFCNPJ("0"), '0');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 19, 15, 0, Beneficiario.CPFCNPJ, '0');
-                tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 34, 20, 0, Codigo, ' ');
+                tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 34, 20, 0, Beneficiario.ContaBancaria.CodigoConvenio, ' ');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 54, 5, 0, Beneficiario.ContaBancaria.Agencia, '0');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 59, 1, 0, Beneficiario.ContaBancaria.DigitoAgencia, ' ');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 60, 12, 0, Beneficiario.ContaBancaria.Conta, '0');
