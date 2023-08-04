@@ -53,7 +53,7 @@ namespace BoletoNetCore.WebAPI.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [HttpPost("GerarBoletos")]
-        public async Task<IActionResult> PostGerarBoletos(DadosBoleto dadosBoleto, int tipoBancoEmissor)
+        public IActionResult PostGerarBoletos(DadosBoleto dadosBoleto, int tipoBancoEmissor)
         {
 
             try
