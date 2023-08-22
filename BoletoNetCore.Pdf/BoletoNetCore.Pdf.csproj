@@ -18,10 +18,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Rotativa\Linux\Rotativa\Linux\wkhtmltopdf">
+    <None Update="Rotativa\Linux\wkhtmltopdf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Rotativa\Linux\Rotativa\Linux\libwkhtmltox.so">
+    <None Update="Rotativa\Linux\libwkhtmltox.so">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Rotativa\Windows\wkhtmltopdf.exe">
@@ -31,5 +31,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
 
 </Project>
