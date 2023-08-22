@@ -206,7 +206,6 @@ namespace BoletoNetCore.Testes
             if (gerarBoletoPdfHtml)
             {
                 RotativaConfiguration.RotativaPath = "Rotativa";
-                RotativaConfiguration.IsWindows = true;
 
                 // Gera arquivo PDF
                 try
