@@ -46,7 +46,7 @@ Responsável por guardar toda a lógica de leitura de remessa e retorno de arqui
 ### BoletoNetCore.Pdf
 Responsável pelos serviços de  impessão em PDF. 
 
-Obs.: Para geração de PDF em linux (ambientes baseados em Debian), é necessário a instalaçãod as seguintes dependencias:
+Obs.: Para geração de PDF em linux (ambientes baseados em Debian), é necessário a instalação das seguintes dependências:
 
 ```bash
 apt-get install -y libfontconfig1 libxrender1 libxext6
