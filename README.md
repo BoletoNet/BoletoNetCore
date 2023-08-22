@@ -55,7 +55,7 @@ apt-get install -y libfontconfig1 libxrender1 libxext6
 Também é necessário garantir a permissão de execução para o binário responsável por gerar o PDF:
 
 ```bash
-chmod +x "<Caminho do projeto>/BoletoNetCore.Testes/bin/Debug/net7.0/Rotativa/Linux/Rotativa/Linux/wkhtmltopdf"
+chmod +x "<Caminho do projeto>/BoletoNetCore.Testes/bin/Debug/net7.0/Rotativa/Linux/wkhtmltopdf"
 ```
 
 ### BoletoNetCore.Testes
