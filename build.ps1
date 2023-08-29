@@ -1,5 +1,6 @@
 $rootDir = $env:APPVEYOR_BUILD_FOLDER
-$buildVersion = "$($Env:APPVEYOR_BUILD_VERSION).$($Env:APPVEYOR_BUILD_NUMBER)"
+$buildVersion = $Env:APPVEYOR_BUILD_VERSION
+Write-Host "APPVEYOR_BUILD_VERSION: $buildVersion"
 
 <#Pacote Principal#>
 $solutionFile = Join-Path $rootDir "BoletoNetCore\BoletoNetCore.csproj"
