@@ -50,7 +50,7 @@ namespace BoletoNetCore.Testes
                         Bairro = "Bairro",
                         Cidade = "Cidade",
                         UF = "SP",
-                        CEP = "56789012"
+                        CEP = "04205000"
                     }
                 };
             return new Pagador
@@ -65,7 +65,7 @@ namespace BoletoNetCore.Testes
                     Bairro = "Bairro",
                     Cidade = "Cidade",
                     UF = "SP",
-                    CEP = "12345678"
+                    CEP = "01013020"
                 }
             };
         }
