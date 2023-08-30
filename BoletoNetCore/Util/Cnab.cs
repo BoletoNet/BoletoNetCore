@@ -81,6 +81,8 @@ namespace BoletoNetCore
                     return "Estorno de Baixa / Liquidação";
                 case "45":
                     return "Alteração de Dados";
+                case "BD":
+                    return "Ocorrências para o Retorno";
                 default:
                     return "";
             }
