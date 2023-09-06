@@ -15,5 +15,6 @@ namespace BoletoNetCore
         Sicredi = 748,
         Sicoob = 756,
         CrediSIS = 097,
+        BancoInter = 077,
     }
 }
