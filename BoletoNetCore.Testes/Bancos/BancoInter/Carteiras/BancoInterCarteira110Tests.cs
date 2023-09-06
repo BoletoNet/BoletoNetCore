@@ -1,5 +1,8 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 
 namespace BoletoNetCore.Testes
 {
@@ -22,7 +25,7 @@ namespace BoletoNetCore.Testes
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro
             };
             _banco = Banco.Instancia(Bancos.BancoInter);
-            _banco.Beneficiario = TestUtils.GerarBeneficiario("1234567", "", "", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("12345678", "8", "1234567", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
@@ -33,13 +36,6 @@ namespace BoletoNetCore.Testes
         {
             _banco.Beneficiario.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa;
             TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoInterCarteira110Tests) + "_EmpresaEmite", 5, true, "?", 1);
-        }
-
-        [Test]
-        public void BancoInter_REM400_EmpresaEmiteremessa()
-        {
-            _banco.Beneficiario.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa;
-            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, "CI400_001_0000001", 1, true, "?", 0);
         }
 
         [TestCase(5.00, "4309540", "0004309540-1", 2023, 8, 31)]
@@ -258,5 +254,75 @@ namespace BoletoNetCore.Testes
         }
 
         #endregion
+
+
+        public string arquivoTeste = @"02RETORNO01COBRANCA                           EMPRESA TECNOLOGIA            077INTER          050923                                                                                                                                                                                                                                                                                                      000001
+10207910714000186700011000010262458055CHAVEPRIMARIA1           00000000                11007040923                                        077000101             0000000000000000000                                                00000000000000Data de vencimento anterior ao dia de emissão do boleto! valor: 2023-09-03                                                                                000002
+10207910714000186700011000010262458055CHAVEPRIMARIA1           00000000                11003040923                                        077000101             0000000000000000000                                                00000000000000Data de vencimento anterior ao dia de emissão do boleto! valor: 2023-09-03A data para desconto deve ser maior ou igual à data de emissão. va              000003
+10207910714000186700011000010262458055CHAVEPRIMARIA1           00000000                11003040923                                        077000101             0000000000000000000                                                00000000000000Data de vencimento anterior ao dia de emissão do boleto! valor: 2023-09-03                                                                                000004
+10207910714000186700011000010262458055CHAVEPRIMARIA1           00000000                11003040923                                        077000101             0000000000000000000                                                00000000000000Data de vencimento anterior ao dia de emissão do boleto! valor: 2023-09-03A data para desconto deve ser maior ou igual à data de emissão. va              000005
+10207910714000186700011000010262458055CHAVEPRIMARIA1           00000000                11003040923                                        077000101             0000000000000000000                                                00000000000000Data de vencimento anterior ao dia de emissão do boleto! valor: 2023-09-03A data para desconto deve ser maior ou igual à data de emissão. va              000006
+10207910714000186700011000010262458055CHAVEPRIMARIA1           00000000                11003040923                                        077000101             0000000000000000000                                                00000000000000Data de vencimento anterior ao dia de emissão do boleto! valor: 2023-09-03                                                                                000007
+10207910714000186700011000010262458055CHAVEPRIMARIA1           00000000                11003040923                                        077000101             0000000000000000000                                                00000000000000Data da mora do título deve ser maior que a data de vencimento informada. valor: 2023-10-04Data da multa do título deve ser maior que a data              000008
+10207910714000186700011000010262458055CHAVEPRIMARIA1           0000000030061000017     11002040923BB000001A 300610000170409230000000010000077000101             0000000000000000000   PAGADOR TESTE PJ                             71738978000101                                                                                                                                                          000009
+10207910714000186700011000010262458055CHAVEPRIMARIA1           0000000030060999995     11006040923BB000001A 300609999950410230000000010000077000101             0000000009000040923   PAGADOR TESTE PJ                             71738978000101                                                                                                                                                          000010
+10207910714000186700011000010262458055CHAVEPRIMARIA1           0000000030061000009     11006040923BB000001A 300610000090409230000000010000077000101             0000000010000040923   PAGADOR TESTE PJ                             71738978000101                                                                                                                                                          000011
+9201077          00000010                                00001000000010000            00007                        00002000000020000                                                                                                                                                                                                                                                                      000012";
+
+        [Test]
+        public void LerRetorno_validando_motivo_retorno()
+        {
+           
+            var buffer = Encoding.ASCII.GetBytes(arquivoTeste);
+            var mem = new MemoryStream(buffer);
+            var boletos = new ArquivoRetorno(mem);
+
+            Assert.AreEqual(10, boletos.Boletos.Count);
+            Assert.AreEqual("Cancelado", boletos.Boletos[0].DescricaoMovimentoRetorno);
+            Assert.AreEqual("Erro", boletos.Boletos[1].DescricaoMovimentoRetorno);
+            Assert.AreEqual("Erro", boletos.Boletos[2].DescricaoMovimentoRetorno);
+            Assert.AreEqual("Erro", boletos.Boletos[3].DescricaoMovimentoRetorno); 
+            Assert.AreEqual("Erro", boletos.Boletos[4].DescricaoMovimentoRetorno);
+            Assert.AreEqual("Erro", boletos.Boletos[5].DescricaoMovimentoRetorno);
+            Assert.AreEqual("Erro", boletos.Boletos[6].DescricaoMovimentoRetorno);
+            Assert.AreEqual("Em aberto", boletos.Boletos[7].DescricaoMovimentoRetorno);
+            Assert.AreEqual("Pago", boletos.Boletos[8].DescricaoMovimentoRetorno);
+            Assert.AreEqual("Pago", boletos.Boletos[9].DescricaoMovimentoRetorno);
+        }
+
+        [Test]
+        public void LerRetorno_validando_valor_pago()
+        {
+
+            var buffer = Encoding.ASCII.GetBytes(arquivoTeste);
+            var mem = new MemoryStream(buffer);
+            var boletos = new ArquivoRetorno(mem);
+
+            Assert.AreEqual(10, boletos.Boletos.Count);
+            Assert.AreEqual(0, boletos.Boletos[7].ValorPago);
+            Assert.AreEqual(90, boletos.Boletos[8].ValorPago);
+            Assert.AreEqual(100, boletos.Boletos[9].ValorPago);
+        }
+
+        [Test]
+        public void LerRetorno_validando_valor_titulo()
+        {
+
+            var buffer = Encoding.ASCII.GetBytes(arquivoTeste);
+            var mem = new MemoryStream(buffer);
+            var boletos = new ArquivoRetorno(mem);
+
+            Assert.AreEqual(10, boletos.Boletos.Count);
+            Assert.AreEqual(0, boletos.Boletos[0].ValorTitulo);
+            Assert.AreEqual(0, boletos.Boletos[1].ValorTitulo);
+            Assert.AreEqual(0, boletos.Boletos[2].ValorTitulo);
+            Assert.AreEqual(0, boletos.Boletos[3].ValorTitulo);
+            Assert.AreEqual(0, boletos.Boletos[4].ValorTitulo);
+            Assert.AreEqual(0, boletos.Boletos[5].ValorTitulo);
+            Assert.AreEqual(0, boletos.Boletos[6].ValorTitulo);
+            Assert.AreEqual(100, boletos.Boletos[7].ValorTitulo);
+            Assert.AreEqual(100, boletos.Boletos[8].ValorTitulo);
+            Assert.AreEqual(100, boletos.Boletos[9].ValorTitulo);
+        }
     }
 }

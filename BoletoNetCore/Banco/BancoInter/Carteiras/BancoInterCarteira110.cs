@@ -33,7 +33,8 @@ namespace BoletoNetCore
                 var carteira = boleto.Carteira.PadLeft(3, '0');
                 boleto.NossoNumero = boleto.NossoNumero.PadLeft(10, '0');
                 boleto.NossoNumeroDV = (agencia + carteira + boleto.NossoNumero).CalcularDVBancoInter();
-                boleto.NossoNumeroFormatado = boleto.NossoNumero + "-" + boleto.NossoNumeroDV;
+                var contaBancaria = boleto.Banco.Beneficiario.ContaBancaria;
+                boleto.NossoNumeroFormatado = $"{contaBancaria.Agencia}{contaBancaria.DigitoAgencia}/{contaBancaria.CarteiraPadrao}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
             }
             
 
@@ -42,7 +43,7 @@ namespace BoletoNetCore
         public virtual string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
             var contaBancaria = boleto.Banco.Beneficiario.ContaBancaria;
-            return $"{contaBancaria.Agencia}{contaBancaria.CarteiraPadrao}{boleto.Banco.Beneficiario.Codigo}{boleto.NossoNumero}{boleto.NossoNumeroDV}";
+            return $"{contaBancaria.Agencia}{contaBancaria.CarteiraPadrao}{boleto.Banco.Beneficiario.CodigoTransmissao}{boleto.NossoNumero}{boleto.NossoNumeroDV}";
         }
     }
 }

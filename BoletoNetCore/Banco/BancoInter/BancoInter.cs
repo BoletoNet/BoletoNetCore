@@ -11,7 +11,7 @@ namespace BoletoNetCore
         {
             Codigo = 77;
             Nome = "Inter";
-            Digito = "1";
+            Digito = "9";
             IdsRetornoCnab400RegistroDetalhe = new List<string> { "1" };
             RemoveAcentosArquivoRemessa = true;
         }
@@ -20,7 +20,7 @@ namespace BoletoNetCore
         {
             var contaBancaria = Beneficiario.ContaBancaria;
 
-            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO.", "", "", 9);
+            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ O VENCIMENTO.", "", "", 10);
 
             Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia}{contaBancaria.DigitoAgencia}/{Beneficiario.Codigo}{Beneficiario.CodigoDV}";
 

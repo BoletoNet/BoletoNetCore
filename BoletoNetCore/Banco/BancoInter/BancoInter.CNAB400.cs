@@ -67,23 +67,6 @@ namespace BoletoNetCore
             }
         }
 
-        private string DescricaoOcorrenciaCnab400(string codigo)
-        {
-            switch (codigo)
-            {
-                case "02":
-                    return "Em aberto";
-                case "03":
-                    return "Erro";
-                case "06":
-                    return "Pago";
-                case "07":
-                    return "Cancelado";
-                default:
-                    return "";
-            }
-        }
-
         private string GerarDetalheRemessaCNAB400Registro1(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
@@ -100,7 +83,7 @@ namespace BoletoNetCore
                 if(boleto.PercentualMulta > 0 || boleto.ValorMulta > 0)
                 {
                     if (boleto.DataVencimento.ToString("dd/MM/yyyy") == boleto.DataMulta.ToString("dd/MM/yyyy"))
-                        boleto.DataMulta.AddDays(1);
+                        boleto.DataMulta = boleto.DataVencimento.AddDays(1);
 
                     if (boleto.ValorMulta > 0)
                     {
@@ -121,7 +104,7 @@ namespace BoletoNetCore
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0066, 001, 0, "0", '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0067, 013, 2, "0", '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0080, 004, 2, "0", '0');
-                    reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0084, 006, 0, "0", '0');
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0084, 006, 0, "0", '0');
                 }
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0090, 011, 0, boleto.NossoNumero + boleto.NossoNumeroDV, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0101, 008, 0, string.Empty, ' ');
@@ -140,12 +123,12 @@ namespace BoletoNetCore
                         throw new Exception("Espécie do título não suportada: (" + boleto.EspecieDocumento + ").");
                 }
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0150, 001, 0, "N", ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0151, 006, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0151, 006, 0, boleto.DataEmissao, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0157, 003, 0, string.Empty, ' ');
                 if (boleto.PercentualJurosDia > 0 || boleto.ValorJurosDia > 0)
                 {
                     if (boleto.DataVencimento.ToString("dd/MM/yyyy") == boleto.DataJuros.ToString("dd/MM/yyyy"))
-                        boleto.DataJuros.AddDays(1);
+                        boleto.DataJuros = boleto.DataVencimento.AddDays(1);
 
                     if (boleto.ValorJurosDia > 0)
                     {
@@ -166,14 +149,14 @@ namespace BoletoNetCore
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0160, 001, 0, "0", '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0161, 013, 2, "0", '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0174, 004, 2, "0", '0');
-                    reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0178, 006, 0, "0", '0');
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0178, 006, 0, "0", '0');
                 }
                 if (boleto.ValorDesconto == 0)
                 {
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0184, 001, 0, "0", '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0185, 013, 2, "0", '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0198, 004, 2, "0", '0');
-                    reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0202, 006, 0, "0", '0');
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0202, 006, 0, "0", '0');
                 }
                 else
                 {
@@ -203,7 +186,7 @@ namespace BoletoNetCore
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(boleto.MensagemArquivoRemessa) || boleto.ValorDesconto2 > 0 || boleto.ValorDesconto3 > 0)
+                if (string.IsNullOrWhiteSpace(boleto.MensagemArquivoRemessa) && boleto.ValorDesconto2 == 0 && boleto.ValorDesconto3 == 0)
                     return "";
 
                 numeroRegistroGeral++;
@@ -212,7 +195,7 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 312, 0, boleto.MensagemArquivoRemessa, ' '); // 4 campos de 75 caracteres cada.
                 if (boleto.ValorDesconto2 == 0)
                 {
-                    reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0314, 006, 0, "0", '0');
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0314, 006, 0, "0", '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0320, 013, 2, "0", '0');
                 }
                 else
@@ -224,7 +207,7 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0337, 010, 0, string.Empty, ' ');
                 if (boleto.ValorDesconto3 == 0)
                 {
-                    reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0347, 006, 0, "0", '0');
+                    reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0347, 006, 0, "0", '0');
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0353, 013, 2, "0", '0');
                 }
                 else
@@ -270,53 +253,39 @@ namespace BoletoNetCore
             try
             {
                 // Nº Controle do Participante
-                boleto.NumeroControleParticipante = registro.Substring(37, 25);
+                boleto.NumeroControleParticipante = registro.Substring(38, 25);
 
                 // Identificação do Título no Banco
-                boleto.NossoNumero = registro.Substring(70, 10); //Sem o DV
-                boleto.NossoNumeroDV = registro.Substring(80, 1); //DV
+                boleto.NossoNumero = registro.Substring(71, 10); //Sem o DV
+                boleto.NossoNumeroDV = registro.Substring(81, 1); //DV
                 boleto.NossoNumeroFormatado = boleto.NossoNumero + "-" + boleto.NossoNumeroDV;
 
                 // Carteira
-                boleto.Carteira = registro.Substring(86, 3);
+                boleto.Carteira = registro.Substring(87, 3);
                 boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 // Identificação de Ocorrência
-                boleto.CodigoMovimentoRetorno = registro.Substring(89, 2);
-                boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
+                boleto.CodigoMovimentoRetorno = registro.Substring(90, 2);
+                boleto.DescricaoMovimentoRetorno = DescricaoMovimentoRetornoCnab400(boleto.CodigoMovimentoRetorno, registro);
 
                 // Data Ocorrência no Banco
-                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(91, 6)).ToString("##-##-##"));
+                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(92, 6)).ToString("##-##-##"));
 
                 // Número do Documento
-                boleto.NumeroDocumento = registro.Substring(97, 10);
+                boleto.NumeroDocumento = registro.Substring(98, 10);
 
                 //Data Vencimento do Título
-                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(118, 6)).ToString("##-##-##"));
+                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(119, 6)).ToString("##-##-##"));
 
                 //Valores do Título
-                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(124, 13)) / 100;
-                boleto.ValorPago = Convert.ToDecimal(registro.Substring(159, 13)) / 100;
-                // Data do Crédito
-                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(172, 6)).ToString("##-##-##"));
+                boleto.ValorTitulo = string.IsNullOrWhiteSpace(registro.Substring(125, 13)) ? 0 : Convert.ToDecimal(registro.Substring(125, 13)) / 100;
+                boleto.ValorPago = string.IsNullOrWhiteSpace(registro.Substring(160, 13)) ? 0 : Convert.ToDecimal(registro.Substring(160, 13)) / 100;
+                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(173, 6)).ToString("##-##-##"));
 
-
-
-                //boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
-                //boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(188, 13)) / 100;
-                //boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
-                //boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
-                
-                //boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
-                //boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
-
-
-                //boleto.ValorPago += boleto.ValorJurosDia;
-
-                
-
-                // Identificação de Ocorrência - Código Auxiliar
-                boleto.CodigoMotivoOcorrencia = registro.Substring(240, 140);
+                boleto.ListMotivosOcorrencia = new List<string>
+                    {
+                        registro.Substring(241, 140).Trim()
+                    };
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
@@ -334,6 +303,23 @@ namespace BoletoNetCore
         public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
         {
             
+        }
+
+        private string DescricaoMovimentoRetornoCnab400(string codigo, string registro)
+        {
+            switch (codigo)
+            {
+                case "02":
+                    return "Em aberto";
+                case "03":
+                    return "Erro";
+                case "06":
+                    return "Pago";
+                case "07":
+                    return "Cancelado";
+                default:
+                    return "";
+            }
         }
 
         #endregion
