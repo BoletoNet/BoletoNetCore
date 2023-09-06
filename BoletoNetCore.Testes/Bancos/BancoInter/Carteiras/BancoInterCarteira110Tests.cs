@@ -38,11 +38,11 @@ namespace BoletoNetCore.Testes
             TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoInterCarteira110Tests) + "_EmpresaEmite", 5, true, "?", 1);
         }
 
-        [TestCase(5.00, "4309540", "0004309540-1", 2023, 8, 31)]
-        [TestCase(5.00, "1", "0000000001-4", 2023, 8, 31)]
-        [TestCase(5.00, "4309541", "0004309541-9", 2023, 8, 31)]
-        [TestCase(5.00, "4309542", "0004309542-7", 2023, 8, 31)]
-        [TestCase(5.00, "4309543", "0004309543-5", 2023, 8, 31)]
+        [TestCase(5.00, "4309540", "00019/110/0004309540-1", 2023, 8, 31)]
+        [TestCase(5.00, "1", "00019/110/0000000001-4", 2023, 8, 31)]
+        [TestCase(5.00, "4309541", "00019/110/0004309541-9", 2023, 8, 31)]
+        [TestCase(5.00, "4309542", "00019/110/0004309542-7", 2023, 8, 31)]
+        [TestCase(5.00, "4309543", "00019/110/0004309543-5", 2023, 8, 31)]
         public void Deve_criar_boleto_BancoInter_com_tipo_emissao_empresa_e_nosso_numero_formatado_valido(decimal valorTitulo, string nossoNumero, string nossoNumeroFormatado, params int[] anoMesDia)
         {
             // Ambiente - Emissão pela empresa
@@ -153,11 +153,11 @@ namespace BoletoNetCore.Testes
             TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoInterCarteira110Tests) + "_BancoEmite", 5, true, "?", 0);
         }
 
-        [TestCase(5.00, "4309540", "0004309540-1", 2023, 8, 31)]
-        [TestCase(5.00, "1", "0000000001-4", 2023, 8, 31)]
-        [TestCase(5.00, "4309541", "0004309541-9", 2023, 8, 31)]
-        [TestCase(5.00, "4309542", "0004309542-7", 2023, 8, 31)]
-        [TestCase(5.00, "4309543", "0004309543-5", 2023, 8, 31)]
+        [TestCase(5.00, "4309540", "00019/110/0004309540-1", 2023, 8, 31)]
+        [TestCase(5.00, "1", "00019/110/0000000001-4", 2023, 8, 31)]
+        [TestCase(5.00, "4309541", "00019/110/0004309541-9", 2023, 8, 31)]
+        [TestCase(5.00, "4309542", "00019/110/0004309542-7", 2023, 8, 31)]
+        [TestCase(5.00, "4309543", "00019/110/0004309543-5", 2023, 8, 31)]
         public void Deve_criar_boleto_BancoInter_com_tipo_emissao_banco_e_nosso_numero_formatado_valido(decimal valorTitulo, string nossoNumero, string nossoNumeroFormatado, params int[] anoMesDia)
         {
             _banco.Beneficiario.ContaBancaria.TipoImpressaoBoleto = TipoImpressaoBoleto.Banco;
