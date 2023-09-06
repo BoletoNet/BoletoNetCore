@@ -1,8 +1,25 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>BoletoNetCore.PDF</PackageId>
+    <title>BoletoNetCore.PDF</title>
+    <version>3.0.0</version>
+    <authors>BoletoNetCore</authors>
+    <owners>BoletoNetCore</owners>
+    <projectUrl>https://github.com/BoletoNet/BoletoNetCore/</projectUrl>
+    <iconUrl>https://https://avatars2.githubusercontent.com/u/10621326?v=3amp;s=200</iconUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>
+      BoletoNetCore is a library developed for use in Brazil, given it has been programmed with Brazilian retail legislation and business rules for bank registered billing integration.
+      Boleto.Net é um componente desenvolvido em C# e ASP.Net e contempla as seguintes funcionalidades:
+      Emissão e Impressão de Boletos Bancários
+      Geração de Arquivo de Remessa (CNAB 240 e 400)
+      Leitura do Arquivo de Retorno (CNAB 240 e 400)</description>
+    <summary>BoletoNetCore is a library developed for use in Brazil, given it has been programmed with Brazilian retail legislation and business rules for bank registered billing integration.</summary>
+    <releaseNotes>A versão 3.0 está sendo reescrita. Alguns bancos/carteiras podem não estar disponíveis.</releaseNotes>
+    <tags>boleto cnab banco pdf</tags>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
@@ -18,15 +35,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="Rotativa\Linux\libwkhtmltox.so">
+    <Content Include="Rotativa\Windows\**\*">
+      <Pack>true</Pack>
+      <PackagePath>contentFiles\Rotativa\Windows</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Rotativa\Windows\wkhtmltopdf.exe">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Rotativa\Linux\**\*">
+      <Pack>true</Pack>
+      <PackagePath>contentFiles\Rotativa\Linux</PackagePath>
+      <PackageCopyToOutput>true</PackageCopyToOutput>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="Rotativa\Windows\wkhtmltox.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
+
 
 </Project>

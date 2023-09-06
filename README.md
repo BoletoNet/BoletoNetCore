@@ -46,6 +46,18 @@ Responsável por guardar toda a lógica de leitura de remessa e retorno de arqui
 ### BoletoNetCore.Pdf
 Responsável pelos serviços de  impessão em PDF. 
 
+Obs.: Para geração de PDF em linux (ambientes baseados em Debian), é necessário a instalação das seguintes dependências:
+
+```bash
+apt-get install -y libfontconfig1 libxrender1 libxext6
+```
+
+Também é necessário garantir a permissão de execução para o binário responsável por gerar o PDF:
+
+```bash
+chmod +x "<Caminho do projeto>/BoletoNetCore.Testes/bin/Debug/net7.0/Rotativa/Linux/wkhtmltopdf"
+```
+
 ### BoletoNetCore.Testes
 Validação e testes de toda a lógica dos boletos.
 
