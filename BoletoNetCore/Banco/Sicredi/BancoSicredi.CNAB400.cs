@@ -296,6 +296,7 @@ namespace BoletoNetCore
 
                 //Valores do Título
                 boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
+                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
                 boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
                 boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
                 boleto.ValorPago = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
