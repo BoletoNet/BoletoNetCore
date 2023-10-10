@@ -20,5 +20,10 @@ namespace BoletoNetCore
         public void FormataBeneficiario()
         {
         }
+
+        public string GerarMensagemRemessa(Boleto boleto, ref int numeroRegistro)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

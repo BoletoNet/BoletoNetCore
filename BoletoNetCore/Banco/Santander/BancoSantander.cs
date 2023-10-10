@@ -41,9 +41,9 @@ namespace BoletoNetCore
             return "";
         }
 
-       
-
-
-
+        public string GerarMensagemRemessa(Boleto boleto, ref int numeroRegistro)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

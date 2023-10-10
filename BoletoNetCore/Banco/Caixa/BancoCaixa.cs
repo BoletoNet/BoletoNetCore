@@ -54,6 +54,9 @@ namespace BoletoNetCore
             return numeroSequencial.ToString();
         }
 
-
+        public string GerarMensagemRemessa(Boleto boleto, ref int numeroRegistro)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

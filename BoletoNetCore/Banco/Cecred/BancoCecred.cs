@@ -28,5 +28,10 @@ namespace BoletoNetCore
             contaBancaria.FormatarDados("Pagar preferencialmente nas cooperativas do Sistema Ailos.", "", "", 7);
             Beneficiario.CodigoFormatado = contaBancaria.Agencia + "-" + contaBancaria.DigitoAgencia + "    " + Beneficiario.ContaBancaria.Conta + "-" + Beneficiario.ContaBancaria.DigitoConta;
         }
+
+        public string GerarMensagemRemessa(Boleto boleto, ref int numeroRegistro)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

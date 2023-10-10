@@ -30,5 +30,10 @@ namespace BoletoNetCore
         {
             return $"CI400_001_{numeroSequencial.ToString("D7")}.REM";
         }
+
+        public string GerarMensagemRemessa(Boleto boleto, ref int numeroRegistro)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

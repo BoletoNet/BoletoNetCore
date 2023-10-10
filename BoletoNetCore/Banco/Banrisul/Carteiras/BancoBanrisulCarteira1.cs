@@ -44,6 +44,13 @@ namespace BoletoNetCore
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
             var contaBancaria = boleto.Banco.Beneficiario.ContaBancaria;
+
+            if (contaBancaria.Conta.Length < 7)
+                throw new Exception($"Número da conta ({contaBancaria.Conta}) deve conter no mínimo 7 digitos");
+            if (contaBancaria.Agencia.Length != 4)
+                throw new Exception($"Número da agência ({contaBancaria.Agencia}) deve conter 4 digitos");
+
+
             var campoLivre = $"21{contaBancaria.Agencia}{contaBancaria.Conta.Substring(0,7)}{boleto.NossoNumero}40";
             int dv1 = Mod10Banrisul(campoLivre);
             int dv1e2 = Mod11Banrisul(campoLivre, dv1); // O módulo 11 sempre devolve os dois Dígitos, pois, as vezes o dígito calculado no mod10 será incrementado em 1
