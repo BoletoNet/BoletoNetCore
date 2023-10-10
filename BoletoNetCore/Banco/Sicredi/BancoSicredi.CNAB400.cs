@@ -195,6 +195,34 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
             }
         }
+        public string GerarMensagemRemessa(Boleto boleto, ref int numeroRegistro)
+        {
+            try
+            {
+                numeroRegistro++;
+                TRegistroEDI reg = new TRegistroEDI();
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0001, 001, 0, "2", ' '));                                                    //001-001    Identificação do registro detalhe 
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 011, 0, string.Empty, ' '));                                           //002-012    Filler
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0013, 009, 0, boleto.NossoNumero + boleto.NossoNumeroDV, '0'));              //013-021    Nosso número 
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0022, 080, 0, boleto.MensagemProtesto, ' '));                                //022-101    Instrução para impressão no boleto
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 080, 0, boleto.MensagemLivre, ' '));                                   //102 a 181  Instrução para impressão no boleto
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0182, 080, 0, string.Empty, ' '));                                           //182 a 261  Instrução para impressão no boleto
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0262, 080, 0, string.Empty, ' '));                                           //262 a 341  Instrução para impressão no boleto
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0342, 010, 0, boleto.NumeroDocumento, ' '));                                 //342 a 351  Seu Número
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0352, 043, 0, string.Empty, ' '));                                           //352 a 394  Filler
+                reg.CamposEDI.Add(new TCampoRegistroEDI(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistro, '0'));                                         //395 a 400  Número seqüencial do registro 
+
+                reg.CodificarLinha();
+
+                string _detalhe = Utils.SubstituiCaracteresEspeciais(reg.LinhaRegistro);
+
+                return _detalhe;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
+            }
+        }
 
         private TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie)
         {
