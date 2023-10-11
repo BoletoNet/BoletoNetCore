@@ -70,16 +70,18 @@ namespace BoletoNetCore
                     boleto.Banco = Banco;
 
                     // Detalhe do arquivo
+                    strline = boleto.Banco.GerarDetalheRemessa(TipoArquivo, boleto, ref numeroRegistroGeral);
+                    if (string.IsNullOrWhiteSpace(strline))
+                        throw new Exception("Registro DETALHE obrigatório.");
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
 
                     if (boleto.Banco.GerarMensagemRemessa(TipoArquivo, boleto, ref numeroRegistroGeral) != null)
                     {
                         strline = boleto.Banco.GerarMensagemRemessa(TipoArquivo, boleto, ref numeroRegistroGeral);
+                        strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
+                        arquivoRemessa.WriteLine(strline);
                     }
-                    
-                    strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
-                    arquivoRemessa.WriteLine(strline);
 
                     // Ajusta Totalizadores
                     valorBoletoGeral += boleto.ValorTitulo;
