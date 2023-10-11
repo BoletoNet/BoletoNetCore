@@ -34,9 +34,9 @@ namespace BoletoNetCore
             return $"{DateTime.Now.ToString("ddMMyy")}{numeroSequencial.ToString().PadLeft(9, '0').Right(2)}.rem"; ;
         }
 
-        public string GerarMensagemRemessa(Boleto boleto, ref int numeroRegistro)
+        public string GerarMensagemRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
