@@ -219,6 +219,8 @@ namespace BoletoNetCore
         public string MensagemInstrucoesCaixa { get; set; } = string.Empty;
         public string MensagemInstrucoesCaixaFormatado { get; set; } = string.Empty;
         public string MensagemArquivoRemessa { get; set; } = string.Empty;
+        public string MensagemProtesto { get; set; } = string.Empty;
+        public string MensagemLivre { get; set; } = string.Empty;
         public string RegistroArquivoRetorno { get; set; } = string.Empty;
 
         /// <summary>

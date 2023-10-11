@@ -47,6 +47,17 @@ namespace BoletoNetCore
             return string.Format("{0}{1}{2}.{3}", Beneficiario.Codigo, mes, dia, $"RM{(sequencial == 10 ? 0 : sequencial)}");
 
         }
-       
+
+        public string GerarMensagemRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        {
+            if (tipoArquivo is TipoArquivo.CNAB400)
+            {
+                return GerarMensagemRemessa(boleto, ref numeroRegistro);
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

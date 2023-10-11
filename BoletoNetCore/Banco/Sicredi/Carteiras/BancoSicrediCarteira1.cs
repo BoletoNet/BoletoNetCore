@@ -14,6 +14,16 @@ namespace BoletoNetCore
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
+
+            if (boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta.Length != 2)
+                throw new NotImplementedException($"Não foi possível formatar o campo livre: Codigo de Operação da conta ({boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta}) não possui 2 dígitos.");
+
+            if (boleto.Banco.Beneficiario.Codigo.Length != 5)
+                throw new NotImplementedException($"Não foi possível formatar o campo livre: Conta ({boleto.Banco.Beneficiario.Codigo}) não possui 5 dígitos.");
+
+            if (boleto.Banco.Beneficiario.ContaBancaria.Agencia.Length != 4)
+                throw new NotImplementedException($"Não foi possível formatar o campo livre: Numero de Agencia ({boleto.Banco.Beneficiario.ContaBancaria.Agencia}) não possui 4 dígitos.");
+
             string CampoLivre = boleto.Carteira + "1" +
                 boleto.NossoNumero + boleto.NossoNumeroDV +
                 boleto.Banco.Beneficiario.ContaBancaria.Agencia +

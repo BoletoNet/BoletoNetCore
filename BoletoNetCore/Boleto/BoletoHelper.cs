@@ -21,18 +21,11 @@ namespace BoletoNetCore
 
         public static Stream GerarRemessa(this Boletos boletos, int numArquivoRemessa, TipoArquivo tipoArquivo = TipoArquivo.CNAB240 )
         {
-            ArquivoRemessa rem = new ArquivoRemessa(boletos.Banco, TipoArquivo.CNAB240, numArquivoRemessa);
+            ArquivoRemessa rem = new ArquivoRemessa(boletos.Banco, tipoArquivo, numArquivoRemessa);
             MemoryStream ms = new MemoryStream(2048);
-            try
-            {
-                rem.GerarArquivoRemessa(boletos, ms, false);
-                ms.Position = 0;
-                return ms as Stream;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            rem.GerarArquivoRemessa(boletos, ms, false);
+            ms.Position = 0;
+            return ms as Stream;
         }
 
         /// <summary>

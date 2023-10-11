@@ -58,6 +58,11 @@ namespace BoletoNetCore
         string GerarDetalheRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro);
 
         /// <summary>
+        /// Registra a mensagem de preotesto ou mensagem livre na remessa.
+        /// </summary>
+        string GerarMensagemRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro);
+
+        /// <summary>
         /// Gera o Trailer do arquivo de remessa
         /// </summary>
         string GerarTrailerRemessa(TipoArquivo tipoArquivo, int numeroArquivoRemessa,

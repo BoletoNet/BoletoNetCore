@@ -26,5 +26,10 @@ namespace BoletoNetCore
         {
             return $"cb{DateTime.Now.ToString("ddMM")}{numeroSequencial.ToString("00")}.rem"; ;
         }
+
+        public string GerarMensagemRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        {
+                return null;       
+        }
     }
 }
