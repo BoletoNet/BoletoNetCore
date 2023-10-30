@@ -76,9 +76,10 @@ namespace BoletoNetCore
                     strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                     arquivoRemessa.WriteLine(strline);
 
-                    if (boleto.Banco.GerarMensagemRemessa(TipoArquivo, boleto, ref numeroRegistroGeral) != null)
+                    var mensagemRemessa = boleto.Banco.GerarMensagemRemessa(TipoArquivo, boleto, ref numeroRegistroGeral);
+                    if (mensagemRemessa != null)
                     {
-                        strline = boleto.Banco.GerarMensagemRemessa(TipoArquivo, boleto, ref numeroRegistroGeral);
+                        strline = mensagemRemessa;
                         strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
                         arquivoRemessa.WriteLine(strline);
                     }
