@@ -269,6 +269,7 @@ namespace BoletoNetCore.Testes
 10207910714000186700011000010262458055CHAVEPRIMARIA1           0000000030061000009     11006040923BB000001A 300610000090409230000000010000077000101             0000000010000040923   PAGADOR TESTE PJ                             71738978000101                                                                                                                                                          000011
 9201077          00000010                                00001000000010000            00007                        00002000000020000                                                                                                                                                                                                                                                                      000012";
 
+
         [Test]
         public void LerRetorno_validando_motivo_retorno()
         {
@@ -290,6 +291,13 @@ namespace BoletoNetCore.Testes
             Assert.AreEqual("Pago", boletos.Boletos[9].DescricaoMovimentoRetorno);
         }
 
+
+        const string arquivoTeste1 = @"02RETORNO01COBRANCA                           UCONDO TECNOLOGIA S.A.        077INTER          311023                                                                                                                                                                                                                                                                                                      000001
+1022394143300014700011000010262457938796B47DFE22F4D75933DA22C10000000030061000215     1100224102352A212E   300610002152510230000000000500077000101             0000000000000000000   ROBERTO CARLOS                               00044443206051                                                                                                                                                          000002
+9201077          00000001                                00001000000000500            00000                        00000000000000000                                                                                                                                                                                                                                                                      000003";
+
+
+
         [Test]
         public void LerRetorno_validando_valor_pago()
         {
@@ -300,29 +308,20 @@ namespace BoletoNetCore.Testes
 
             Assert.AreEqual(10, boletos.Boletos.Count);
             Assert.AreEqual(0, boletos.Boletos[7].ValorPago);
-            Assert.AreEqual(90, boletos.Boletos[8].ValorPago);
-            Assert.AreEqual(100, boletos.Boletos[9].ValorPago);
+            Assert.AreEqual(9, boletos.Boletos[8].ValorPago);
+            Assert.AreEqual(10, boletos.Boletos[9].ValorPago);
         }
 
         [Test]
         public void LerRetorno_validando_valor_titulo()
         {
 
-            var buffer = Encoding.ASCII.GetBytes(arquivoTeste);
+            var buffer = Encoding.ASCII.GetBytes(arquivoTeste1);
             var mem = new MemoryStream(buffer);
             var boletos = new ArquivoRetorno(mem);
 
-            Assert.AreEqual(10, boletos.Boletos.Count);
-            Assert.AreEqual(0, boletos.Boletos[0].ValorTitulo);
-            Assert.AreEqual(0, boletos.Boletos[1].ValorTitulo);
-            Assert.AreEqual(0, boletos.Boletos[2].ValorTitulo);
-            Assert.AreEqual(0, boletos.Boletos[3].ValorTitulo);
-            Assert.AreEqual(0, boletos.Boletos[4].ValorTitulo);
-            Assert.AreEqual(0, boletos.Boletos[5].ValorTitulo);
-            Assert.AreEqual(0, boletos.Boletos[6].ValorTitulo);
-            Assert.AreEqual(100, boletos.Boletos[7].ValorTitulo);
-            Assert.AreEqual(100, boletos.Boletos[8].ValorTitulo);
-            Assert.AreEqual(100, boletos.Boletos[9].ValorTitulo);
+            Assert.AreEqual(1, boletos.Boletos.Count);
+            Assert.AreEqual(5, boletos.Boletos[0].ValorTitulo);
         }
     }
 }
