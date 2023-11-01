@@ -253,38 +253,38 @@ namespace BoletoNetCore
             try
             {
                 // Nº Controle do Participante
-                boleto.NumeroControleParticipante = registro.Substring(38, 25);
+                boleto.NumeroControleParticipante = registro.Substring(37, 25);
 
                 // Identificação do Título no Banco
-                boleto.NossoNumero = registro.Substring(71, 10); //Sem o DV
-                boleto.NossoNumeroDV = registro.Substring(81, 1); //DV
+                boleto.NossoNumero = registro.Substring(70, 10); //Sem o DV
+                boleto.NossoNumeroDV = registro.Substring(80, 1); //DV
                 boleto.NossoNumeroFormatado = boleto.NossoNumero + "-" + boleto.NossoNumeroDV;
 
                 // Carteira
-                boleto.Carteira = registro.Substring(87, 3);
+                boleto.Carteira = registro.Substring(86, 3);
                 boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 // Identificação de Ocorrência
-                boleto.CodigoMovimentoRetorno = registro.Substring(90, 2);
+                boleto.CodigoMovimentoRetorno = registro.Substring(80, 2);
                 boleto.DescricaoMovimentoRetorno = DescricaoMovimentoRetornoCnab400(boleto.CodigoMovimentoRetorno, registro);
 
                 // Data Ocorrência no Banco
-                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(92, 6)).ToString("##-##-##"));
+                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(91, 6)).ToString("##-##-##"));
 
                 // Número do Documento
-                boleto.NumeroDocumento = registro.Substring(98, 10);
+                boleto.NumeroDocumento = registro.Substring(97, 10);
 
                 //Data Vencimento do Título
-                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(119, 6)).ToString("##-##-##"));
+                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(118, 6)).ToString("##-##-##"));
 
                 //Valores do Título
-                boleto.ValorTitulo = string.IsNullOrWhiteSpace(registro.Substring(125, 13)) ? 0 : Convert.ToDecimal(registro.Substring(125, 13)) / 100;
-                boleto.ValorPago = string.IsNullOrWhiteSpace(registro.Substring(160, 13)) ? 0 : Convert.ToDecimal(registro.Substring(160, 13)) / 100;
-                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(173, 6)).ToString("##-##-##"));
+                boleto.ValorTitulo = string.IsNullOrWhiteSpace(registro.Substring(124, 13)) ? 0 : Convert.ToDecimal(registro.Substring(124, 13)) / 100;
+                boleto.ValorPago = string.IsNullOrWhiteSpace(registro.Substring(159, 13)) ? 0 : Convert.ToDecimal(registro.Substring(159, 13)) / 100;
+                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(172, 6)).ToString("##-##-##"));
 
                 boleto.ListMotivosOcorrencia = new List<string>
                     {
-                        registro.Substring(241, 140).Trim()
+                        registro.Substring(240, 140).Trim()
                     };
 
                 // Registro Retorno
