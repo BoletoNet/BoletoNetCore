@@ -265,7 +265,7 @@ namespace BoletoNetCore
                 boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 // Identificação de Ocorrência
-                boleto.CodigoMovimentoRetorno = registro.Substring(90, 2);
+                boleto.CodigoMovimentoRetorno = registro.Substring(89, 2);
                 boleto.DescricaoMovimentoRetorno = DescricaoMovimentoRetornoCnab400(boleto.CodigoMovimentoRetorno, registro);
 
                 // Data Ocorrência no Banco
