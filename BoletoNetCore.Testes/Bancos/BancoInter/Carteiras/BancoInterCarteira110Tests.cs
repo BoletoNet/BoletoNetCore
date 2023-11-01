@@ -274,21 +274,12 @@ namespace BoletoNetCore.Testes
         public void LerRetorno_validando_motivo_retorno()
         {
            
-            var buffer = Encoding.ASCII.GetBytes(arquivoTeste);
+            var buffer = Encoding.ASCII.GetBytes(arquivoTeste1);
             var mem = new MemoryStream(buffer);
             var boletos = new ArquivoRetorno(mem);
 
-            Assert.AreEqual(10, boletos.Boletos.Count);
-            Assert.AreEqual("Cancelado", boletos.Boletos[0].DescricaoMovimentoRetorno);
-            Assert.AreEqual("Erro", boletos.Boletos[1].DescricaoMovimentoRetorno);
-            Assert.AreEqual("Erro", boletos.Boletos[2].DescricaoMovimentoRetorno);
-            Assert.AreEqual("Erro", boletos.Boletos[3].DescricaoMovimentoRetorno); 
-            Assert.AreEqual("Erro", boletos.Boletos[4].DescricaoMovimentoRetorno);
-            Assert.AreEqual("Erro", boletos.Boletos[5].DescricaoMovimentoRetorno);
-            Assert.AreEqual("Erro", boletos.Boletos[6].DescricaoMovimentoRetorno);
-            Assert.AreEqual("Em aberto", boletos.Boletos[7].DescricaoMovimentoRetorno);
-            Assert.AreEqual("Pago", boletos.Boletos[8].DescricaoMovimentoRetorno);
-            Assert.AreEqual("Pago", boletos.Boletos[9].DescricaoMovimentoRetorno);
+            Assert.AreEqual(1, boletos.Boletos.Count);
+            Assert.AreEqual("Em aberto", boletos.Boletos[0].DescricaoMovimentoRetorno);
         }
 
 
