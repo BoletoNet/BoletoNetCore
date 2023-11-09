@@ -76,6 +76,9 @@ namespace BoletoNetCore
             // Segmento P (Obrigatório)
             var detalhe = GerarDetalheSegmentoPRemessaCNAB240(boleto, ref registro);
 
+
+            if (boleto.CodigoMotivoOcorrencia == "02")
+                return detalhe;
             // Segmento Q (Obrigatório)
             detalhe += Environment.NewLine;
             detalhe += GerarDetalheSegmentoQRemessaCNAB240(boleto, ref registro);
@@ -95,6 +98,7 @@ namespace BoletoNetCore
                 detalhe += Environment.NewLine;
                 detalhe += strline;
             }
+
             return detalhe;
         }
 
