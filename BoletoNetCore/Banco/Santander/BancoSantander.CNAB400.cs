@@ -114,7 +114,7 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0148, 002, 0, boleto.EspecieDocumento.GetHashCode(), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0150, 001, 0, boleto.Aceite, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0151, 006, 0, boleto.DataEmissao, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0157, 002, 0, "00", '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0157, 002, 0, boleto.CodigoInstrucao1, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0159, 002, 0, "00", '0');
                 if (boleto.ValorJurosDia > 0)
                 {
