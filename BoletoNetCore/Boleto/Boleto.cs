@@ -238,6 +238,7 @@ namespace BoletoNetCore
         public CodigoBarra CodigoBarra { get; } = new CodigoBarra();
         public ObservableCollection<GrupoDemonstrativo> Demonstrativos { get; } = new ObservableCollection<GrupoDemonstrativo>();
         public string ParcelaInformativo { get; set; } = string.Empty;
+        public string ByteNossoNumero { get; set; } = "2";
 
         public void ValidarDados()
         {
