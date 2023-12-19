@@ -22,7 +22,7 @@ namespace BoletoNetCore.Testes
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.Santander);
-            _banco.Beneficiario = TestUtils.GerarBeneficiario("1234567", "", "12340000123456701236", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("1234567", "", "123400001234567", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
