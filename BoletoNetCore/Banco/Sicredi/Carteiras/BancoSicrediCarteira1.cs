@@ -52,7 +52,7 @@ namespace BoletoNetCore
                 throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter até 5 dígitos ou exatamente 6 ou 8 dígitos.");
             else if (boleto.NossoNumero.Length <= 5)
             {
-                boleto.NossoNumero = string.Format("{0}2{1}", boleto.DataEmissao.ToString("yy"), boleto.NossoNumero.PadLeft(5, '0'));
+                boleto.NossoNumero = string.Format("{0}{1}{2}", boleto.DataEmissao.ToString("yy"), boleto.ByteNossoNumero, boleto.NossoNumero.PadLeft(5, '0'));
             }
             else if (boleto.NossoNumero.Length == 6)
             {
