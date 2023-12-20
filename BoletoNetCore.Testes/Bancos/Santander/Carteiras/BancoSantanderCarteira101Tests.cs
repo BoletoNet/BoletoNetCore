@@ -12,17 +12,17 @@ namespace BoletoNetCore.Testes
         {
             var contaBancaria = new ContaBancaria
             {
-                Agencia = "0097",
-                DigitoAgencia = "",
-                Conta = "13008693",
-                DigitoConta = "2",
+                Agencia = "1234",
+                DigitoAgencia = "5",
+                Conta = "12345678",
+                DigitoConta = "9",
                 CarteiraPadrao = "101",
                 TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
                 TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
             };
             _banco = Banco.Instancia(Bancos.Santander);
-            _banco.Beneficiario = TestUtils.GerarBeneficiario("0407098", "", "00970040709801300869", contaBancaria);
+            _banco.Beneficiario = TestUtils.GerarBeneficiario("1234567", "", "123400001234567", contaBancaria);
             _banco.FormataBeneficiario();
         }
 
