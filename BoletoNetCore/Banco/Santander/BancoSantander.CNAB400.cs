@@ -70,10 +70,10 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0002, 002, 0, boleto.Banco.Beneficiario.TipoCPFCNPJ("00"), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 014, 0, boleto.Banco.Beneficiario.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0018, 004, 0, boleto.Banco.Beneficiario.ContaBancaria.Agencia, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0022, 008, 0, boleto.Banco.Beneficiario.ContaBancaria.Conta, '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0030, 008, 0, '0', '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0022, 008, 0, boleto.Banco.Beneficiario.Codigo, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0030, 008, 0, boleto.Banco.Beneficiario.CodigoTransmissao.Substring(boleto.Banco.Beneficiario.CodigoTransmissao.Length - 8), '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 025, 0, boleto.NumeroControleParticipante, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0063, 008, 0, boleto.NossoNumero, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0063, 008, 0, boleto.NossoNumero.ToString().Substring(boleto.NossoNumero.Length - 8), '0');
                 if (boleto.ValorDesconto2 == 0)
                 {
                     reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0071, 006, 0, "0", '0');
@@ -104,7 +104,7 @@ namespace BoletoNetCore
                     reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0098, 004, 0, string.Empty, ' ');
                     reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0102, 006, 0, string.Empty, ' ');
                 }
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0108, 001, 0, boleto.TipoCarteira.GetHashCode(), '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0108, 001, 0, ConvertTipoCarteira(boleto.TipoCarteira), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0109, 002, 0, boleto.CodigoMovimentoRetorno, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0111, 010, 0, boleto.NumeroDocumento, '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0121, 006, 0, boleto.DataVencimento, ' ');
@@ -163,6 +163,22 @@ namespace BoletoNetCore
             catch (Exception ex)
             {
                 throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
+            }
+        }
+
+        private static int ConvertTipoCarteira(TipoCarteira tipoCarteira)
+        {
+            switch (tipoCarteira)
+            {   
+                case TipoCarteira.CarteiraCobrancaSimples:
+                    return 5;
+                case TipoCarteira.CarteiraCobrancaCaucionada:
+                    return 6;
+                case TipoCarteira.CarteiraCobrancaDescontada:
+                    return 7;
+                case TipoCarteira.CarteiraCobrancaVendor:
+                default:
+                    return tipoCarteira.GetHashCode();
             }
         }
 
