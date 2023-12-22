@@ -73,7 +73,7 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0022, 008, 0, boleto.Banco.Beneficiario.Codigo, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0030, 008, 0, boleto.Banco.Beneficiario.CodigoTransmissao.Substring(boleto.Banco.Beneficiario.CodigoTransmissao.Length -8), '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 025, 0, boleto.NumeroControleParticipante, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0063, 008, 0, boleto.NossoNumero, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0063, 008, 0, boleto.NossoNumero.ToString().Substring(boleto.NossoNumero.Length - 8), '0');
                 if (boleto.ValorDesconto2 == 0)
                 {
                     reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0071, 006, 0, "0", '0');
