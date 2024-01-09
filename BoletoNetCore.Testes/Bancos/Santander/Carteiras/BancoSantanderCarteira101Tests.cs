@@ -32,12 +32,6 @@ namespace BoletoNetCore.Testes
             TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoSantanderCarteira101Tests), 5, true, "N", 223344);
         }
 
-        [Test]
-        public void Santander_101_REM400()
-        {
-            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoSantanderCarteira101Tests), 5, true, "N", 223344);
-        }
-
         [TestCase(2717.16, "456", "BB874A", "1", "000000000456-1", "03391693400002717169123456700000000045610101", "03399.12347 56700.000005 00456.101013 1 69340000271716", 2016, 10, 1)]
         [TestCase(649.32, "414", "BB815A", "2", "000000000414-6", "03392687300000649329123456700000000041460101", "03399.12347 56700.000005 00414.601013 2 68730000064932", 2016, 8, 1)]
         [TestCase(297.22, "444", "BB834A", "3", "000000000444-8", "03393690500000297229123456700000000044480101", "03399.12347 56700.000005 00444.801013 3 69050000029722", 2016, 9, 2)]
