@@ -192,7 +192,7 @@ namespace BoletoNetCore
             {
                 if (registro.Substring(0, 19) != "02RETORNO01COBRANCA")
                     throw new Exception("O arquivo não é do tipo \"02RETORNO01COBRANCA\"");
-                if (registro.Substring(79, 15) != "SANTANDER")
+                if (registro.Substring(79, 15).TrimEnd() != "SANTANDER")
                     throw new Exception("O arquivo não é do tipo \"SANTANDER\"");
             }
             catch (Exception ex)
