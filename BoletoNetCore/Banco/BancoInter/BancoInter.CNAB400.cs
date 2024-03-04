@@ -267,6 +267,7 @@ namespace BoletoNetCore
                 // Identificação de Ocorrência
                 boleto.CodigoMovimentoRetorno = registro.Substring(89, 2);
                 boleto.DescricaoMovimentoRetorno = DescricaoMovimentoRetornoCnab400(boleto.CodigoMovimentoRetorno, registro);
+                boleto.DescricaoMovimentoRetorno += $": {registro.Substring(240, 140).Trim()}";
 
                 // Data Ocorrência no Banco
                 boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(91, 6)).ToString("##-##-##"));
