@@ -158,20 +158,24 @@ namespace BoletoNetCore
         {
             try
             {
-                if (boleto.ValorMulta == 0)
+                if (boleto.ValorMulta == 0 && boleto.PercentualMulta == 0)
                     return "";
+                
+                var valorOuPercentualMulta = boleto.TipoCodigoMulta == Enums.TipoCodigoMulta.Valor ? boleto.ValorMulta : boleto.PercentualMulta;
+
                 numeroRegistroGeral++;
                 var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "5", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0002, 002, 0, "99", '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 001, 0, (int)boleto.TipoCodigoMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0005, 006, 0, boleto.DataMulta, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0011, 012, 2, boleto.ValorMulta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0011, 012, 2, valorOuPercentualMulta, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0023, 003, 0, boleto.DiasLimiteRecebimento.HasValue ? boleto.DiasLimiteRecebimento.Value.ToString("000") : string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0026, 369, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
                 reg.CodificarLinha();
                 return reg.LinhaRegistro;
+                    
             }
             catch (Exception ex)
             {
