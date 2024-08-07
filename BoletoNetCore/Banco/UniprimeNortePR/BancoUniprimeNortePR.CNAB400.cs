@@ -109,6 +109,29 @@ namespace BoletoNetCore
             }
         }
 
+        private TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie)
+        {
+            switch (codigoEspecie)
+            {
+                case "01":
+                    return TipoEspecieDocumento.DM;
+                case "02":
+                    return TipoEspecieDocumento.NP;
+                case "03":
+                    return TipoEspecieDocumento.NS;
+                case "05":
+                    return TipoEspecieDocumento.RC;
+                case "10":
+                    return TipoEspecieDocumento.LC;
+                case "11":
+                    return TipoEspecieDocumento.ND;
+                case "12":
+                    return TipoEspecieDocumento.DS;
+                default:
+                    return TipoEspecieDocumento.OU;
+            }
+        }
+
         private string AjustaEspecieCnab400(TipoEspecieDocumento especieDocumento)
         {
             switch (especieDocumento)
@@ -185,7 +208,56 @@ namespace BoletoNetCore
 
         public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                //N� Controle do Participante
+                boleto.NumeroControleParticipante = registro.Substring(37, 25);
+
+                //Carteira (no arquivo retorno, vem com 1 caracter. Ajustamos para 2 caracteres, como no manual do Bradesco.
+                boleto.Carteira = registro.Substring(107, 1).PadLeft(2, '0');
+                boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
+
+                //Identifica��o do T�tulo no Banco
+                boleto.NossoNumero = registro.Substring(70, 11); //Sem o DV
+                boleto.NossoNumeroDV = registro.Substring(81, 1); //DV
+                boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+
+                //Identifica��o de Ocorr�ncia
+                boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
+                boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno);
+                boleto.CodigoMotivoOcorrencia = registro.Substring(318, 10);
+
+                //N�mero do Documento
+                boleto.NumeroDocumento = registro.Substring(116, 10);
+                boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
+
+                //Valores do T�tulo
+                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
+                boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
+                boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(188, 13)) / 100;
+                boleto.ValorIOF = Convert.ToDecimal(registro.Substring(214, 13)) / 100;
+                boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
+                boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
+                boleto.ValorPago = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
+                boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
+                boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
+
+                //Data Ocorr�ncia no Banco
+                boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
+
+                //Data Vencimento do T�tulo
+                boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
+
+                // Data do Cr�dito
+                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
+
+                // Registro Retorno
+                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
+            }
         }
 
         public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
@@ -195,7 +267,6 @@ namespace BoletoNetCore
 
         public void LerTrailerRetornoCNAB400(string registro)
         {
-            throw new System.NotImplementedException();
         }
     }
 }
