@@ -11,7 +11,7 @@ namespace BoletoNetCore.BTGPactual
         {
             Codigo = 208;
             Nome = "BTG Pactual";
-            Digito = "2";
+            Digito = "1";
             IdsRetornoCnab400RegistroDetalhe = new List<string> { "1" };
             RemoveAcentosArquivoRemessa = true;
         }

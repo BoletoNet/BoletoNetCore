@@ -216,33 +216,44 @@ namespace BoletoNetCore.Extensions
             return digitoFinal.ToString();
         }
         
-        public static string CalcularDVBancoBTGPactual(this string texto)
+        public static string CalcularDVBancoBTGPactual(this string nossoNumero)
         {
-            // Multiplicadores (pesos) de 2 a 9, repetidos da direita para a esquerda
-            int[] pesos = { 2, 3, 4, 5, 6, 7, 8, 9 };
-            int soma = 0;
-            int pesoIndex = 0;
+            var soma = 0;
+            var multiplicador = 2;
 
-            // Percorre os dígitos do "Nosso Número" da direita para a esquerda
-            for (int i = texto.Length - 1; i >= 0; i--)
+            // Percorrer o número de trás para frente
+            for (int i = nossoNumero.Length - 1; i >= 0; i--)
             {
-                // Pega o dígito atual
-                int digito = int.Parse(texto[i].ToString());
+                // Multiplicar cada dígito pela sequência crescente de 2 a 9
+                int numero = int.Parse(nossoNumero[i].ToString());
+                soma += numero * multiplicador;
 
-                // Multiplica o dígito pelo peso correspondente
-                soma += digito * pesos[pesoIndex];
-
-                // Avança no array de pesos (recomeça do início se necessário)
-                pesoIndex = (pesoIndex + 1) % pesos.Length;
+                // Atualizar o multiplicador (2 a 9 e depois volta para 2)
+                multiplicador++;
+                if (multiplicador > 9)
+                {
+                    multiplicador = 2;
+                }
             }
 
-            var resto = soma % 11;
-            
+            // Aplicar o Módulo 11
+            int resto = soma % 11;
+            int digitoVerificador;
+
             if (resto == 0 || resto == 1)
             {
-                return "0";
+                digitoVerificador = 1;  // Regra para evitar dígito zero
             }
-            return (11 - resto).ToString();
+            else if (resto == 10)
+            {
+                digitoVerificador = 1;  // Também pode ser 1, dependendo da regra do banco
+            }
+            else
+            {
+                digitoVerificador = 11 - resto;
+            }
+
+            return digitoVerificador.ToString();
         }
     }
     

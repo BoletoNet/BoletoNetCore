@@ -18,9 +18,10 @@ namespace BoletoNetCore.BTGPactual.Carteiras
             if (string.IsNullOrWhiteSpace(boleto.NossoNumero))
                 throw new Exception("Nosso Número não informado.");
 
-            // Nosso número não pode ter mais de 8 dígitos
-            if (boleto.NossoNumero.Length > 8)
-                throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 8 dígitos.");
+            // Nosso número não pode ter mais de 11 dígitos
+            const int tamanhoMaximoNossoNumero = 11;
+            if (boleto.NossoNumero.Length > tamanhoMaximoNossoNumero)
+                throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter {tamanhoMaximoNossoNumero} dígitos.");
 
             var contaBancaria = boleto.Banco.Beneficiario.ContaBancaria;
             
@@ -30,22 +31,19 @@ namespace BoletoNetCore.BTGPactual.Carteiras
             if (contaBancaria.Agencia.Length != 4)
                 throw new NotImplementedException($"Não foi possível formatar o campo livre: Numero de Agencia ({contaBancaria.Agencia}) não possui 4 dígitos.");
 
-            boleto.NossoNumero = boleto.NossoNumero.PadLeft(8, '0');
-            boleto.NossoNumeroDV = (boleto.Banco.Beneficiario.ContaBancaria.Agencia + boleto.Banco.Beneficiario.ContaBancaria.Conta + boleto.Carteira + boleto.NossoNumero).CalcularDVBancoBTGPactual();
-            boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+            boleto.NossoNumero = boleto.NossoNumero.PadLeft(tamanhoMaximoNossoNumero, '0');
+            boleto.NossoNumeroDV = (boleto.NossoNumero).CalcularDVBancoBTGPactual();
+            boleto.NossoNumeroFormatado = $"{boleto.Carteira.PadLeft(3, '0')}/{boleto.NossoNumero.PadLeft(10, '0')}-{boleto.NossoNumeroDV}";
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
              return
-                $"00" +
-                $"{boleto.Carteira}" +
-                $"{boleto.NossoNumero}" +
-                $"{boleto.NossoNumeroDV}" +
                 $"{boleto.Banco.Beneficiario.ContaBancaria.Agencia}" +
-                $"{boleto.Banco.Beneficiario.ContaBancaria.Conta}" +
-                $"{boleto.Banco.Beneficiario.ContaBancaria.DigitoConta}" +
-                $"";
+                $"{Convert.ToInt32(boleto.Carteira).ToString().PadLeft(2, '0')}" +
+                $"{boleto.NossoNumero}" +
+                $"{boleto.Banco.Beneficiario.ContaBancaria.Conta.Substring(boleto.Banco.Beneficiario.ContaBancaria.Conta.Length - 7)}" +
+                $"0";
         }
     }
 }
