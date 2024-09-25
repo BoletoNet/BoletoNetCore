@@ -827,7 +827,8 @@ namespace BoletoNetCore
 
             var assembly = Assembly.GetExecutingAssembly();
 
-            var streamLogo = assembly.GetManifestResourceStream("BoletoNetCore.Imagens." + Boleto.Banco.Codigo.ToString("000") + ".jpg");
+            var imageLogo = "BoletoNetCore.Imagens." + Boleto.Banco.Codigo.ToString("000") + ".jpg";
+            var streamLogo = assembly.GetManifestResourceStream(imageLogo);
             var base64Logo = Convert.ToBase64String(new BinaryReader(streamLogo).ReadBytes((int)streamLogo.Length));
             var fnLogo = string.Format("data:image/jpg;base64,{0}", base64Logo);
 
