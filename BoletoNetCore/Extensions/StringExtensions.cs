@@ -215,5 +215,36 @@ namespace BoletoNetCore.Extensions
 
             return digitoFinal.ToString();
         }
+        
+        public static string CalcularDVBancoBTGPactual(this string texto)
+        {
+            // Multiplicadores (pesos) de 2 a 9, repetidos da direita para a esquerda
+            int[] pesos = { 2, 3, 4, 5, 6, 7, 8, 9 };
+            int soma = 0;
+            int pesoIndex = 0;
+
+            // Percorre os dígitos do "Nosso Número" da direita para a esquerda
+            for (int i = texto.Length - 1; i >= 0; i--)
+            {
+                // Pega o dígito atual
+                int digito = int.Parse(texto[i].ToString());
+
+                // Multiplica o dígito pelo peso correspondente
+                soma += digito * pesos[pesoIndex];
+
+                // Avança no array de pesos (recomeça do início se necessário)
+                pesoIndex = (pesoIndex + 1) % pesos.Length;
+            }
+
+            var resto = soma % 11;
+            
+            if (resto == 0 || resto == 1)
+            {
+                return "0";
+            }
+            return (11 - resto).ToString();
+        }
     }
+    
+   
 }
