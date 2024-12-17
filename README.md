@@ -39,6 +39,7 @@ R: [Live sobre o entendimento do projeto](https://www.youtube.com/watch?v=ci8u2c
 |Banco do Brasil| 001 |11 `(Variação 019)`|
 |Banco CrediSIS|097|18|
 |Nordeste|004|1|
+|Nordeste|077|112|
 > Atenção: Para manter a ordem do projeto, qualquer solicitação de Pull Request de um novo banco ou carteira implementada, deverá seguir o formato dos bancos/carteiras já implementados e vir acompanhado de teste unitário da geração do boleto (PDF), arquivo remessa e geração de 9 boletos, com dígitos da linha digitável variando de 1 a 9, checando além do próprio dígito verificador, o cálculo do nosso número, linha digitável e código de barras.
 
 ### Pre requisitos
