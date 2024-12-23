@@ -84,25 +84,6 @@ namespace BoletoNetCore
                         arquivoRemessa.WriteLine(strline);
                     }
 
-
-                    // Verifica se a propriedade NFe está preenchida e se existe o metodo para gerar registro tipo 4 (NFe) utilizado no CNAB400 Daycoval
-                    if (boleto.NFe.Numero != null)
-                    {
-                        Type type = boleto.Banco.GetType();
-                        var method = type.GetMethod("GerarNFeRemessa");
-                        if (method != null)
-                        {
-                            var nfeRemessa = method.Invoke(boleto.Banco, new object[] { TipoArquivo,  boleto, numeroRegistroGeral });
-                            if (nfeRemessa != null)
-                            {
-                                strline = nfeRemessa.ToString();
-                                strline = FormataLinhaArquivoCNAB(strline, tamanhoRegistro);
-                                arquivoRemessa.WriteLine(strline);
-                            }
-                        }
-                        numeroRegistroGeral++;
-                    }
-
                     // Ajusta Totalizadores
                     valorBoletoGeral += boleto.ValorTitulo;
                     switch (boleto.TipoCarteira)

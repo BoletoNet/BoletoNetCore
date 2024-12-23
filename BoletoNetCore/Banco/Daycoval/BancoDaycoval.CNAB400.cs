@@ -36,8 +36,25 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao gerar HEADER do arquivo de remessa do CNAB400.", ex);
             }
         }
-
         public string GerarDetalheRemessaCNAB400(Boleto boleto, ref int numeroRegistroGeral)
+        {
+            var detalhe = GerarRegistroTransacaoRemessaCNAB400(boleto, ref numeroRegistroGeral);
+
+            // Se tiver NFe, gera o registro da Tipo 4 Conforme Manual
+            if (boleto.NFe.Numero != null)
+            {
+                var strline = GerarNFeRemessaCNAB400(boleto, ref numeroRegistroGeral);
+                if (!IsNullOrWhiteSpace(strline))
+                {
+                    detalhe += Environment.NewLine;
+                    detalhe += strline;
+                }
+            }
+            return detalhe;
+
+
+        }
+        public string GerarRegistroTransacaoRemessaCNAB400(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
             {
@@ -111,7 +128,7 @@ namespace BoletoNetCore
                 numeroRegistroGeral++;
                 var reg = new TRegistroEDI();
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "4", '0');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0002, 015, 0, boleto.NFe.Numero, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliDireita______, 0002, 015, 0, boleto.NFe.Numero, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0017, 013, 2, boleto.NFe.Valor, '0');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0030, 008, 0, boleto.NFe.DataEmissao, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 044, 0, boleto.NFe.ChaveAcesso, ' ');

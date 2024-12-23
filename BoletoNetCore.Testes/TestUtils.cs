@@ -151,6 +151,12 @@ namespace BoletoNetCore.Testes
             grupoDemonstrativo.Itens.Add(new ItemDemonstrativo { Descricao = "Grupo 3, Item 4", Referencia = boleto.DataEmissao.AddMonths(+1).Month + "/" + boleto.DataEmissao.AddMonths(+1).Year, Valor = boleto.ValorTitulo * (decimal)0.08 });
             boleto.Demonstrativos.Add(grupoDemonstrativo);
 
+            // Informação de NFe para Teste Daycoval
+            boleto.NFe.Numero = i.ToString("000000000000000");
+            boleto.NFe.Valor = boleto.ValorTitulo;
+            boleto.NFe.DataEmissao = DateTime.Now;
+            boleto.NFe.ChaveAcesso = "12345678901234567890123456789012345678901234";
+
             boleto.ValidarDados();
             _contador++;
             _proximoNossoNumero++;

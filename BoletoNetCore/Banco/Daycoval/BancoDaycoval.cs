@@ -41,16 +41,5 @@ namespace BoletoNetCore
             return null;
         }
 
-        public string GerarNFeRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
-        {
-            if (tipoArquivo is TipoArquivo.CNAB400)
-            {
-                return GerarNFeRemessaCNAB400(boleto, ref numeroRegistro);
-            }
-            else
-            {
-                return null;
-            }
-        }
     }
 }
