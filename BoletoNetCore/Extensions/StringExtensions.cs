@@ -255,7 +255,32 @@ namespace BoletoNetCore.Extensions
 
             return digitoVerificador.ToString();
         }
+        public static string CalcularDVDaycoval(this string texto)
+        {
+            string digito;
+            int soma = 0, peso = 2, digTmp = 0;
+            for (var i = texto.Length - 1; i >= 0; i--)
+            {
+                digTmp = (int)char.GetNumericValue(texto[i]) * peso;
+                if (digTmp > 9)
+                    digTmp = (digTmp / 10) + (digTmp % 10);
+
+                soma = soma + digTmp;
+
+                if (peso == 2)
+                    peso = 1;
+                else
+                    peso = peso + 1;
+            }
+            var resto = (soma % 10);
+            if (resto == 0)
+                digito = "0";
+            else
+                digito = (10 - resto).ToString();
+            return digito;
+        }
+
     }
-    
-   
+
+
 }

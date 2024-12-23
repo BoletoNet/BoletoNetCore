@@ -26,6 +26,7 @@ namespace BoletoNetCore
             [097] = BancoCrediSIS.Instance,
             [077] = BancoInter.Instance,
             [208] = BancoBTGPactual.Instance,
+            [707] = BancoDaycoval.Instance
         };
 
         public static IBanco Instancia(int codigoBanco)
