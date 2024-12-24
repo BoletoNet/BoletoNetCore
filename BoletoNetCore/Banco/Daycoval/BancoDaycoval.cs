@@ -25,9 +25,6 @@ namespace BoletoNetCore
 
             contaBancaria.FormatarDados("PAGAVEL EM QUALQUER AGÊNCIA BANCÁRIA, MESMO APÓS VENCIMENTO", "", "", 7);
 
-            //if (Beneficiario.Codigo.Length != 7)
-            //    throw BoletoNetCoreException.CodigoBeneficiarioInvalido(Beneficiario.Codigo, 7);
-
             Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia}{(string.IsNullOrEmpty(contaBancaria.DigitoAgencia) ? "" : "-" + contaBancaria.DigitoAgencia)} / {contaBancaria.Conta}{(string.IsNullOrEmpty(contaBancaria.DigitoConta) ? "" : "-" + contaBancaria.DigitoConta)}";
         }
 
