@@ -188,17 +188,16 @@ namespace BoletoNetCore
                 boleto.NumeroControleParticipante = registro.Substring(31, 6);
 
                 //Carteira
-                boleto.Carteira = registro.Substring(106, 2);
+                boleto.Carteira = registro.Substring(82, 3);
                 boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 //Identificação do Título no Banco
-                boleto.NossoNumero = registro.Substring(56, 17);
-                boleto.NossoNumeroDV = registro.Substring(93, 1); //DV
-                boleto.NossoNumeroFormatado = $"{boleto.Carteira}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
-
+                boleto.NossoNumero = registro.Substring(64, 08);
+                boleto.NossoNumeroDV = registro.Substring(72, 1); //DV
+                boleto.NossoNumeroFormatado = $"{boleto.Banco.Beneficiario.ContaBancaria.Agencia}{boleto.Banco.Beneficiario.ContaBancaria.DigitoAgencia}/{boleto.Carteira}/00{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
                 //Identificação de Ocorrência
                 boleto.CodigoMovimentoRetorno = registro.Substring(108, 2);
-                boleto.CodigoMotivoOcorrencia = registro.Substring(79, 2);
+                boleto.CodigoMotivoOcorrencia = registro.Substring(377, 2);
                 boleto.DescricaoMovimentoRetorno = DescricaoOcorrenciaCnab400(boleto.CodigoMovimentoRetorno, boleto.CodigoMotivoOcorrencia);
 
                 //Número do Documento
@@ -223,7 +222,7 @@ namespace BoletoNetCore
                 boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
 
                 // Data do Crédito
-                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(293, 6)).ToString("##-##-##"));
+                boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
 
                 // Registro Retorno
                 boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
@@ -248,202 +247,290 @@ namespace BoletoNetCore
             switch (codigo)
             {
                 case "01":
-                    return "Entrada Confirmada";
+                    return "Entrada Confirmada na CIP";
                 case "02":
-                    return "Baixa Manual Confirmada";
+                    return "Entrada Confirmada";
                 case "03":
-                    return "Abatimento Concedido";
-                case "04":
-                    return "Abatimento Cancelado";
+                    return "Entrada Rejeitada - " + EntradaDescricaoRejeicaoCnab400(codigoRejeicao);
                 case "05":
-                    return "Vencimento Alterado";
+                    return "Campo Livre Alterado";
                 case "06":
-                    return "Uso da Empresa Alterado";
-                case "07":
-                    return "Prazo de Protesto Alterado";
+                    return "Liquidação Normal";
                 case "08":
-                    return "Prazo de Devolução Alterado";
+                    return "Liquidação em Cartorio";
                 case "09":
-                    return "Alteração Confirmada";
+                    return "Baixa Automática";
                 case "10":
-                    return "Alteração com reemissão de boleto confirmada";
-                case "11":
-                    return "Alteração da opção de Protesto para Devolução Confirmada";
+                    return "Baixa pôr ter sido liquidado";
                 case "12":
-                    return "Alteração da opção de Devolução para Protesto Confirmada";
+                    return "Confirma Abatimento";
+                case "13":
+                    return "Abatimento Cancelado";
+                case "14":
+                    return "Vencimento Alterado";
+                case "15":
+                    return "Baixa Rejeitada - " + BaixaDescricaoRejeicaoCnab400(codigoRejeicao); 
+                case "16":
+                    return "Instrução Rejeitada - " + InstrucoesDescricaoRejeicaoCnab400(codigoRejeicao);
+                case "19":
+                    return "Confirma Recebimento da Ordem de Protesto";
                 case "20":
-                    return "Em Ser";
-                case "21":
-                    return "Liquidação";
+                    return "Confirma Recebimento da Ordem de Sustação";
                 case "22":
-                    return "Liquidação em Cartório";
+                    return "Seu Numero Alterado";
                 case "23":
-                    return "Baixa por Devolução";
-                case "25":
-                    return "Baixa por Protesto";
-                case "26":
-                    return "Título enviado para Cartório";
-                case "27":
-                    return "Sustação de Protesto";
+                    return "titulo Enviado para Cartório";
+                case "24":
+                    return "Confirma recebimento de ordem de não protestar";
                 case "28":
-                    return "Estorno de Protesto";
-                case "29":
-                    return "Estorno de Sustação de Protesto";
-                case "30":
-                    return "Alteração de Título";
-                case "31":
-                    return "Tarifa sobre Título Vencido";
-                case "32":
-                    return "Outras Tarifas de Alteração";
-                case "33":
-                    return "Estorno de Baixa / Liquidação";
-                case "34":
-                    return "Tarifas Diversas";
-                case "35":
-                    return "Liquidação On-line";
-                case "36":
-                    return "Estorno de Liquidação On-line";
-                case "37":
-                    return "Transferência para a cobrança simples";
-                case "38":
-                    return "Transferência para a cobrança descontada";
-                case "51":
-                    return "Reconhecido pelo pagador";
-                case "52":
-                    return "Não reconhecido pelo pagador";
-                case "53":
-                    return "Recusado no DDA";
-                case "A4":
-                    return "Pagador DDA";
-
+                    return "Débito de tarifas/custas – Correspondentes";
+                case "40":
+                    return "Tarifa de entrada (debitada na liquidação)";
+                case "43":
+                    return "Baixado por ter sido protestado";
+                case "96":
+                    return "Tarifa sobre instruções – Mês anterior";
+                case "97":
+                    return "Tarifa sobre baixas – Mês anterior";
+                case "98":
+                    return "Tarifa sobre entradas – Mês anterior";
                 case "99":
-                    return DescricaoRejeicaoCnab400(codigoRejeicao);
+                    return "Tarifa sobre instrução de protesto/sustação – mês anterior";
                 default:
                     return "";
             }
         }
 
-        private string DescricaoRejeicaoCnab400(string codigo)
+        private string EntradaDescricaoRejeicaoCnab400(string codigo)
         {
             switch (codigo)
             {
-                case "01":
-                    return "Movimento sem Beneficiário Correspondente";
-                case "02":
-                    return "Movimento sem Título Correspondente";
+                case "03":
+                    return "CEP inválido – Não temos cobrador – Cobrador não Localizado";
+                case "04":
+                    return "Sigla do Estado inválida";
+                case "05":
+                    return "Data de Vencimento inválida ou fora do prazo mínimo";
+                case "06":
+                    return "Código do Banco inválido";
                 case "08":
-                    return "Movimento para título já com movimentação no dia";
-                case "09":
-                    return "Nosso Número não pertence ao Beneficiário";
+                    return "Nome do sacado não informado";
                 case "10":
-                    return "Inclusão de título já existente na base";
-                case "12":
-                    return "Movimento duplicado";
-                case "13":
-                    return "Entrada Inválida para Cobrança Caucionada(Beneficiário não possui conta Caução)";
+                    return "Logradouro não informado";
+                case "14":
+                    return "Registro em duplicidade";
+                case "19":
+                    return "Data de desconto inválida ou maior que a data de vencimento";
                 case "20":
-                    return "CEP do Pagador não encontrado(não foi possível a determinação da Agência Cobradora para o título)";
+                    return "Valor de IOF não numérico";
                 case "21":
-                    return "Agência cobradora não encontrada (agência designada para cobradora não cadastrada no sistema)";
+                    return "Movimento para título não cadastrado no sistema";
                 case "22":
-                    return "Agência Beneficiário não encontrada (Agência do Beneficiário não cadastrada no sistema)";
+                    return "Valor de desconto + abatimento maior que o valor do título";
+                case "25":
+                    return "CNPJ ou CPF do sacado inválido (aceito com restrições)";
                 case "26":
-                    return "Data de vencimento inválida";
+                    return "Espécies de documento inválida (difere de 01...10,13 e 99)";
+                case "27":
+                    return "Data de emissão do título inválida";
+                case "28":
+                    return "Seu número não informado";
+                case "29":
+                    return "CEP é igual a espaço ou zeros; ou não numérico";
+                case "30":
+                    return "Valor do título não numérico ou inválido";
+                case "36":
+                    return "Valor de permanência não numérico";
+                case "37":
+                    return "Valor de permanência inconsistente, pois, dentro de um mês, será maior que o valor do título";
+                case "38":
+                    return "Valor de desconto/abatimento não numérico ou inválido";
+                case "39":
+                    return "Valor de abatimento não numérico";
+                case "42":
+                    return "Título já existente em nossos registros. Nosso número não aceito";
+                case "43":
+                    return "Título enviado em duplicidade nesse movimento";
                 case "44":
-                    return "CEP do pagador inválido";
-                case "45":
-                    return "Data de Vencimento com prazo superior ao limite";
-                case "49":
-                    return "Movimento inválido para título Baixado / Liquidado";
-                case "50":
-                    return "Movimento inválido para título enviado a Cartório";
+                    return "Título zerado ou em branco; ou não numérico na remessa";
+                case "46":
+                    return "Título enviado fora da faixa de Nosso Número, estipulada para o cliente.";
+                case "51":
+                    return "Tipo/Número de Inscrição Sacador/Avalista Inválido";
+                case "52":
+                    return "Sacador/Avalista não informado";
+                case "53":
+                    return "Prazo de vencimento do título excede ao da contratação";
                 case "54":
-                    return "Faixa de CEP da Agência Cobradora não abrange CEP do Pagador";
+                    return "Banco informado não é nosso correspondente";
                 case "55":
-                    return "Título já com opção de Devolução";
+                    return "Banco correspondente informado não cobra este CEP ou não possui faixas de CEP cadastradas";
                 case "56":
-                    return "Processo de Protesto em andamento";
+                    return "Nosso número no correspondente não foi informado";
                 case "57":
-                    return "Título já com opção de Protesto";
+                    return "Remessa contendo duas instruções incompatíveis – não protestar e dias de protesto ou prazo para protesto inválido.";
                 case "58":
-                    return "Processo de devolução em andamento";
-                case "59":
-                    return "Novo prazo p / Protesto / Devolução inválido";
-                case "76":
-                    return "Alteração do prazo de protesto inválida";
-                case "77":
-                    return "Alteração do prazo de devolução inválida";
-                case "81":
-                    return "CEP do Pagador inválido";
-                case "82":
-                    return "CNPJ / CPF do Pagador inválido (dígito não confere)";
-                case "83":
-                    return "Número do Documento(seu número) inválido";
-                case "84":
-                    return "Protesto inválido para título sem Número do documento(seu número)";
+                    return "Entradas Rejeitadas – Reprovado no Represamento para Análise";
+                case "60":
+                    return "CNPJ/CPF do sacado inválido – título recusado";
+                case "87":
+                    return "Excede Prazo máximo entre emissão e vencimento";
+                case "99":
+                    return "Título não acatado pelo banco – entrar em contato Gerente da conta";
+                case "AA":
+                    return "Serviço de Cobrança inválido";
+                case "AB":
+                    return "Nossa Carteira inválida";
+                case "AE":
+                    return "Título não possui abatimento";
+                case "AI":
+                    return "Nossa Cobrança inválida";
+                case "AJ":
+                    return "Modalidade com bancos correspondentes inválida";
+                case "AL":
+                    return "Sacado impedido de entrar nesta cobrança";
+                case "AU":
+                    return "Data de ocorrência inválida";
+                case "AV":
+                    return "Valor de tarifa de cobrança inválida";
+                case "AX":
+                    return "Título em pagamento parcial";
+                case "BC":
+                    return "Análise gerencial-sacado inválido p/operação crédito";
+                case "BD":
+                    return "Análise gerencial-sacado inadimplente";
+                case "BE":
+                    return "Análise gerencial-sacado difere do exigido";
+                case "BF":
+                    return "Análise gerencial-vencto excede vencto da operação de crédito";
+                case "BG":
+                    return "Análise gerencial-sacado com baixa liquidez";
+                case "BH":
+                    return "Análise gerencial-sacado excede concentração";
+                case "CC":
+                    return "Valor de iof incompatível com a espécie documento";
+                case "CD":
+                    return "Efetivação de protesto sem agenda válida";
+                case "CE":
+                    return "Título não aceito - pessoa física";
+                case "CF":
+                    return "Excede prazo máximo da entrada ao vencimento";
+                case "CG":
+                    return "Título não aceito – por análise gerencial";
+                case "CH":
+                    return "Título em espera – em análise pelo banco";
+                case "CJ":
+                    return "Análise gerencial-vencto do titulo abaixo przcurto";
+                case "CK":
+                    return "Análise gerencial-vencto do titulo abaixo przlongo";
+                case "CS":
+                    return "Título rejeitado pela checagem de duplicatas";
+                case "DA":
+                    return "Análise gerencial – Entrada de Título Descontado com limite cancelado";
+                case "DB":
+                    return "Análise gerencial – Entrada de Título Descontado com limite vencido";
+                case "DC":
+                    return "Análise gerencial - cedente com limite cancelado";
+                case "DD":
+                    return "Análise gerencial – cedente é sacado e teve seu limite cancelado";
+                case "DE":
+                    return "Análise gerencial - apontamento no Serasa";
+                case "DG":
+                    return "Endereço sacador/avalista não informado";
+                case "DH":
+                    return "Cep do sacador/avalista não informado";
+                case "DI":
+                    return "Cidade do sacador/avalista não informado";
+                case "DJ":
+                    return "Estado do sacador/avalista inválido ou n informado";
+                case "DM":
+                    return "Cliente sem Código de Flash cadastrado no cobrador";
+                case "DN":
+                    return "Título Descontado com Prazo ZERO – Recusado";
+                case "DP":
+                    return "Data de Referência menor que a Data de Emissão do Título";
+                case "DT":
+                    return "Nosso Número do Correspondente não deve ser informado";
+                case "EB":
+                    return "HSBC não aceita endereço de sacado com mais de 38 caracteres";
+                default:
+                    return "";
+            }
+        }
+        
+        private string BaixaDescricaoRejeicaoCnab400(string codigo)
+        {
+            switch (codigo)
+            {
+                case "05":
+                    return "Solicitação de baixa para título já baixado ou liquidado";
+                case "06":
+                    return "Solicitação de baixa para título não registrado no sistema";
+                case "08":
+                    return "Solicitação de baixa para título em float";
                 default:
                     return "";
             }
         }
 
+        private string InstrucoesDescricaoRejeicaoCnab400(string codigo)
+        {
+            switch (codigo)
+            {
+                case "04":
+                    return "Data de Vencimento não numérica ou inválida";
+                case "05":
+                    return "Data de vencimento inválida ou fora do prazo mínimo";
+                case "14":
+                    return "Registro em duplicidade";
+                case "19":
+                    return "Data de desconto inválida ou maior que a data de vencimento";
+                case "20":
+                    return "Campo livre informado";
+                case "21":
+                    return "Título não registrado no sistema";
+                case "22":
+                    return "Título baixada ou liquidado";
+                case "26":
+                    return "Espécie de documento inválida";
+                case "27":
+                    return "Instrução não aceita, pôr não ter sido emitida ordem de protesto ao cartório";
+                case "28":
+                    return "Título tem instrução de cartório ativa";
+                case "29":
+                    return "Título não tem instrução de cartório ativa";
+                case "30":
+                    return "Existe instrução de não protestar, ativa para o título";
+                case "36":
+                    return "Valor de permanência (mora) não numérico";
+                case "37":
+                    return "Título Descontado Instrução não permitida para a carteira";
+                case "38":
+                    return "Valor do abatimento não numérico ou maior que a soma do valor do título + permanência + multa";
+                case "39":
+                    return "Título em cartório";
+                case "40":
+                    return "Instrução recusada - cobrança vinculada / caucionada";
+                case "44":
+                    return "Título zerado ou em brancos ou não numérico na remessa";
+                case "99":
+                    return "Ocorrência desconhecida na remessa";
+                default:
+                    return "";
+            }
+        }
         private TipoEspecieDocumento AjustaEspecieCnab400(string codigoEspecie)
         {
             switch (codigoEspecie)
             {
                 case "01":
-                    return TipoEspecieDocumento.CH;
-                case "02":
                     return TipoEspecieDocumento.DM;
-                case "03":
-                    return TipoEspecieDocumento.DMI;
-                case "04":
-                    return TipoEspecieDocumento.DS;
-                case "05":
-                    return TipoEspecieDocumento.DSI;
-                case "06":
-                    return TipoEspecieDocumento.DR;
-                case "07":
-                    return TipoEspecieDocumento.LC;
-                case "08":
-                    return TipoEspecieDocumento.NCC;
-                case "09":
-                    return TipoEspecieDocumento.NCE;
-                case "10":
-                    return TipoEspecieDocumento.NCI;
-                case "11":
-                    return TipoEspecieDocumento.NCR;
-                case "12":
+                case "02":
                     return TipoEspecieDocumento.NP;
-                case "13":
-                    return TipoEspecieDocumento.NPR;
-                case "14":
-                    return TipoEspecieDocumento.TM;
-                case "15":
-                    return TipoEspecieDocumento.TS;
-                case "16":
-                    return TipoEspecieDocumento.NS;
-                case "17":
+                case "05":
                     return TipoEspecieDocumento.RC;
-                case "18":
-                    return TipoEspecieDocumento.FAT;
-                case "19":
-                    return TipoEspecieDocumento.ND;
-                case "20":
-                    return TipoEspecieDocumento.AP;
-                case "21":
-                    return TipoEspecieDocumento.ME;
-                case "22":
-                    return TipoEspecieDocumento.PC;
-                case "23":
-                    return TipoEspecieDocumento.NF;
-                case "24":
-                    return TipoEspecieDocumento.DD;
-                case "25":
-                    return TipoEspecieDocumento.CPR;
-                case "31":
-                    return TipoEspecieDocumento.CC;
-                case "32":
-                    return TipoEspecieDocumento.BP;
+                case "12":
+                    return TipoEspecieDocumento.DS;
                 case "99":
                     return TipoEspecieDocumento.OU;
                 default:
