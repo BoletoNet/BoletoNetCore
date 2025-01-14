@@ -1,9 +1,5 @@
-using BoletoNetCore;
-using QuestPDF.Infrastructure;
 using QuestPDF.Fluent;
-using Microsoft.Extensions.FileProviders;
-using System.Reflection;
-using System.IO;
+using QuestPDF.Infrastructure;
 
 namespace BoletoNetCore.QuestPdf
 {
@@ -28,7 +24,7 @@ namespace BoletoNetCore.QuestPdf
                     row.RelativeColumn().BorderRight(BoletoPdfConstants.BorderSize).Stack(st =>
                     {
                         st.Item().Text("Parcela", BoletoPdfConstants.LabelStyle);
-                        st.Item().Text($"001 / 001", BoletoPdfConstants.NormalFieldStyle); // todo
+                        st.Item().Text(this.boleto.ParcelaInformativo, BoletoPdfConstants.NormalFieldStyle); // todo
                     });
 
                     row.RelativeColumn().Stack(st =>
