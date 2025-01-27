@@ -279,7 +279,7 @@ namespace BoletoNetCore.Testes
             var boletos = new ArquivoRetorno(mem);
 
             Assert.AreEqual(1, boletos.Boletos.Count);
-            Assert.AreEqual("Em aberto", boletos.Boletos[0].DescricaoMovimentoRetorno);
+            Assert.AreEqual("Em aberto: ", boletos.Boletos[0].DescricaoMovimentoRetorno);
         }
 
 

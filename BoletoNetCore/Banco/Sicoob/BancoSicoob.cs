@@ -28,7 +28,7 @@ namespace BoletoNetCore
             if (Beneficiario.CodigoDV == Empty)
                 throw new Exception($"Dígito do código do beneficiário ({codigoBeneficiario}) não foi informado.");
 
-            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.", "", "", 12);
+            contaBancaria.FormatarDados("PAGÁVEL PREFERENCIALMENTE NO SICOOB.", "", "", 12);
 
             Beneficiario.Codigo = codigoBeneficiario.Length <= 6 ? codigoBeneficiario.PadLeft(6, '0') : throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, 6);
 

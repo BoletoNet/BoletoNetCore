@@ -215,5 +215,72 @@ namespace BoletoNetCore.Extensions
 
             return digitoFinal.ToString();
         }
+        
+        public static string CalcularDVBancoBTGPactual(this string nossoNumero)
+        {
+            var soma = 0;
+            var multiplicador = 2;
+
+            // Percorrer o número de trás para frente
+            for (int i = nossoNumero.Length - 1; i >= 0; i--)
+            {
+                // Multiplicar cada dígito pela sequência crescente de 2 a 9
+                int numero = int.Parse(nossoNumero[i].ToString());
+                soma += numero * multiplicador;
+
+                // Atualizar o multiplicador (2 a 9 e depois volta para 2)
+                multiplicador++;
+                if (multiplicador > 9)
+                {
+                    multiplicador = 2;
+                }
+            }
+
+            // Aplicar o Módulo 11
+            int resto = soma % 11;
+            int digitoVerificador;
+
+            if (resto == 0 || resto == 1)
+            {
+                digitoVerificador = 1;  // Regra para evitar dígito zero
+            }
+            else if (resto == 10)
+            {
+                digitoVerificador = 1;  // Também pode ser 1, dependendo da regra do banco
+            }
+            else
+            {
+                digitoVerificador = 11 - resto;
+            }
+
+            return digitoVerificador.ToString();
+        }
+        public static string CalcularDVDaycoval(this string texto)
+        {
+            string digito;
+            int soma = 0, peso = 2, digTmp = 0;
+            for (var i = texto.Length - 1; i >= 0; i--)
+            {
+                digTmp = (int)char.GetNumericValue(texto[i]) * peso;
+                if (digTmp > 9)
+                    digTmp = (digTmp / 10) + (digTmp % 10);
+
+                soma = soma + digTmp;
+
+                if (peso == 2)
+                    peso = 1;
+                else
+                    peso = peso + 1;
+            }
+            var resto = (soma % 10);
+            if (resto == 0)
+                digito = "0";
+            else
+                digito = (10 - resto).ToString();
+            return digito;
+        }
+
     }
+
+
 }

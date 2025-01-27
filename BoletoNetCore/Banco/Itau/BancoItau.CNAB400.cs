@@ -295,15 +295,15 @@ namespace BoletoNetCore
                     boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
 
                     //Valores do Título
-                    boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
-                    boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
-                    boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(188, 13)) / 100;
-                    boleto.ValorIOF = Convert.ToDecimal(registro.Substring(214, 13)) / 100;
-                    boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
-                    boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
-                    boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
-                    boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
-                    boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
+                    boleto.ValorTitulo = (!string.IsNullOrWhiteSpace(registro.Substring(152, 13)) ? Convert.ToDecimal(registro.Substring(152, 13)) : 0) / 100;
+                    boleto.ValorTarifas = (!string.IsNullOrWhiteSpace(registro.Substring(175, 13)) ? Convert.ToDecimal(registro.Substring(175, 13)) : 0) / 100;
+                    boleto.ValorOutrasDespesas = (!string.IsNullOrWhiteSpace(registro.Substring(188, 13)) ? Convert.ToDecimal(registro.Substring(188, 13)) : 0) / 100;
+                    boleto.ValorIOF = (!string.IsNullOrWhiteSpace(registro.Substring(214, 13)) ? Convert.ToDecimal(registro.Substring(214, 13)) : 0) / 100;
+                    boleto.ValorAbatimento = (!string.IsNullOrWhiteSpace(registro.Substring(227, 13)) ? Convert.ToDecimal(registro.Substring(227, 13)) : 0) / 100;
+                    boleto.ValorDesconto = (!string.IsNullOrWhiteSpace(registro.Substring(240, 13)) ? Convert.ToDecimal(registro.Substring(240, 13)) : 0) / 100;
+                    boleto.ValorPagoCredito = (!string.IsNullOrWhiteSpace(registro.Substring(253, 13)) ? Convert.ToDecimal(registro.Substring(253, 13)) : 0) / 100;
+                    boleto.ValorJurosDia = (!string.IsNullOrWhiteSpace(registro.Substring(266, 13)) ? Convert.ToDecimal(registro.Substring(266, 13)) : 0) / 100;
+                    boleto.ValorOutrosCreditos = (!string.IsNullOrWhiteSpace(registro.Substring(279, 13)) ? Convert.ToDecimal(registro.Substring(279, 13)) : 0) / 100;
 
                     //Data Ocorrência no Banco
                     boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
@@ -314,6 +314,7 @@ namespace BoletoNetCore
                     // Data do Crédito
                     boleto.DataCredito = Utils.ToDateTime(Utils.ToInt32(registro.Substring(295, 6)).ToString("##-##-##"));
 
+                    // Nome Pagador
                     boleto.Pagador = new Pagador();
                     boleto.Pagador.Nome = registro.Substring(324, 30).Trim();
                 }
@@ -342,15 +343,15 @@ namespace BoletoNetCore
                     boleto.EspecieDocumento = AjustaEspecieCnab400(registro.Substring(173, 2));
 
                     //Valores do Título
-                    boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(152, 13)) / 100;
-                    boleto.ValorTarifas = Convert.ToDecimal(registro.Substring(175, 13)) / 100;
-                    boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(201, 13)) / 100;
-                    boleto.ValorIOF = Convert.ToDecimal(registro.Substring(214, 13)) / 100;
-                    boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
-                    boleto.ValorMulta = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
-                    boleto.ValorOutrasDespesas = Convert.ToDecimal(registro.Substring(94, 13)) / 100;
-                    boleto.ValorOutrasDespesas += Convert.ToDecimal(registro.Substring(266, 13)) / 100;
-                    boleto.ValorOutrasDespesas += Convert.ToDecimal(registro.Substring(279, 13)) / 100;
+                    boleto.ValorTitulo = (!string.IsNullOrWhiteSpace(registro.Substring(152, 13)) ? Convert.ToDecimal(registro.Substring(152, 13)) : 0) / 100;
+                    boleto.ValorTarifas = (!string.IsNullOrWhiteSpace(registro.Substring(175, 13)) ? Convert.ToDecimal(registro.Substring(175, 13)) : 0) / 100;
+                    boleto.ValorPagoCredito = (!string.IsNullOrWhiteSpace(registro.Substring(201, 13)) ? Convert.ToDecimal(registro.Substring(201, 13)) : 0) / 100;
+                    boleto.ValorIOF = (!string.IsNullOrWhiteSpace(registro.Substring(214, 13)) ? Convert.ToDecimal(registro.Substring(214, 13)) : 0) / 100;
+                    boleto.ValorDesconto = (!string.IsNullOrWhiteSpace(registro.Substring(240, 13)) ? Convert.ToDecimal(registro.Substring(240, 13)) : 0) / 100;
+                    boleto.ValorMulta = (!string.IsNullOrWhiteSpace(registro.Substring(253, 13)) ? Convert.ToDecimal(registro.Substring(253, 13)) : 0) / 100;
+                    boleto.ValorOutrasDespesas = (!string.IsNullOrWhiteSpace(registro.Substring(94, 13)) ? Convert.ToDecimal(registro.Substring(94, 13)) : 0) / 100;
+                    boleto.ValorOutrasDespesas += (!string.IsNullOrWhiteSpace(registro.Substring(266, 13)) ? Convert.ToDecimal(registro.Substring(266, 13)) : 0) / 100;
+                    boleto.ValorOutrasDespesas += (!string.IsNullOrWhiteSpace(registro.Substring(279, 13)) ? Convert.ToDecimal(registro.Substring(279, 13)) : 0) / 100;
 
                     //Data Ocorrência no Banco
                     boleto.DataProcessamento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(110, 6)).ToString("##-##-##"));
@@ -361,6 +362,7 @@ namespace BoletoNetCore
                     //Data Vencimento do Título
                     boleto.DataVencimento = Utils.ToDateTime(Utils.ToInt32(registro.Substring(146, 6)).ToString("##-##-##"));
 
+                    // Nome Pagador
                     boleto.Pagador = new Pagador();
                     boleto.Pagador.Nome = registro.Substring(324, 30).Trim();
                 }

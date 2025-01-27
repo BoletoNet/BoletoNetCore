@@ -39,6 +39,8 @@ namespace BoletoNetCore
 
             boleto.NossoNumeroDV = boleto.NossoNumero.CalcularDVCaixa();
             boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+            boleto.ImprimirMensagemInstrucao = true;
+            boleto.ImprimirValoresAuxiliares = false;
         }
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)

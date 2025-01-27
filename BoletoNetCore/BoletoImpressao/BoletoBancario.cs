@@ -388,7 +388,7 @@ namespace BoletoNetCore
                 .Replace("@MENSAGEMFIXAPAGADOR", Boleto.Banco.Beneficiario.ContaBancaria.MensagemFixaPagador)
                 .Replace("@DATAVENCIMENTO", dataVencimento)
                 .Replace("@BENEFICIARIO_BOLETO", !Boleto.Banco.Beneficiario.MostrarCNPJnoBoleto ? Boleto.Banco.Beneficiario.Nome : string.Format("{0} - {1}", Boleto.Banco.Beneficiario.Nome, Utils.FormataCNPJ(Boleto.Banco.Beneficiario.CPFCNPJ)))
-                .Replace("@BENEFICIARIO", Boleto.Banco.Beneficiario.Nome)
+                .Replace("@BENEFICIARIO", !Boleto.Banco.Beneficiario.MostrarCNPJnoBoleto ? Boleto.Banco.Beneficiario.Nome : string.Format("{0} - {1}", Boleto.Banco.Beneficiario.Nome, Utils.FormataCNPJ(Boleto.Banco.Beneficiario.CPFCNPJ)))
                 .Replace("@DATADOCUMENTO", Boleto.DataEmissao.ToString("dd/MM/yyyy"))
                 .Replace("@NUMERODOCUMENTO", Boleto.NumeroDocumento)
                 .Replace("@ESPECIEDOCUMENTO", Boleto.EspecieDocumento.ToString())
@@ -828,7 +828,8 @@ namespace BoletoNetCore
 
             var assembly = Assembly.GetExecutingAssembly();
 
-            var streamLogo = assembly.GetManifestResourceStream("BoletoNetCore.Imagens." + Boleto.Banco.Codigo.ToString("000") + ".jpg");
+            var imageLogo = "BoletoNetCore.Imagens." + Boleto.Banco.Codigo.ToString("000") + ".jpg";
+            var streamLogo = assembly.GetManifestResourceStream(imageLogo);
             var base64Logo = Convert.ToBase64String(new BinaryReader(streamLogo).ReadBytes((int)streamLogo.Length));
             var fnLogo = string.Format("data:image/jpg;base64,{0}", base64Logo);
 
