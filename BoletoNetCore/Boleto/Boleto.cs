@@ -66,6 +66,7 @@ namespace BoletoNetCore
 
         public string NumeroDocumento { get; set; } = string.Empty;
         public string NumeroControleParticipante { get; set; } = string.Empty;
+        public string NumeroParcela { get; set; } = string.Empty;
         public string Aceite { get; set; } = "N";
         public string UsoBanco { get; set; } = string.Empty;
 
