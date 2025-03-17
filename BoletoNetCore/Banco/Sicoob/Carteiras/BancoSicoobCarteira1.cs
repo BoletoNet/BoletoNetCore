@@ -45,7 +45,7 @@ namespace BoletoNetCore
             if (contaBancaria.Agencia.Length != 4)
                 throw new NotImplementedException($"Não foi possível formatar o campo livre: Número da agência ({contaBancaria.Agencia}) não possui 4 dígitos.");
 
-            return $"{boleto.Carteira}{contaBancaria.Agencia}{boleto.VariacaoCarteira}{beneficiario.Codigo}{beneficiario.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}001";
+            return $"{boleto.Carteira}{contaBancaria.Agencia}{boleto.VariacaoCarteira}{beneficiario.Codigo}{beneficiario.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}{boleto.NumeroDocumento}";
         }
     }
 }
