@@ -101,6 +101,9 @@
         /// <summary>Boleto Proposta</summary>
         BP = 32,
 
+        /// <summary>Diversos</summary>
+        DV = 33,
+
         /// <summary>Outros</summary>
         OU = 99
     }
