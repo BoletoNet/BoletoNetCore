@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -73,6 +74,22 @@ namespace BoletoNetCore
                                             int numeroRegistroCobrancaDescontada, decimal valorCobrancaDescontada);
 
         string FormatarNomeArquivoRemessa(int numeroSequencial);
+
+        #region #173339 - Remover no Pull Request (se aprovado)
+
+        /// <summary>
+        /// Retorna um array de carteiras implementadas para este banco.
+        /// </summary>
+        /// <param name="predicate">
+        /// Função opcional para filtrar as carteiras retornadas.
+        /// Se não for informada, retorna todas as carteiras implementadas.
+        /// </param>
+        /// <returns>
+        /// Array de strings contendo os códigos das carteiras implementadas.
+        /// </returns>
+        IEnumerable<(string Carteira, string VariacaoCarteira)> ObterCarteiras(Func<(string Carteira, string VariacaoCarteira), bool> predicate = null);
+
+        #endregion
     }
 
     /// <summary>

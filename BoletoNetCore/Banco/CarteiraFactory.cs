@@ -29,5 +29,36 @@ namespace BoletoNetCore
 
         public static bool CarteiraEstaImplementada(string identificacao)
             => Carteiras.ContainsKey(identificacao);
+
+        #region #173339 - Remover no Pull Request (se aprovado)
+
+        /// <summary>
+        /// Retorna um array de carteiras implementadas para este banco.
+        /// </summary>
+        /// <param name="predicate">
+        /// Função opcional para filtrar as carteiras retornadas.
+        /// Se não for informada, retorna todas as carteiras implementadas.
+        /// </param>
+        /// <returns>
+        /// Array de strings contendo os códigos das carteiras implementadas.
+        /// </returns>
+        internal static IEnumerable<(string Carteira, string VariacaoCarteira)> ObterCarteiras(Func<(string Carteira, string VariacaoCarteira), bool> predicate = null)
+        {
+            predicate = predicate ?? (s => true); // Se não for informado, assume que todas as carteiras são válidas.
+
+            foreach(var carteira in Carteiras.Select(s => transform(s.Key)).Where(w => predicate(w)))
+            {
+                yield return carteira;
+            }
+
+            (string Carteira, string VariacaoCarteira) transform(string carteira)
+            {
+                var split = carteira.Split('/');
+                return split.Length == 1 ? (split[0], string.Empty) : (split[0], split[1]);
+            }
+
+        }
+
+        #endregion
     }
 }
