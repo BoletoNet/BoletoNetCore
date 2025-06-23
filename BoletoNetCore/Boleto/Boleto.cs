@@ -66,6 +66,7 @@ namespace BoletoNetCore
 
         public string NumeroDocumento { get; set; } = string.Empty;
         public string NumeroControleParticipante { get; set; } = string.Empty;
+        public string NumeroParcela { get; set; } = "01";
         public string Aceite { get; set; } = "N";
         public string UsoBanco { get; set; } = string.Empty;
 
@@ -238,7 +239,6 @@ namespace BoletoNetCore
         public CodigoBarra CodigoBarra { get; } = new CodigoBarra();
         public ObservableCollection<GrupoDemonstrativo> Demonstrativos { get; } = new ObservableCollection<GrupoDemonstrativo>();
         public string ParcelaInformativo { get; set; } = string.Empty;
-        public string NumeroParcela { get; set; } = string.Empty;
         public string ByteNossoNumero { get; set; } = "2";
 
         public NotaFiscalEletronica NFe { get; set; } = new NotaFiscalEletronica();
