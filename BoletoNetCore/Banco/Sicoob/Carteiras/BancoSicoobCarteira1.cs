@@ -41,11 +41,12 @@ namespace BoletoNetCore
         {
             var beneficiario = boleto.Banco.Beneficiario;
             var contaBancaria = beneficiario.ContaBancaria;
+            var numeroParcela = boleto.NumeroParcela.Length > 0 ? boleto.NumeroParcela.PadLeft(3,'0') : "001";
 
             if (contaBancaria.Agencia.Length != 4)
                 throw new NotImplementedException($"Não foi possível formatar o campo livre: Número da agência ({contaBancaria.Agencia}) não possui 4 dígitos.");
 
-            return $"{boleto.Carteira}{contaBancaria.Agencia}{boleto.VariacaoCarteira}{beneficiario.Codigo}{beneficiario.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}001";
+            return $"{boleto.Carteira}{contaBancaria.Agencia}{boleto.VariacaoCarteira}{beneficiario.Codigo}{beneficiario.CodigoDV}{boleto.NossoNumero}{boleto.NossoNumeroDV}{numeroParcela}";
         }
     }
 }
