@@ -193,7 +193,7 @@ namespace BoletoNetCore
                     reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0047, 001, 0, boleto.NossoNumeroDV, '0');
                 }
                 //reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0048, 002, 0, "01", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0048, 002, 0, string.IsNullOrWhiteSpace(boleto.NumeroParcela) ? "01" : boleto.NumeroParcela.PadLeft(2, '0').Substring(boleto.NumeroParcela.PadLeft(2, '0').Length - 2), '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0048, 002, 0, string.IsNullOrWhiteSpace(boleto.NumeroParcela) ? "01" : boleto.NumeroParcela, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0050, 002, 0, boleto.VariacaoCarteira, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0052, 001, 0, "4", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0053, 005, 0, Empty, ' ');
