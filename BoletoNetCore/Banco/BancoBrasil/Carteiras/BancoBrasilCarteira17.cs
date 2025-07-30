@@ -57,7 +57,7 @@ namespace BoletoNetCore
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            return $"000000{boleto.NossoNumero}{boleto.Carteira}";
+            return $"000000{boleto.NossoNumero}{boleto.Carteira}".PadLeft(25, '0');
         }
     }
 }
