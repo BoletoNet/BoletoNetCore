@@ -8,20 +8,20 @@ namespace BoletoNetCore
         string _codigoDeBarras;
 
         /// <summary>
-        /// Representação numérica do Código de Barras, composto por 44 posições
-        ///    01 a 03 - 3 - Identificação  do  Banco
-        ///    04 a 04 - 1 - Código da Moeda
-        ///    05 a 05 – 1 - Dígito verificador do Código de Barras
+        /// RepresentaÃ§Ã£o numÃ©rica do CÃ³digo de Barras, composto por 44 posiÃ§Ãµes
+        ///    01 a 03 - 3 - IdentificaÃ§Ã£o  do  Banco
+        ///    04 a 04 - 1 - CÃ³digo da Moeda
+        ///    05 a 05 â€“ 1 - DÃ­gito verificador do CÃ³digo de Barras
         ///    06 a 09 - 4 - Fator de vencimento
         ///    10 a 19 - 10 - Valor
-        ///    20 a 44 – 25 - Campo Livre
+        ///    20 a 44 â€“ 25 - Campo Livre
         /// </summary>
         public string CodigoDeBarras
         {
             get
             {
-                // Com o advento das APIs "developers" dos bancos para a cobrança, muitos devolvem o código de barras como ele deve ser impresso no boleto.
-                // Com isso, não há a necessidade de se criar o código de barras uma vez que ele foi informado
+                // Com o advento das APIs "developers" dos bancos para a cobranÃ§a, muitos devolvem o cÃ³digo de barras como ele deve ser impresso no boleto.
+                // Com isso, nÃ£o hÃ¡ a necessidade de se criar o cÃ³digo de barras uma vez que ele foi informado
                 // Marcelo - https://unimake.com.br/ 
                 if(!string.IsNullOrWhiteSpace(_codigoDeBarras))
                 {
@@ -45,29 +45,29 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// A linha digitável é composta por cinco campos:
-        ///      1º campo
-        ///          composto pelo código de Banco, código da moeda, as cinco primeiras posições do campo 
-        ///          livre e o dígito verificador deste campo;
-        ///      2º campo
-        ///          composto pelas posições 6ª a 15ª do campo livre e o dígito verificador deste campo;
-        ///      3º campo
-        ///          composto pelas posições 16ª a 25ª do campo livre e o dígito verificador deste campo;
-        ///      4º campo
-        ///          composto pelo dígito verificador do código de barras, ou seja, a 5ª posição do código de 
+        /// A linha digitÃ¡vel Ã© composta por cinco campos:
+        ///      1Âº campo
+        ///          composto pelo cÃ³digo de Banco, cÃ³digo da moeda, as cinco primeiras posiÃ§Ãµes do campo 
+        ///          livre e o dÃ­gito verificador deste campo;
+        ///      2Âº campo
+        ///          composto pelas posiÃ§Ãµes 6Âª a 15Âª do campo livre e o dÃ­gito verificador deste campo;
+        ///      3Âº campo
+        ///          composto pelas posiÃ§Ãµes 16Âª a 25Âª do campo livre e o dÃ­gito verificador deste campo;
+        ///      4Âº campo
+        ///          composto pelo dÃ­gito verificador do cÃ³digo de barras, ou seja, a 5Âª posiÃ§Ã£o do cÃ³digo de 
         ///          barras;
-        ///      5º campo
-        ///          Composto pelo fator de vencimento com 4(quatro) caracteres e o valor do documento com 10(dez) caracteres, sem separadores e sem edição.
+        ///      5Âº campo
+        ///          Composto pelo fator de vencimento com 4(quatro) caracteres e o valor do documento com 10(dez) caracteres, sem separadores e sem ediÃ§Ã£o.
         /// </summary>
         public string LinhaDigitavel { get; set; } = String.Empty;
 
         /// <summary>
-        /// Código do Banco (3 dígitos)
+        /// CÃ³digo do Banco (3 dÃ­gitos)
         /// </summary>
         public string CodigoBanco { get; set; } = String.Empty;
 
         /// <summary>
-        /// Código da Moeda (9 = Real)
+        /// CÃ³digo da Moeda (9 = Real)
         /// </summary>
         public int Moeda { get; set; } = 9;
 
@@ -91,7 +91,7 @@ namespace BoletoNetCore
                                       ValorDocumento,
                                       CampoLivre);
 
-                // Calcula Dígito Verificador do Código de Barras
+                // Calcula DÃ­gito Verificador do CÃ³digo de Barras
                 int pesoMaximo = 9, soma = 0, peso = 2;
                 for(int i = (codigoSemDv.Length - 1); i >= 0; i--)
                 {
