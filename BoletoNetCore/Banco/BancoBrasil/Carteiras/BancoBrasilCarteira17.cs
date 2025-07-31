@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using static System.String;
 
 namespace BoletoNetCore
@@ -15,6 +16,10 @@ namespace BoletoNetCore
 
         public void FormataNossoNumero(Boleto boleto)
         {
+            var carteirasNaoPadrao = new List<string>
+            {
+                "019" 
+            };
             // Carteira 17 - Variação 019/027: Cliente emite o boleto
             // O nosso número não pode ser em branco.
             if (IsNullOrWhiteSpace(boleto.NossoNumero))
@@ -28,8 +33,15 @@ namespace BoletoNetCore
             // o nosso número deve estar formatado corretamente (com 17 dígitos e iniciando com o código do convênio),
             if (boleto.NossoNumero?.Length == 17)
             {
-                if (!boleto.NossoNumero.StartsWith(boleto.Banco.Beneficiario.Codigo))
-                    throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve iniciar com \"{boleto.Banco.Beneficiario.Codigo}\" e conter 17 dígitos.");
+                if (!boleto.NossoNumero.StartsWith(boleto.Banco.Beneficiario.Codigo) &&
+                    !carteirasNaoPadrao.Contains(boleto.VariacaoCarteira)) // Só aplicar as variações não padrão 
+                {
+                    throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve iniciar com \"{boleto.Banco.Beneficiario.Codigo}\" e conter 17 dígitos. (Exceto para as variações {Join(", ", carteirasNaoPadrao)})");
+                }
+            }
+            else if (boleto.VariacaoCarteira == "019") // Regra específica para a variação 019
+            {
+                boleto.NossoNumero = $"{boleto.Banco.Beneficiario.ContaBancaria.CodigoConvenio}{boleto.NossoNumero.PadLeft(10, '0')}";
             }
             else
             {
@@ -45,7 +57,7 @@ namespace BoletoNetCore
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            return $"000000{boleto.NossoNumero}{boleto.Carteira}";
+            return $"000000{boleto.NossoNumero}{boleto.Carteira}".PadLeft(25, '0');
         }
     }
 }
