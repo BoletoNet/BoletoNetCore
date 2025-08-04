@@ -115,7 +115,8 @@ namespace BoletoNetCore.Testes
                 MensagemArquivoRemessa = "Mensagem para o arquivo remessa",
                 NumeroControleParticipante = "CHAVEPRIMARIA" + _proximoNossoNumero,
                 ParcelaInformativo = informativoParcelas,
-                ImprimirValoresAuxiliares = true
+                ImprimirValoresAuxiliares = true,
+                ImprimirMensagemInstrucao = true
             };
             // Mensagem - Instruções do Caixa
             StringBuilder msgCaixa = new StringBuilder();
