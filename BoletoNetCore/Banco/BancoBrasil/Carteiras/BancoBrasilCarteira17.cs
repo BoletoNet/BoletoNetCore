@@ -16,15 +16,10 @@ namespace BoletoNetCore
 
         public void FormataNossoNumero(Boleto boleto)
         {
-            var carteirasNaoPadrao = new List<string>
-            {
-                "019" 
-            };
             // Carteira 17 - Variação 019/027: Cliente emite o boleto
             // O nosso número não pode ser em branco.
             if (IsNullOrWhiteSpace(boleto.NossoNumero))
                 boleto.NossoNumero = "";//boleto registrado não aceita nosso número somente em geração do boleto, mas em remessa CNAB é possível
-                //throw new Exception("Nosso Número não informado.");
 
             if (boleto.Banco.Beneficiario.Codigo.Length != 7)
                 throw new NotImplementedException("Não foi possível formatar o nosso número: Código do Beneficiário não tem 7 dígitos.");
@@ -33,15 +28,21 @@ namespace BoletoNetCore
             // o nosso número deve estar formatado corretamente (com 17 dígitos e iniciando com o código do convênio),
             if (boleto.NossoNumero?.Length == 17)
             {
-                if (!boleto.NossoNumero.StartsWith(boleto.Banco.Beneficiario.Codigo) &&
-                    !carteirasNaoPadrao.Contains(boleto.VariacaoCarteira)) // Só aplicar as variações não padrão 
+                if (!boleto.NossoNumero.StartsWith(boleto.Banco.Beneficiario.Codigo))
                 {
-                    throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve iniciar com \"{boleto.Banco.Beneficiario.Codigo}\" e conter 17 dígitos. (Exceto para as variações {Join(", ", carteirasNaoPadrao)})");
+                    throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve iniciar com \"{boleto.Banco.Beneficiario.Codigo}\" e conter 17 dígitos.");
                 }
             }
             else if (boleto.VariacaoCarteira == "019") // Regra específica para a variação 019
             {
-                boleto.NossoNumero = $"{boleto.Banco.Beneficiario.ContaBancaria.CodigoConvenio}{boleto.NossoNumero.PadLeft(10, '0')}";
+                if (!string.IsNullOrEmpty(boleto.Banco.Beneficiario.ContaBancaria.CodigoConvenio))
+                {
+                    boleto.NossoNumero = $"{boleto.Banco.Beneficiario.ContaBancaria.CodigoConvenio}{boleto.NossoNumero.PadLeft(10, '0')}";
+                }
+                else
+                {
+                    boleto.NossoNumero = $"{boleto.Banco.Beneficiario.Codigo}{boleto.NossoNumero.PadLeft(10, '0')}";
+                }
             }
             else
             {
