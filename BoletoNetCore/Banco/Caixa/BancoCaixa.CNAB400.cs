@@ -207,6 +207,11 @@ namespace BoletoNetCore
             }
         }
 
+        public void LerDetalheRetornoCNAB400Segmento4(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
+        }
+
         public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();

@@ -228,8 +228,12 @@ namespace BoletoNetCore
                 throw new Exception("Erro ao ler HEADER do arquivo de RETORNO / CNAB 400.", ex);
             }
         }
-
         public void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void LerDetalheRetornoCNAB400Segmento4(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
         }
