@@ -13,7 +13,7 @@ namespace BoletoNetCore
             Codigo = 237;
             Nome = "Bradesco";
             Digito = "2";
-            IdsRetornoCnab400RegistroDetalhe = new List<string> { "1" };
+            IdsRetornoCnab400RegistroDetalhe = new List<string> { "1", "4"};
             RemoveAcentosArquivoRemessa = true;
         }
 

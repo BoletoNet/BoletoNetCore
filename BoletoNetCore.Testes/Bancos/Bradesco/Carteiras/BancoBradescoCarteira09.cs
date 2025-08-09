@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
+using System.Text;
 using NUnit.Framework;
 
 namespace BoletoNetCore.Testes
@@ -9,6 +11,13 @@ namespace BoletoNetCore.Testes
     public class BancoBradescoCarteira09
     {
         readonly IBanco _banco;
+        const string arquivoRetorno = @"02RETORNO01COBRANCA       00000000000007654321YYYYYYY CLUBE XXXXX CONTA     237BRADESCO       0408250160000000103                                                                                                                                                                                                                                                                          050825         000001
+1028888888800018400099999999999999999                         000000000000001068470000000000000000000000000902040825000001068400000000000000106847070825000000000400023704422  000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000                          P100000000                                                                  000002
+4009099990055500000000106847qrpix.bradesco.com.br/qr/v2/cobv/ad6726a-aaaaa-b48ff27ecc382c758e025ba6cccc  20250804237093595554460000000011184                                                                                                                                                                                                                                                              000003
+102888888880001840009999999999999999900000000000865100035197250000000000000008651P000000000000000000000000090604082500000086510000000000000008651P050725000000000300010400991  000000000000000000000000000000000000000000000000000000000000000000000000000000000000000300000000000000000000000000000   050825             00000000000000                                                                  000004
+1028888888800018400099999999999999999                         000000000000000882370000000000000000000000000910040825000000882300000000000000088237030725000000000200023700000  000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000                          1600000000                                                                  000005
+";
+
         public BancoBradescoCarteira09()
         {
             var contaBancaria = new ContaBancaria
@@ -143,6 +152,44 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
+        }
+
+        [Test]
+        public void LerRetorno_validando_Registro_QrCode()
+        {
+            string qrCode = "qrpix.bradesco.com.br/qr/v2/cobv/ad6726a-aaaaa-b48ff27ecc382c758e025ba6cccc  ";
+            var buffer = Encoding.ASCII.GetBytes(arquivoRetorno);
+            var mem = new MemoryStream(buffer);
+            var boletos = new ArquivoRetorno(mem);
+
+            Assert.AreEqual(3, boletos.Boletos.Count);
+            Assert.AreEqual("Entrada Confirmada", boletos.Boletos[0].DescricaoMovimentoRetorno);
+            Assert.AreEqual(qrCode, boletos.Boletos[0].QRCode);
+            Assert.AreEqual("20250804237093595554460000000011184", boletos.Boletos[0].TxId);
+        }
+
+        [Test]
+        public void LerRetorno_validando_Liquidacao()
+        {
+            var buffer = Encoding.ASCII.GetBytes(arquivoRetorno);
+            var mem = new MemoryStream(buffer);
+            var boletos = new ArquivoRetorno(mem);
+
+            Assert.AreEqual(3, boletos.Boletos.Count);
+            Assert.AreEqual("Liquidação normal", boletos.Boletos[1].DescricaoMovimentoRetorno);
+            Assert.AreEqual(30.00M, boletos.Boletos[1].ValorPago);
+            Assert.AreEqual(new DateTime(2025, 8, 5), boletos.Boletos[1].DataCredito);
+        }
+
+        [Test]
+        public void LerRetorno_validando_Baixa()
+        {
+            var buffer = Encoding.ASCII.GetBytes(arquivoRetorno);
+            var mem = new MemoryStream(buffer);
+            var boletos = new ArquivoRetorno(mem);
+
+            Assert.AreEqual(3, boletos.Boletos.Count);
+            Assert.AreEqual("Baixado conforme instruções da Agência", boletos.Boletos[2].DescricaoMovimentoRetorno);
         }
     }
 }
