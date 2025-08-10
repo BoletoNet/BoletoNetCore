@@ -240,6 +240,8 @@ namespace BoletoNetCore
         public ObservableCollection<GrupoDemonstrativo> Demonstrativos { get; } = new ObservableCollection<GrupoDemonstrativo>();
         public string ParcelaInformativo { get; set; } = string.Empty;
         public string ByteNossoNumero { get; set; } = "2";
+        public string QRCode { get; set; }
+        public string TxId { get; set; }
 
         public NotaFiscalEletronica NFe { get; set; } = new NotaFiscalEletronica();
 
