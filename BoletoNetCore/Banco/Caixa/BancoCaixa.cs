@@ -7,10 +7,12 @@ namespace BoletoNetCore
 {
     internal sealed partial class BancoCaixa : BancoFebraban<BancoCaixa>, IBanco
     {
+        const int digitosconta = 12;
+        
         public BancoCaixa()
         {
             Codigo = 104;
-            Nome = "Caixa EconÙmica Federal";
+            Nome = "Caixa Econ√¥mica Federal";
             Digito = "0";
             IdsRetornoCnab400RegistroDetalhe = new List<string> { "1" };
             RemoveAcentosArquivoRemessa = true;
@@ -22,7 +24,8 @@ namespace BoletoNetCore
             if (!CarteiraFactory<BancoCaixa>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
                 throw BoletoNetCoreException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
-            contaBancaria.FormatarDados("EM TODA A REDE BANC¡RIA E SEUS CORRESPONDENTES AT… O VALOR LIMITE", "", "SAC CAIXA: 0800 726 0101 (informaÁıes, reclamaÁıes, sugestıes e elogios)<br>Para pessoas com deficiÍncia auditiva ou de fala: 0800 726 2492<br>Ouvidoria: 0800 725 7474<br>caixa.gov.br<br>", 6);
+             contaBancaria.FormatarDados("EM TODA A REDE BANC√ÅRIA E SEUS CORRESPONDENTES AT√â O VALOR LIMITE", "", 
+                 "SAC CAIXA: 0800 726 0101 (informa√ß√µes, reclama√ß√µes, sugest√µes e elogios)<br>Para pessoas com defici√™ncia auditiva ou de fala: 0800 726 2492<br>Ouvidoria: 0800 725 7474<br>caixa.gov.br<br>", digitosconta);
 
             var codigoBeneficiario = Beneficiario.Codigo;
             if (codigoBeneficiario.Length <= 6)
@@ -30,7 +33,7 @@ namespace BoletoNetCore
                 Beneficiario.Codigo = codigoBeneficiario.PadLeft(6, '0');
 
                 if (String.IsNullOrEmpty(Beneficiario.CodigoDV))
-                    throw new Exception($"DÌgito do cÛdigo do benefici·rio ({codigoBeneficiario}) n„o foi informado.");
+                    throw new Exception($"D√≠gito do c√≥digo do benefici√°rio ({codigoBeneficiario}) n√£o foi informado.");
 
                 Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoBeneficiario}-{Beneficiario.CodigoDV}";
             }
@@ -39,7 +42,7 @@ namespace BoletoNetCore
                 Beneficiario.Codigo = codigoBeneficiario;
 
                 if (!String.IsNullOrEmpty(Beneficiario.CodigoDV))
-                    throw new Exception($"DÌgito do cÛdigo do benefici·rio ({codigoBeneficiario}) n„o deve ser informado quando codigo beneficiario tiver 7 dÌgitos.");
+                    throw new Exception($"D√≠gito do c√≥digo do benefici√°rio ({codigoBeneficiario}) n√£o deve ser informado quando codigo beneficiario tiver 7 d√≠gitos.");
 
                 Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {codigoBeneficiario}-{codigoBeneficiario.CalcularDVCaixa()}";
             }
