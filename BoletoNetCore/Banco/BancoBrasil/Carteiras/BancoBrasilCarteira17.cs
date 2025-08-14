@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using static System.String;
 
 namespace BoletoNetCore
@@ -19,7 +20,6 @@ namespace BoletoNetCore
             // O nosso número não pode ser em branco.
             if (IsNullOrWhiteSpace(boleto.NossoNumero))
                 boleto.NossoNumero = "";//boleto registrado não aceita nosso número somente em geração do boleto, mas em remessa CNAB é possível
-                //throw new Exception("Nosso Número não informado.");
 
             if (boleto.Banco.Beneficiario.Codigo.Length != 7)
                 throw new NotImplementedException("Não foi possível formatar o nosso número: Código do Beneficiário não tem 7 dígitos.");
@@ -29,7 +29,20 @@ namespace BoletoNetCore
             if (boleto.NossoNumero?.Length == 17)
             {
                 if (!boleto.NossoNumero.StartsWith(boleto.Banco.Beneficiario.Codigo))
+                {
                     throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve iniciar com \"{boleto.Banco.Beneficiario.Codigo}\" e conter 17 dígitos.");
+                }
+            }
+            else if (boleto.VariacaoCarteira == "019") // Regra específica para a variação 019
+            {
+                if (!string.IsNullOrEmpty(boleto.Banco.Beneficiario.ContaBancaria.CodigoConvenio))
+                {
+                    boleto.NossoNumero = $"{boleto.Banco.Beneficiario.ContaBancaria.CodigoConvenio}{boleto.NossoNumero.PadLeft(10, '0')}";
+                }
+                else
+                {
+                    boleto.NossoNumero = $"{boleto.Banco.Beneficiario.Codigo}{boleto.NossoNumero.PadLeft(10, '0')}";
+                }
             }
             else
             {
@@ -45,7 +58,7 @@ namespace BoletoNetCore
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
-            return $"000000{boleto.NossoNumero}{boleto.Carteira}";
+            return $"000000{boleto.NossoNumero}{boleto.Carteira}".PadLeft(25, '0');
         }
     }
 }

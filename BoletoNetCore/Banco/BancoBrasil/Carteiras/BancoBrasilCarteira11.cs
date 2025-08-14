@@ -21,7 +21,8 @@ namespace BoletoNetCore
             // Ou deve estar com 17 posições, iniciando com o código do convênio
 
             if (boleto.Banco.Beneficiario.Codigo.Length != 7)
-                throw new Exception("Não foi possível formatar o nosso número.");
+                throw new Exception($"Não foi possível formatar o nosso número, número beneficiário ({boleto.Banco.Beneficiario.Codigo}) deve conter 7 dígitos.");
+
 
             if (IsNullOrWhiteSpace(boleto.NossoNumero) || boleto.NossoNumero == "00000000000000000")
             {

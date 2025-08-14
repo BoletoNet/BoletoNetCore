@@ -14,6 +14,16 @@ namespace BoletoNetCore
 
         public string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
+
+            if (boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta.Length != 2)
+                throw new NotImplementedException($"Não foi possível formatar o campo livre: Codigo de Operação da conta ({boleto.Banco.Beneficiario.ContaBancaria.OperacaoConta}) não possui 2 dígitos.");
+
+            if (boleto.Banco.Beneficiario.Codigo.Length != 5)
+                throw new NotImplementedException($"Não foi possível formatar o campo livre: Conta ({boleto.Banco.Beneficiario.Codigo}) não possui 5 dígitos.");
+
+            if (boleto.Banco.Beneficiario.ContaBancaria.Agencia.Length != 4)
+                throw new NotImplementedException($"Não foi possível formatar o campo livre: Numero de Agencia ({boleto.Banco.Beneficiario.ContaBancaria.Agencia}) não possui 4 dígitos.");
+
             string CampoLivre = boleto.Carteira + "1" +
                 boleto.NossoNumero + boleto.NossoNumeroDV +
                 boleto.Banco.Beneficiario.ContaBancaria.Agencia +
@@ -42,7 +52,7 @@ namespace BoletoNetCore
                 throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter até 5 dígitos ou exatamente 6 ou 8 dígitos.");
             else if (boleto.NossoNumero.Length <= 5)
             {
-                boleto.NossoNumero = string.Format("{0}2{1}", boleto.DataEmissao.ToString("yy"), boleto.NossoNumero.PadLeft(5, '0'));
+                boleto.NossoNumero = string.Format("{0}{1}{2}", boleto.DataEmissao.ToString("yy"), boleto.ByteNossoNumero, boleto.NossoNumero.PadLeft(5, '0'));
             }
             else if (boleto.NossoNumero.Length == 6)
             {

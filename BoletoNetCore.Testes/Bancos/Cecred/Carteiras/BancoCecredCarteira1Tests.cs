@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using NUnit.Framework;
 
 namespace BoletoNetCore.Testes
@@ -19,7 +20,8 @@ namespace BoletoNetCore.Testes
                 CarteiraPadrao = "1",
                 TipoCarteiraPadrao = TipoCarteira.CarteiraCobrancaSimples,
                 TipoFormaCadastramento = TipoFormaCadastramento.ComRegistro,
-                TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa
+                TipoImpressaoBoleto = TipoImpressaoBoleto.Empresa,
+                CodigoConvenio = "23156489"
             };
             _banco = Banco.Instancia(Bancos.Cecred);
             _banco.Beneficiario = TestUtils.GerarBeneficiario("101104", "", "", contaBancaria);
@@ -153,6 +155,20 @@ namespace BoletoNetCore.Testes
             boleto.ValidarDados();
 
             Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
+        }
+
+        [Test]
+        public void Cecred_1_REM240_Convenio()
+        {
+            //Ambiente
+            TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCecredCarteira1Tests), 5, true, "?", 1);
+
+            //Ação
+            var nomeArquivoREM = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nameof(BancoCecredCarteira1Tests)}_{TipoArquivo.CNAB240}.REM");
+            var linhas = File.ReadAllLines(nomeArquivoREM);
+            var convenio = linhas[1].Substring(33, 20).TrimEnd();
+            //Assert
+            Assert.AreEqual("23156489", convenio);
         }
     }
 }

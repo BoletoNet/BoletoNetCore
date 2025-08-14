@@ -1,29 +1,16 @@
 $rootDir = $env:APPVEYOR_BUILD_FOLDER
-$buildNumber = $env:APPVEYOR_BUILD_NUMBER
+$buildVersion = $Env:APPVEYOR_BUILD_VERSION
 
 <#Pacote Principal#>
-$solutionFile = "$rootDir\BoletoNetCore\BoletoNetCore.csproj"
-$solutionTest = "$rootDir\BoletoNetCore.Testes\BoletoNetCore.Testes.csproj"
-$nuspecPath = "$rootDir\BoletoNetCore\BoletoNetCore.nuspec"
-$nupkgPath = "$rootDir\NuGet\"
+$solutionFile = Join-Path $rootDir "BoletoNetCore\BoletoNetCore.csproj"
+$nupkgPath = Join-Path $rootDir "NuGet"
 
-[xml]$xml = cat $nuspecPath
-$xml.package.metadata.version="3.0.1."+"$buildNumber"
-$xml.Save($nuspecPath)
-
-dotnet publish -f netstandard2.0 -c release $solutionFile
-dotnet pack -c release $solutionFile /p:NuspecFile=$nuspecPath -o $nupkgPath
-appveyor PushArtifact $nupkgPath
+dotnet build -c Release $solutionFile /p:Version=$buildVersion
+dotnet pack -c Release $solutionFile -o $nupkgPath /p:Version=$buildVersion
 
 <#Pacote PDF#>
-$solutionFilePDF = "$rootDir\BoletoNetCore.PDF\BoletoNetCore.PDF.csproj"
-$nuspecPathPDF = "$rootDir\BoletoNetCore.PDF\BoletoNetCore.PDF.nuspec"
-$nupkgPathPDF = "$rootDir\NuGet.PDF\"
+<#$solutionFilePDF = Join-Path $rootDir "BoletoNetCore.PDF\BoletoNetCore.PDF.csproj"#>
+<#$nupkgPathPDF = Join-Path $rootDir "NuGet.PDF"#>
 
-[xml]$xmlPDF = cat $nuspecPathPDF
-$xmlPDF.package.metadata.version="3.0.1."+"$buildNumber"
-$xmlPDF.Save($nuspecPathPDF)
-
-dotnet publish -f netstandard2.0 -c release $solutionFilePDF
-dotnet pack -c Release $solutionFilePDF /p:NuspecFile=$nuspecPathPDF -o $nupkgPathPDF
-appveyor PushArtifact $nupkgPathPDF
+<#dotnet build -c Release $solutionFilePDF /p:Version=$buildVersion#>
+<#dotnet pack -c Release $solutionFilePDF -o $nupkgPathPDF /p:Version=$buildVersion#>

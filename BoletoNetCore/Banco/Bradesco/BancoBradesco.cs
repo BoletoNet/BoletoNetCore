@@ -13,7 +13,7 @@ namespace BoletoNetCore
             Codigo = 237;
             Nome = "Bradesco";
             Digito = "2";
-            IdsRetornoCnab400RegistroDetalhe = new List<string> { "1" };
+            IdsRetornoCnab400RegistroDetalhe = new List<string> { "1", "4"};
             RemoveAcentosArquivoRemessa = true;
         }
 
@@ -37,5 +37,9 @@ namespace BoletoNetCore
             Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
         }
 
+        public string GerarMensagemRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        {
+            return null;
+        }
     }
 }

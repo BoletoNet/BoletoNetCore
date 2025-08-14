@@ -110,6 +110,14 @@ namespace BoletoNetCore.Testes
         public void Deve_criar_um_banco_uniprime_norte_pr_valido()
            => Assert.NotNull(Banco.Instancia(Bancos.UniprimeNortePR));
 
+        [Test]
+        public void Deve_criar_um_banco_inter_valido()
+           => Assert.NotNull(Banco.Instancia(Bancos.BancoInter));
+
+        [Test]
+        public void Deve_criar_um_banco_daycoval_valido()
+           => Assert.NotNull(Banco.Instancia(Bancos.BancoDaycoval));
+
 
         #endregion
 

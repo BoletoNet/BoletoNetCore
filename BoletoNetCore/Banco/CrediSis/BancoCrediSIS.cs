@@ -28,6 +28,10 @@ namespace BoletoNetCore
 
             Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {contaBancaria.Conta}{contaBancaria.DigitoConta}";
         }
-        
+
+        public string GerarMensagemRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        {
+            return null;
+        }
     }
 }

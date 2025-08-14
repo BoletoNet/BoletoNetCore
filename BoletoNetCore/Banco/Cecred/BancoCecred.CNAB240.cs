@@ -61,7 +61,7 @@ namespace BoletoNetCore
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 17, 1, 0, Empty, ' ');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 18, 1, 0, Beneficiario.TipoCPFCNPJ("0"), '0');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 19, 15, 0, Beneficiario.CPFCNPJ, '0');
-                tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 34, 20, 0, Codigo, ' ');
+                tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 34, 20, 0, Beneficiario.ContaBancaria.CodigoConvenio, ' ');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 54, 5, 0, Beneficiario.ContaBancaria.Agencia, '0');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 59, 1, 0, Beneficiario.ContaBancaria.DigitoAgencia, ' ');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 60, 12, 0, Beneficiario.ContaBancaria.Conta, '0');
@@ -283,7 +283,7 @@ namespace BoletoNetCore
                     str = "1";
                 if (boleto.PercentualMulta > 0M)
                     str = "2";
-                if (str == "0")
+                if (str == "0" && boleto.ValorDesconto2 == 0 && boleto.ValorDesconto3 == 0)
                     return "";
                 ++numeroRegistroGeral;
                 TRegistroEDI tregistroEdi = new TRegistroEDI();
@@ -294,12 +294,34 @@ namespace BoletoNetCore
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 14, 1, 0, "R", '0');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 15, 1, 0, Empty, ' ');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 16, 2, 0, boleto.CodigoMovimentoRetorno, '0');
-                tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 18, 1, 0, "0", '0');
-                tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 19, 8, 0, "0", '0');
-                tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 27, 15, 0, "0", '0');
-                tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 42, 1, 0, "0", '0');
-                tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 43, 8, 0, "0", '0');
-                tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 51, 15, 0, "0", '0');
+                if (boleto.ValorDesconto2 == 0)
+                {
+                    // Sem Desconto 2
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 18, 1, 0, "0", '0');
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 19, 8, 0, "0", '0');
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 27, 15, 0, "0", '0');
+                }
+                else
+                {
+                    // Com Desconto 2
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 18, 1, 0, "1", '0');
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 19, 8, 0, boleto.DataDesconto2, '0');
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 27, 15, 2, boleto.ValorDesconto2, '0');
+                }
+                if (boleto.ValorDesconto3 == 0)
+                {
+                    // Sem Desconto 3
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 42, 1, 0, "0", '0');
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 43, 8, 0, "0", '0');
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 51, 15, 0, "0", '0');
+                }
+                else
+                {
+                    // Com Desconto 3
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 42, 1, 0, "1", '0');
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 43, 8, 0, boleto.DataDesconto3, '0');
+                    tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 51, 15, 2, boleto.ValorDesconto3, '0');
+                }
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 66, 1, 0, str, '0');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 67, 8, 0, boleto.DataMulta, '0');
                 tregistroEdi.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 75, 15, 2, boleto.ValorMulta, '0');

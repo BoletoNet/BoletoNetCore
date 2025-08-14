@@ -2,7 +2,7 @@ version: 3.0.1.{build}
 branches:
   only:
   - master
-image: Visual Studio 2019
+image: Visual Studio 2022
 environment:
   $msbuildPath: $(cmd /c where msbuild)
   COVERALLS_REPO_TOKEN: hgIQF4YzTnoNUn5KyS9onk6vbbjaGLWrN

@@ -73,7 +73,7 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0004, 014, 0, boleto.Banco.Beneficiario.CPFCNPJ, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 004, 0, boleto.Banco.Beneficiario.ContaBancaria.Agencia, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0022, 001, 0, boleto.Banco.Beneficiario.ContaBancaria.DigitoAgencia, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0023, 008, 0, boleto.Banco.Beneficiario.ContaBancaria.Conta, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0023, 008, 0, boleto.Banco.Beneficiario.ContaBancaria.Conta.Substring(boleto.Banco.Beneficiario.ContaBancaria.Conta.Length - 8, 8), '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0031, 001, 0, boleto.Banco.Beneficiario.ContaBancaria.DigitoConta, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0032, 006, 0, "000000", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0038, 025, 0, boleto.NumeroControleParticipante, ' ');
@@ -360,6 +360,11 @@ namespace BoletoNetCore
             {
                 throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 400.", ex);
             }
+        }
+
+        public void LerDetalheRetornoCNAB400Segmento4(ref Boleto boleto, string registro)
+        {
+            throw new NotImplementedException();
         }
 
         public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)

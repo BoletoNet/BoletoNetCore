@@ -1,0 +1,13 @@
+﻿<Project>
+    <ItemGroup>
+        <Files Include="$(MSBuildThisFileDirectory)/../contentFiles/Rotativa/**/*.*" />
+    </ItemGroup>
+    <Target Name="CopyFiles_Build" AfterTargets="Build">
+        <Message Text="BoletoNetCore.PDF: Copiando arquivo para gerar PDF em: $(TargetDir)" Importance="High" />
+        <Copy SourceFiles="@(Files)" DestinationFolder="$(TargetDir)/Rotativa/%(RecursiveDir)" />
+    </Target>
+    <Target Name="CopyFiles_Publish" AfterTargets="Publish">
+        <Message Text="BoletoNetCore.PDF: Copiando arquivo para gerar PDF em: $(PublishDir)" Importance="High" />
+        <Copy SourceFiles="@(Files)" DestinationFolder="$(PublishDir)/Rotativa/%(RecursiveDir)" />
+    </Target>
+</Project>

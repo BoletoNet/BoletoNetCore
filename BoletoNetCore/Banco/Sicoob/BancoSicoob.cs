@@ -28,7 +28,7 @@ namespace BoletoNetCore
             if (Beneficiario.CodigoDV == Empty)
                 throw new Exception($"Dígito do código do beneficiário ({codigoBeneficiario}) não foi informado.");
 
-            contaBancaria.FormatarDados("PAGÁVEL EM QUALQUER BANCO ATÉ A DATA DE VENCIMENTO.", "", "", 8);
+            contaBancaria.FormatarDados("PAGÁVEL PREFERENCIALMENTE NO SICOOB.", "", "", 12);
 
             Beneficiario.Codigo = codigoBeneficiario.Length <= 6 ? codigoBeneficiario.PadLeft(6, '0') : throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, 6);
 
@@ -40,5 +40,9 @@ namespace BoletoNetCore
             return $"CB{DateTime.Now.Date.Day:00}{DateTime.Now.Date.Month:00}{numeroSequencial.ToString().PadLeft(9, '0').Right(2)}.rem";
         }
 
+        public string GerarMensagemRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        {
+                return null;
+        }
     }
 }

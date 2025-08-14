@@ -12,7 +12,7 @@ namespace BoletoNetCore
             Codigo = 033;
             Nome = "Santander";
             Digito = "7";
-            IdsRetornoCnab400RegistroDetalhe = new List<string> { };
+            IdsRetornoCnab400RegistroDetalhe = new List<string> { "1" };
             RemoveAcentosArquivoRemessa = true;
         }
 
@@ -41,9 +41,9 @@ namespace BoletoNetCore
             return "";
         }
 
-       
-
-
-
+        public string GerarMensagemRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
+        {
+            return null;
+        }
     }
 }

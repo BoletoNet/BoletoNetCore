@@ -24,18 +24,34 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0014, 001, 0, "R", ' '); // 014 a 014 - Cód. segmento do registro detalhe
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0015, 001, 0, "", ' '); // 015 a 015 - Uso exclusivo FEBRABAN/CNAB
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0016, 002, 0, boleto.CodigoMovimentoRetorno, ' '); // 016 a 017 - Código de movimento remessa
-
-            // nao há propriedades para o desconto 2 no boleto
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0018, 001, 0, "0", '0'); // 18 - 18 tipo de desconto 2 - "0 sem desconto"
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0019, 008, 0, "00000000", '0'); // 19 - 26 Data do Desconto 2
-            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 015, 2, 0, '0'); // 27 - 41 Valor/Percentual
-
-            // nao há propriedades para o desconto 3 no boleto
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0042, 001, 0, "0", '0'); // 42 - 42 tipo de desconto 3
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0043, 008, 0, "00000000", '0'); // 43-50 data do desconto 3
-            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 2, 0, '0'); // 51-65 Valor ou percentual a ser concedido
-
-
+            if (boleto.ValorDesconto2 == 0)
+            {
+                // Sem Desconto 2
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0019, 008, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0027, 015, 0, "0", '0');
+            }
+            else
+            {
+                // Com Desconto 2
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0018, 001, 0, "1", '0');
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0019, 008, 0, boleto.DataDesconto2, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0027, 015, 2, boleto.ValorDesconto2, '0');
+            }
+            if (boleto.ValorDesconto3 == 0)
+            {
+                // Sem Desconto 3
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0042, 001, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0043, 008, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 0, "0", '0');
+            }
+            else
+            {
+                // Com Desconto 3
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0042, 001, 0, "1", '0');
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0043, 008, 0, boleto.DataDesconto3, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0051, 015, 2, boleto.ValorDesconto3, '0');
+            }
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0066, 001, 0, "2", '0'); // 66 Código da multa - 2 valor percentual (manual: "No Sicredi a multa só pode ser informada em valor percentual")
             reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0067, 008, 0, boleto.DataMulta, '0'); // 67 - 74 Se cobrar informe a data para iniciar a cobrança ou informe zeros se não cobrar
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0075, 015, 2, boleto.PercentualMulta, '0');  // 75 - 89 Percentual de multa. Informar zeros se não cobrar
@@ -155,7 +171,7 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0151, 015, 2, boleto.ValorDesconto, '0');  // 151 a 165 - Valor percentual a ser concedido
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0166, 015, 2, boleto.ValorIOF, '0'); // 166 a 180 - Valor do IOF a ser recolhido
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0181, 015, 2, boleto.ValorAbatimento, '0'); // 181 a 195 - Valor do abatimento
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0196, 025, 0, boleto.NumeroDocumento, ' '); // 196 a 220 - Identificação do título na empresa
+            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0196, 025, 0, boleto.NumeroControleParticipante, ' '); // 196 a 220 - Identificação do título na empresa
 
             /* protesto
             1 - Protestar automaticamente
@@ -186,7 +202,7 @@ namespace BoletoNetCore
             }
 
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0224, 001, 0, "1", '0'); // 224 a 224 - Código para baixa/devolução
-            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0225, 003, 0, "000", '0'); // 225 a 227 - Nº de dias para baixa/devolução (Manual: "O Sicredi não utiliza esse campo, preencher com zeros")
+            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0225, 003, 0, boleto.DiasBaixaDevolucao, '0'); // 225 a 227 - Nº de dias para baixa/devolução (Manual: "O Sicredi não utiliza esse campo, preencher com zeros")
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0228, 002, 0, "09", '0'); // 228 a 229 - Código da moeda = "09"
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0230, 010, 0, "0000000000", '0'); // 230 a 239 - Nº do contrato da operação de crédito (Manual: "O Sicredi não utiliza esse campo, preencher com zeros")
             reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0240, 001, 0, "", ' '); // 240 a 240 - Uso exclusivo FEBRABAN/CNAB
