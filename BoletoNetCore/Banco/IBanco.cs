@@ -110,6 +110,7 @@ namespace BoletoNetCore
         void LerHeaderRetornoCNAB400(string registro);
         void CompletarHeaderRetornoCNAB400(string registro);
         void LerDetalheRetornoCNAB400Segmento1(ref Boleto boleto, string registro);
+        void LerDetalheRetornoCNAB400Segmento2(ref Boleto boleto, string registro);
         void LerDetalheRetornoCNAB400Segmento4(ref Boleto boleto, string registro);
         void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro);
         void LerTrailerRetornoCNAB400(string registro);

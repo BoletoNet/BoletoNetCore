@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Text;
 using NUnit.Framework;
 
 namespace BoletoNetCore.Testes
@@ -8,6 +10,12 @@ namespace BoletoNetCore.Testes
     public class BancoSantanderCarteira101Tests
     {
         readonly IBanco _banco;
+
+        const string arquivoRetorno = @"02RETORNO01COBRANCA       11221654321916543219AAAAAA BBBBBBBBBB NOVO HAMBURG033SANTANDER      02092400000000000163305                                                                                                                                                                                                                                                                                  153000001
+1029169988400017011341300340913003409900028566000000000000714400071447                                     50202092400000071440007144795508       15092400000000003000331134701000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000 N 020924Teste Testety                        00000000000000000000000000000000000000000C           153000002
+2 pix.santander.com.br/qr/v2/cobv/aaaaaaaa-3dfa-4321-1234-aa00bb22cc33         XYZ000123455000000006044802099024                                                                                                                                                                                                                                                                                       153000003
+9201033          000023900000001234567800000138                                                  000000000000000000000000000000          000000000000000000000000000000 ";
+
         public BancoSantanderCarteira101Tests()
         {
             var contaBancaria = new ContaBancaria
@@ -146,6 +154,106 @@ namespace BoletoNetCore.Testes
 
             //Assertivas 
             Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
+        }
+
+
+        [TestCase(TipoChavePix.CPF, "00000000191")]
+        [TestCase(TipoChavePix.CNPJ, "81293564000161")]
+        [TestCase(TipoChavePix.Celular, "51966331122")]
+        [TestCase(TipoChavePix.Email, "teste@teste.com.br")]
+        [TestCase(TipoChavePix.Aleatoria, "CBFEC37D-5C71-4D48-A952-C21A91BD552A")]
+        public void Deve_criar_remessa_boleto_santander_com_segmento8_valido(TipoChavePix tipoChavePix, string chavePix)
+        {
+            var nomeArquivoREM = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{Guid.NewGuid()}.REM");
+
+            try
+            {
+                _banco.Beneficiario.ContaBancaria.TipoChavePix = tipoChavePix;
+                _banco.Beneficiario.ContaBancaria.ChavePix = chavePix;
+
+                int contadorLinha = 0;
+                int quantidadeBoletos = 1;
+
+                var boletos = TestUtils.GerarBoletos(_banco, quantidadeBoletos, "N", 223344);
+                var arquivoRemessa = new ArquivoRemessa(boletos.Banco, TipoArquivo.CNAB400, 1);
+
+                CriarPathArquivoRemessa(nomeArquivoREM);
+
+                using (var fileStream = new FileStream(nomeArquivoREM, FileMode.Create))
+                    arquivoRemessa.GerarArquivoRemessa(boletos, fileStream);
+
+                if (!File.Exists(nomeArquivoREM))
+                    Assert.Fail("Arquivo Remessa não encontrado: " + nomeArquivoREM);
+
+                foreach (string linha in File.ReadLines(nomeArquivoREM))
+                {
+                    contadorLinha++;
+
+                    Assert.AreEqual(contadorLinha, int.Parse(linha.Substring(397, 3)));
+                    Assert.AreEqual(400, linha.Length);
+
+                    if (linha.Substring(0, 1) == "8")
+                    {
+                        Assert.AreEqual(chavePix.ToUpper(), linha.Substring(43, chavePix.Length));
+                    }
+                }
+
+                Assert.AreEqual((quantidadeBoletos * 2) + 2, contadorLinha);
+            }
+            catch (Exception e)
+            {
+                if (e.InnerException != null)
+                    Assert.Fail(e.InnerException.ToString());
+                else
+                    Assert.Fail(e.Message);
+            }
+            finally
+            {
+                if (File.Exists(nomeArquivoREM))
+                    File.Delete(nomeArquivoREM);
+            }
+        }
+
+        private static void CriarPathArquivoRemessa(string nomeArquivoREM)
+        {
+            if (!Directory.Exists(Path.GetDirectoryName(nomeArquivoREM)))
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(nomeArquivoREM));
+            }
+
+            if (File.Exists(nomeArquivoREM))
+            {
+                File.Delete(nomeArquivoREM);
+                if (File.Exists(nomeArquivoREM))
+                    Assert.Fail("Arquivo Remessa não foi excluído: " + nomeArquivoREM);
+            }
+        }
+
+        [Test]
+        public void LerRetorno_validando_beneficiario()
+        {
+            var buffer = Encoding.ASCII.GetBytes(arquivoRetorno);
+            var mem = new MemoryStream(buffer);
+            var boletos = new ArquivoRetorno(mem);
+
+            Assert.AreEqual("AAAAAA BBBBBBBBBB NOVO HAMBURG", boletos.Banco.Beneficiario.Nome);
+            Assert.AreEqual("1122", boletos.Banco.Beneficiario.ContaBancaria.Agencia);
+            Assert.AreEqual("9", boletos.Banco.Beneficiario.ContaBancaria.DigitoConta);
+            Assert.AreEqual("1654321", boletos.Banco.Beneficiario.ContaBancaria.Conta);            
+        }
+
+        [Test]
+        public void LerRetorno_validando_Registro_QrCode()
+        {
+            string qrCode = "pix.santander.com.br/qr/v2/cobv/aaaaaaaa-3dfa-4321-1234-aa00bb22cc33         ";
+            var buffer = Encoding.ASCII.GetBytes(arquivoRetorno);
+            var mem = new MemoryStream(buffer);
+            var boletos = new ArquivoRetorno(mem);
+
+            Assert.AreEqual(1, boletos.Boletos.Count);
+            Assert.AreEqual("Entrada boleto Confirmada", boletos.Boletos[0].DescricaoMovimentoRetorno);
+            Assert.AreEqual(qrCode, boletos.Boletos[0].QRCode);
+            Assert.AreEqual("XYZ000123455000000006044802099024  ", boletos.Boletos[0].TxId);
         }
     }
 }

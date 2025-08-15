@@ -22,6 +22,8 @@ namespace BoletoNetCore
         public string MensagemFixaTopoBoleto { get; set; } = "";
         public string MensagemFixaPagador { get; set; } = "";
         public int CodigoBancoCorrespondente { get; set; }
+        public string ChavePix { get; set; }
+        public TipoChavePix TipoChavePix { get; set; }
         public string NossoNumeroBancoCorrespondente { get; set; }
         public string CodigoConvenio { get; set; } // Detalhamento do tipo de cobrança que você contatou. Veja com o gerente de banco
         public TipoDistribuicaoBoleto TipoDistribuicao { get; set; } = TipoDistribuicaoBoleto.ClienteDistribui;

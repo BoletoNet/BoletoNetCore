@@ -13,7 +13,42 @@ namespace BoletoNetCore
         {
             // Registro 1 - Obrigatório
             var detalhe = GerarDetalheRemessaCNAB400Registro1(boleto, ref registro);
+
+            // Registro 8 - Boleto com Pix - Registro Opcional
+            var strline = GerarDetalheRemessaCNAB400Registro2(boleto, ref registro);
+            if (!string.IsNullOrWhiteSpace(strline))
+            {
+                detalhe += Environment.NewLine;
+                detalhe += strline;
+            }
             return detalhe;
+        }
+
+        private string GerarDetalheRemessaCNAB400Registro2(Boleto boleto, ref int numeroRegistroGeral)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(boleto.Banco.Beneficiario.ContaBancaria.ChavePix))
+                    return "";
+
+                numeroRegistroGeral++;
+                var reg = new TRegistroEDI();
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0001, 001, 0, "8", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0002, 041, 0, string.Empty, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0043, 001, 0, (int)boleto.Banco.Beneficiario.ContaBancaria.TipoChavePix, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0044, 077, 0, boleto.Banco.Beneficiario.ContaBancaria.ChavePix, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0121, 035, 0, boleto.TxId, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0156, 239, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
+
+                reg.CodificarLinha();
+                return reg.LinhaRegistro;
+
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
+            }
         }
 
         public string GerarHeaderRemessaCNAB400(ref int numeroArquivoRemessa, ref int numeroRegistroGeral)
@@ -194,6 +229,17 @@ namespace BoletoNetCore
                     throw new Exception("O arquivo não é do tipo \"02RETORNO01COBRANCA\"");
                 if (registro.Substring(79, 15).TrimEnd() != "SANTANDER")
                     throw new Exception("O arquivo não é do tipo \"SANTANDER\"");
+
+                this.Beneficiario.ContaBancaria = this.Beneficiario.ContaBancaria ?? new ContaBancaria();
+                
+                this.Beneficiario.ContaBancaria.Agencia = registro.Substring(26, 4);
+
+                var conta = registro.Substring(38, 8).Trim();
+                this.Beneficiario.ContaBancaria.Conta = conta.Substring(0, 7);
+                this.Beneficiario.ContaBancaria.DigitoConta = conta.Substring(7, 1);
+                //Layout de retorno cita 9 posições, contudo o código beneficiário do Santander tem apenas 7.
+                this.Beneficiario.Codigo = registro.Substring(108, 9).Right(7); 
+                this.Beneficiario.Nome = registro.Substring(46, 30);
             }
             catch (Exception ex)
             {
@@ -257,6 +303,12 @@ namespace BoletoNetCore
         {
         }
 
+        public void LerDetalheRetornoCNAB400Segmento2(ref Boleto boleto, string registro)
+        {
+            boleto.QRCode = registro.Substring(2, 77);
+            boleto.TxId = registro.Substring(79, 35);
+        }
+
         public void LerDetalheRetornoCNAB400Segmento4(ref Boleto boleto, string registro)
         {
             throw new NotImplementedException();
@@ -264,7 +316,7 @@ namespace BoletoNetCore
 
         public void LerDetalheRetornoCNAB400Segmento7(ref Boleto boleto, string registro)
         {
-            
+            throw new NotImplementedException();
         }
 
         private string DescricaoMovimentoRetornoCnab400(string codigo, string registro)
@@ -341,7 +393,6 @@ namespace BoletoNetCore
                     return "";
             }
         }
-
         #endregion
 
     }
