@@ -15,7 +15,7 @@ namespace BoletoNetCore
             var detalhe = GerarDetalheRemessaCNAB400Registro1(boleto, ref registro);
 
             // Registro 8 - Boleto com Pix - Registro Opcional
-            var strline = GerarDetalheRemessaCNAB400Registro2(boleto, ref registro);
+            var strline = GerarDetalheRemessaCNAB400Registro8(boleto, ref registro);
             if (!string.IsNullOrWhiteSpace(strline))
             {
                 detalhe += Environment.NewLine;
@@ -24,7 +24,7 @@ namespace BoletoNetCore
             return detalhe;
         }
 
-        private string GerarDetalheRemessaCNAB400Registro2(Boleto boleto, ref int numeroRegistroGeral)
+        private string GerarDetalheRemessaCNAB400Registro8(Boleto boleto, ref int numeroRegistroGeral)
         {
             try
             {
