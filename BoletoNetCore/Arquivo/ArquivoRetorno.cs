@@ -218,6 +218,9 @@ namespace BoletoNetCore
                 case "1":
                     b.LerDetalheRetornoCNAB400Segmento1(ref boleto, registro);
                     break;
+                case "2":
+                    b.LerDetalheRetornoCNAB400Segmento2(ref boleto, registro);
+                    break;
                 case "4":
                     b.LerDetalheRetornoCNAB400Segmento4(ref boleto, registro);
                     break;
