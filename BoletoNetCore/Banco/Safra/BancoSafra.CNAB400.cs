@@ -57,7 +57,7 @@ namespace BoletoNetCore
                 boleto.ValorIOF = Convert.ToDecimal(registro.Substring(214, 13)) / 100;
                 boleto.ValorAbatimento = Convert.ToDecimal(registro.Substring(227, 13)) / 100;
                 boleto.ValorDesconto = Convert.ToDecimal(registro.Substring(240, 13)) / 100;
-                boleto.ValorPagoCredito = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
+                boleto.ValorPago = Convert.ToDecimal(registro.Substring(253, 13)) / 100;
                 boleto.ValorJurosDia = Convert.ToDecimal(registro.Substring(266, 13)) / 100;
                 boleto.ValorOutrosCreditos = Convert.ToDecimal(registro.Substring(279, 13)) / 100;
 
