@@ -154,9 +154,25 @@ namespace BoletoNetCore
             reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0110, 008, 0, boleto.DataEmissao, '0'); // 110 a 117 - Data da emissão do título
 
             // 1 - Valor / 2 - Percentual / 3 - Isento
-            reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0118, 001, 0, boleto.ValorJurosDia != 0 ? "1" : "3", '0'); // 118 a 118 - Código do juro de mora
-            reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0119, 008, 0, boleto.DataJuros, '0'); // 119 a 126 - Data do juro de mora
-            reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 015, 2, boleto.ValorJurosDia, '0'); // 127 a 141 - Juros de mora por dia/taxa
+            //reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0118, 001, 0, boleto.ValorJurosDia != 0 ? "1" : "3", '0'); // 118 a 118 - Código do juro de mora
+            //reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0119, 008, 0, boleto.DataJuros, '0'); // 119 a 126 - Data do juro de mora
+            //reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 015, 2, boleto.ValorJurosDia, '0'); // 127 a 141 - Juros de mora por dia/taxa
+            if (boleto.ValorJurosDia == 0 && boleto.PercentualJurosDia == 0)
+            {
+                // Sem Juros Mora
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0118, 001, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0119, 008, 0, "0", '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 015, 2, 0, '0');
+            }
+            else
+            {
+                // Com Juros Mora ($)
+                var codigoMora = (boleto.ValorJurosDia != 0) ? "1" : ((boleto.PercentualJurosDia != 0) ? "2" : "0");
+                var valor = (boleto.ValorJurosDia != 0) ? boleto.ValorJurosDia : ((boleto.PercentualJurosDia != 0) ? boleto.PercentualJurosDia : 0);
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0118, 001, 0, codigoMora, '0');
+                reg.Adicionar(TTiposDadoEDI.ediDataDDMMAAAA_________, 0119, 008, 0, boleto.DataJuros, '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 015, 2, valor, '0');
+            }
 
             // 0 - Sem Desconto / 1 - Valor / 2 - Percentual / 3 - Valor por Atencipacao / 7 - Cancelamento de Desconto
             reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0142, 001, 0, boleto.ValorDesconto != 0 ? "1" : "0", '0'); // 142 a 142 - Código do desconto 1
