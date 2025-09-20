@@ -230,6 +230,7 @@ namespace BoletoNetCore
                 if (registro.Substring(79, 15).TrimEnd() != "SANTANDER")
                     throw new Exception("O arquivo não é do tipo \"SANTANDER\"");
 
+                this.Beneficiario = this.Beneficiario ?? new Beneficiario();
                 this.Beneficiario.ContaBancaria = this.Beneficiario.ContaBancaria ?? new ContaBancaria();
                 
                 this.Beneficiario.ContaBancaria.Agencia = registro.Substring(26, 4);
