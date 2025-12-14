@@ -34,6 +34,10 @@ img {
 	color: #000000;
 }
 
+.w150:empty {
+	display: none;
+}
+
 .ct {
 	font: 9px "arial narrow";
 	color: #000033;
