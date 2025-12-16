@@ -19,8 +19,11 @@ Esta abordagem garante fidelidade visual com o HTML original.
 # Instalar o pacote
 dotnet add package BoletoNetCore.Playwright
 
-# Instalar os navegadores do Playwright
-pwsh bin/Debug/netX.0/playwright.ps1 install chromium
+# Compilar o projeto (gera o script de instalação)
+dotnet build -o ./build
+
+# Instalar o Chromium
+pwsh ./build/playwright.ps1 install chromium
 ```
 
 ## Quick Start
@@ -101,7 +104,6 @@ Apesar de utilizar um navegador headless completo, o renderizador Playwright apr
 
 **Ambiente de teste:**
 - CPU: AMD Ryzen 5 5600X (6 cores / 12 threads)
-- RAM: 32 GB
 - OS: Windows 10
 - .NET: 9.0 (Release build)
 
@@ -113,18 +115,17 @@ dotnet run -c Release -- metrics --output ./results --total 100 --concurrency 4
 
 **Resultados:**
 
-| Categoria | Métrica | Valor |
-|-----------|---------|-------|
-| **Memória** | Baseline | 44 MB |
-| | Peak | 95 MB |
-| | Delta | +50 MB |
-| **CPU** | Média | 2.9% |
-| | Pico | 3.4% |
-| **Latência** | Média | 305 ms |
-| | P95 | 341 ms |
-| | P99 | 370 ms |
-| **Throughput** | | 12.8 PDFs/seg |
-| **Taxa de Sucesso** | | 100% |
+| Categoria           | Métrica  | Valor         |
+| ------------------- | -------- | ------------- |
+| **Memória**         | Baseline | 44 MB         |
+|                     | Peak     | 95 MB         |
+|                     | Delta    | +50 MB        |
+| **CPU**             | Média    | 2.9%          |
+|                     | Pico     | 3.4%          |
+| **Latência**        | Média    | 305 ms        |
+|                     | P95      | 341 ms        |
+|                     | P99      | 370 ms        |
+| **Throughput**      |          | 12.8 PDFs/seg |
 
 O overhead de memória é modesto (~50 MB para 4 slots concorrentes) e a latência é consistente com baixa variância entre P50 e P99.
 
@@ -151,8 +152,4 @@ BoletoNetCore.Playwright
 
 - .NET Standard 2.0+
 - Playwright 1.57+
-- Chromium (instalado via Playwright CLI)
-
-## Licença
-
-MIT
+- Chromium (instalado via Playwright)

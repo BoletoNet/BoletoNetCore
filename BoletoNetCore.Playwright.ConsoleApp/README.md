@@ -1,21 +1,21 @@
 # BoletoNetCore.Playwright.ConsoleApp
 
-Aplicativo de console para geração de boletos utilizando Playwright.
+Aplicativo de console para testes e benchmarks da geração de boletos utilizando Playwright.
 
 ## Configuração do Playwright
 
 Antes de executar, instale o browser Chromium:
 
 ```bash
-dotnet build
-pwsh bin/Debug/net9.0/playwright.ps1 install chromium
+dotnet build -o ./build
+pwsh ./build/playwright.ps1 install chromium
 ```
 
 Para builds em Release:
 
 ```bash
-dotnet build -c Release
-pwsh bin/Release/net9.0/playwright.ps1 install chromium
+dotnet build -c Release -o ./build
+pwsh ./build/playwright.ps1 install chromium
 ```
 
 ## Comandos

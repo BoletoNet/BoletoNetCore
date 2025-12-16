@@ -8,16 +8,43 @@ Extensões para integração do BoletoNetCore.Playwright com Microsoft.Extension
 dotnet add package BoletoNetCore.Playwright.Extensions
 ```
 
-## Registro de Serviços
-
-### Configuração Básica
+## Quick Start
 
 ```csharp
-// Program.cs ou Startup.cs
+// Program.cs
 services.AddPlaywrightRenderer();
 ```
 
-### Configuração Avançada
+```csharp
+public class BoletoService
+{
+    private readonly IHtmlRenderer _renderer;
+
+    public BoletoService(IHtmlRenderer renderer)
+    {
+        _renderer = renderer;
+    }
+
+    public async Task<byte[]> GerarPdfAsync(Boleto boleto, CancellationToken ct = default)
+    {
+        return await boleto.RenderPlaywrightAsync(_renderer, PdfFormat.Default, cancellationToken: ct);
+    }
+
+    public async Task<byte[]> GerarPngAsync(Boleto boleto, CancellationToken ct = default)
+    {
+        return await boleto.RenderPlaywrightAsync(_renderer, PngFormat.Default, cancellationToken: ct);
+    }
+
+    public async Task<byte[]> GerarLotePdfAsync(Boletos boletos, CancellationToken ct = default)
+    {
+        return await boletos.RenderPlaywrightAsync(_renderer, PdfFormat.Default, cancellationToken: ct);
+    }
+}
+```
+
+## Configuração
+
+### Via Delegate
 
 ```csharp
 services.AddPlaywrightRenderer(options =>
@@ -50,36 +77,7 @@ builder.Services.Configure<PlaywrightRendererOptions>(
 }
 ```
 
-## Uso no Serviço
-
-```csharp
-public class BoletoService
-{
-    private readonly IHtmlRenderer _renderer;
-
-    public BoletoService(IHtmlRenderer renderer)
-    {
-        _renderer = renderer;
-    }
-
-    public async Task<byte[]> GerarPdfAsync(Boleto boleto, CancellationToken ct = default)
-    {
-        return await boleto.RenderPlaywrightAsync(_renderer, PdfFormat.Default, cancellationToken: ct);
-    }
-
-    public async Task<byte[]> GerarPngAsync(Boleto boleto, CancellationToken ct = default)
-    {
-        return await boleto.RenderPlaywrightAsync(_renderer, PngFormat.Default, cancellationToken: ct);
-    }
-
-    public async Task<byte[]> GerarLotePdfAsync(Boletos boletos, CancellationToken ct = default)
-    {
-        return await boletos.RenderPlaywrightAsync(_renderer, PdfFormat.Default, cancellationToken: ct);
-    }
-}
-```
-
-## Opções de Configuração
+### Opções Disponíveis
 
 | Opção | Tipo | Padrão | Descrição |
 |-------|------|--------|-----------|
@@ -99,6 +97,8 @@ O renderizador é registrado como **singleton** para reutilizar o processo do na
 ### Prewarm
 
 Quando `PrewarmOnStart = true`, um `IHostedService` é registrado para inicializar o navegador durante o startup da aplicação. Isso elimina o atraso de ~500ms na primeira renderização.
+
+> **Nota:** Este recurso requer um host ASP.NET Core ou Generic Host para funcionar.
 
 ```
 info: BoletoNetCore.PlaywrightRendererHostedService
