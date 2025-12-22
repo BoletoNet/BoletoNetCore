@@ -21,36 +21,40 @@ img {
 }
 
 .cp {
-    font: bold 10px arial;
+    font: bold 10px Arial, "Liberation Sans", sans-serif;
     color: #000000;
 }
 
 .ti {
-	font: 9px arial, helvetica, sans-serif;
+	font: 9px Arial, "Liberation Sans", Helvetica, sans-serif;
 }
 
 .ld {
-	font: bold 15px arial;
+	font: bold 15px Arial, "Liberation Sans", sans-serif;
 	color: #000000;
 }
 
+.w150:empty {
+	display: none;
+}
+
 .ct {
-    font: 9px "arial narrow";
+    font: 9px "Arial Narrow", "Liberation Sans Narrow", sans-serif;
     color: #000000;
 }
 
 .cn {
-    font: 9px arial;
+    font: 9px Arial, "Liberation Sans", sans-serif;
     color: #000000;
 }
 
 .cn8 {
-    font: 8px arial;
+    font: 8px Arial, "Liberation Sans", sans-serif;
     color: #000000;
 }
 
 .bc {
-    font: bold 22px arial;
+    font: bold 22px Arial, "Liberation Sans", sans-serif;
     color: #000000;
 }
 
@@ -88,12 +92,12 @@ img {
 }
 
 .cpN {
-    font: bold 10px arial;
+    font: bold 10px Arial, "Liberation Sans", sans-serif;
     color: #000000;
 }
 
 .ctN {
-    font: 9px "arial narrow";
+    font: 9px "Arial Narrow", "Liberation Sans Narrow", sans-serif;
     color: #000000;
 }
 
@@ -302,7 +306,7 @@ img {
 }
 
 .w450 {
-    width: 409px;
+    width: 450px;
 }
 
 .w472 {
@@ -363,13 +367,13 @@ img {
 }
 
 .rc6 .t {
-	font: 9px "arial narrow";
+	font: 9px "Arial Narrow", "Liberation Sans Narrow", sans-serif;
 	color: #000033;
 	height: 13px;
 }
 
 .rc6 .c {
-	font: bold 10px arial;
+	font: bold 10px Arial, "Liberation Sans", sans-serif;
 	color: black;
 	height: 12px;
 }
