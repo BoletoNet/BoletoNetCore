@@ -1,0 +1,37 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<PackageId>BoletoNetCore.Playwright.Extensions</PackageId>
+		<Title>BoletoNetCore.Playwright.Extensions</Title>
+		<TargetFrameworks>netstandard2.0</TargetFrameworks>
+		<LangVersion>latest</LangVersion>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Authors>BoletoNetCore</Authors>
+		<Description>
+			Extensões de injeção de dependência e hosting para BoletoNetCore.Playwright.
+		</Description>
+		<Summary>Extensões de injeção de dependência e hosting para BoletoNetCore.Playwright.</Summary>
+		<PackageTags>boleto pdf playwright dependency-injection aspnetcore hosting</PackageTags>
+		<RepositoryUrl>https://github.com/BoletoNet/BoletoNetCore</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<IsPackable>true</IsPackable>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\BoletoNetCore.Playwright\BoletoNetCore.Playwright.csproj" />
+	</ItemGroup>
+
+</Project>

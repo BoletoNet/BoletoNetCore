@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <PackageId>BoletoNetCore.Playwright</PackageId>
+	  <Title>BoletoNetCore.Playwright</Title>
+	  <TargetFrameworks>netstandard2.0</TargetFrameworks>
+	  <LangVersion>latest</LangVersion>
+	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Authors>BoletoNetCore</Authors>
+	  <Description>
+		  BoletoNetCore.Playwright é uma biblioteca para renderização de boletos bancários brasileiros em PDF, PNG e JPEG utilizando Microsoft Playwright.
+	  </Description>
+	  <Summary>Renderização de boletos bancários brasileiros em PDF, PNG e JPEG utilizando Microsoft Playwright.</Summary>
+	  <PackageTags>boleto pdf png jpeg playwright chromium</PackageTags>
+	  <RepositoryUrl>https://github.com/BoletoNet/BoletoNetCore</RepositoryUrl>
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <IsPackable>true</IsPackable>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<None Include="README.md" Pack="true" PackagePath="\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Playwright" Version="1.57.0" />
+		<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="8.0.0" />
+		<PackageReference Include="System.Text.Json" Version="8.0.6" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\BoletoNetCore\BoletoNetCore.csproj" />
+	</ItemGroup>
+
+</Project>
