@@ -17,6 +17,6 @@ namespace BoletoNetCore
         CrediSIS = 097,
         BancoInter = 077,
         BancoDaycoval = 707,
-        BancoCressol = 133,
+        BancoCresol = 133,
     }
 }

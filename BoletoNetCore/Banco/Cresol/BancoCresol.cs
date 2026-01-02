@@ -5,12 +5,12 @@ using BoletoNetCore.Extensions;
 
 namespace BoletoNetCore
 {
-    internal sealed partial class BancoCressol : BancoFebraban<BancoCressol>, IBanco
+    internal sealed partial class BancoCresol : BancoFebraban<BancoCresol>, IBanco
     {
-        public BancoCressol()
+        public BancoCresol()
         {
             Codigo = 133;
-            Nome = "Cressol";
+            Nome = "Cresol";
             Digito = "3";
             //IdsRetornoCnab400RegistroDetalhe = new List<string> { "1", "4" };
             RemoveAcentosArquivoRemessa = true;
@@ -25,7 +25,7 @@ namespace BoletoNetCore
         {
             var contaBancaria = Beneficiario.ContaBancaria;
 
-            if (!CarteiraFactory<BancoCressol>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
+            if (!CarteiraFactory<BancoCresol>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
                 throw BoletoNetCoreException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
             contaBancaria.FormatarDados("PAGÁVEL PREFERENCIALMENTE NA REDE BRADESCO OU BRADESCO EXPRESSO.", "", "", 7);
