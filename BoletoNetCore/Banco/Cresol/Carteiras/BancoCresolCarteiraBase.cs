@@ -4,7 +4,7 @@ using static System.String;
 
 namespace BoletoNetCore
 {
-    public abstract class BancoCressolCarteiraBase
+    public abstract class BancoCresolCarteiraBase
     {
         public virtual void FormataNossoNumero(Boleto boleto)
         {
