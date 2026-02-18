@@ -119,43 +119,46 @@ namespace BoletoNetCore
             IBancoCNAB240 b = (IBancoCNAB240)Banco;
             if (b == null) throw new Exception("Leitura CNAB240 não implementada para este banco.");
 
-            var tipoRegistro = registro.Substring(7, 1);
-            var tipoSegmento = registro.Substring(13, 1);
+            char tipoRegistro = registro[7];
+            char tipoSegmento = registro[13];
 
-            if (tipoRegistro == "0")
+            if (tipoRegistro == '0')
             {
                 //REGISTRO HEADER DO ARQUIVO RETORNO
                 b.LerHeaderRetornoCNAB240(this, registro);
                 return;
             }
 
-            if (tipoRegistro == "3" & tipoSegmento == "T")
+            if (tipoRegistro == '3')
             {
-                // Segmento T - Indica um novo boleto
-                var boleto = new Boleto(this.Banco, _ignorarCarteiraBoleto);
-                b.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
-                Boletos.Add(boleto);
-                return;
-            }
+                if (tipoSegmento == 'T')
+                {
+                    // Segmento T - Indica um novo boleto
+                    var boleto = new Boleto(this.Banco, _ignorarCarteiraBoleto);
+                    b.LerDetalheRetornoCNAB240SegmentoT(ref boleto, registro);
+                    Boletos.Add(boleto);
+                    return;
+                }
 
-            if (tipoRegistro == "3" & tipoSegmento == "U")
-            {
-                // Segmento U - Continuação do segmento T anterior (localiza o último boleto da lista)
-                Boleto boleto = Boletos.LastOrDefault();
-                // Se não encontrou um boleto válido, ocorreu algum problema, pois deveria ter criado um novo objeto no registro que foi analisado anteriormente.
-                if (boleto == null)
-                    throw new Exception("Objeto boleto não identificado");
-                b.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
-                return;
-            }
+                if (tipoSegmento == 'U')
+                {
+                    // Segmento U - Continuação do segmento T anterior (localiza o último boleto da lista)
+                    Boleto boleto = Boletos.LastOrDefault();
+                    // Se não encontrou um boleto válido, ocorreu algum problema, pois deveria ter criado um novo objeto no registro que foi analisado anteriormente.
+                    if (boleto == null)
+                        throw new Exception("Objeto boleto não identificado");
+                    b.LerDetalheRetornoCNAB240SegmentoU(ref boleto, registro);
+                    return;
+                }
 
-            if (tipoRegistro == "3" & tipoSegmento == "A")
-            {
-                // Segmento A - Indica um novo boleto
-                var boleto = new Boleto(this.Banco, _ignorarCarteiraBoleto);
-                b.LerDetalheRetornoCNAB240SegmentoA(ref boleto, registro);
-                Boletos.Add(boleto);
-                return;
+                if (tipoSegmento == 'A')
+                {
+                    // Segmento A - Indica um novo boleto
+                    var boleto = new Boleto(this.Banco, _ignorarCarteiraBoleto);
+                    b.LerDetalheRetornoCNAB240SegmentoA(ref boleto, registro);
+                    Boletos.Add(boleto);
+                    return;
+                }
             }
         }
 
@@ -165,17 +168,18 @@ namespace BoletoNetCore
             if (b == null) throw new Exception("Leitura CNAB400 não implementada para este banco.");
 
             // Identifica o tipo do registro (primeira posição da linha)
-            var tipoRegistro = registro.Substring(0, 1);
+            char tipoRegistroChar = registro[0];
+            string tipoRegistro = tipoRegistroChar.ToString();
 
             // Registro HEADER
-            if (tipoRegistro == "0")
+            if (tipoRegistroChar == '0')
             {
                 b.LerHeaderRetornoCNAB400(registro);
                 return;
             }
 
             // Registro TRAILER
-            if (tipoRegistro == "9")
+            if (tipoRegistroChar == '9')
             {
                 b.LerTrailerRetornoCNAB400(registro);
                 return;
@@ -213,18 +217,18 @@ namespace BoletoNetCore
 
 
             // Identifica o tipo de registro que deve ser analisado pelo Banco.
-            switch (tipoRegistro)
+            switch (tipoRegistroChar)
             {
-                case "1":
+                case '1':
                     b.LerDetalheRetornoCNAB400Segmento1(ref boleto, registro);
                     break;
-                case "2":
+                case '2':
                     b.LerDetalheRetornoCNAB400Segmento2(ref boleto, registro);
                     break;
-                case "4":
+                case '4':
                     b.LerDetalheRetornoCNAB400Segmento4(ref boleto, registro);
                     break;
-                case "7":
+                case '7':
                     b.LerDetalheRetornoCNAB400Segmento7(ref boleto, registro);
                     break;
                 default:

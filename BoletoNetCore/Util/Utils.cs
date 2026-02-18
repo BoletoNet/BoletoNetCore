@@ -139,15 +139,28 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Formata o número do CPF 92074286520 para 920.742.865-20
+        /// Formata o nï¿½mero do CPF 92074286520 para 920.742.865-20
         /// </summary>
-        /// <param name="cpf">Sequencia numérica de 11 dígitos. Exemplo: 00000000000</param>
+        /// <param name="cpf">Sequencia numï¿½rica de 11 dï¿½gitos. Exemplo: 00000000000</param>
         /// <returns>CPF formatado</returns>
         internal static string FormataCPF(string cpf)
         {
             try
             {
-                return cpf != null && cpf.Length == 11 ? $"{cpf.Substring(0, 3)}.{cpf.Substring(3, 3)}.{cpf.Substring(6, 3)}-{cpf.Substring(9, 2)}" : cpf;
+                if (cpf == null || cpf.Length != 11)
+                    return cpf;
+                
+                // Otimizado: usa array ao invÃ©s de mÃºltiplos Substring
+                char[] result = new char[14];
+                cpf.CopyTo(0, result, 0, 3);      // 000
+                result[3] = '.';
+                cpf.CopyTo(3, result, 4, 3);      // 000
+                result[7] = '.';
+                cpf.CopyTo(6, result, 8, 3);      // 000
+                result[11] = '-';
+                cpf.CopyTo(9, result, 12, 2);     // 00
+                
+                return new string(result);
             }
             catch
             {
@@ -158,13 +171,28 @@ namespace BoletoNetCore
         /// <summary>
         /// Formata o CNPJ. Exemplo 00.316.449/0001-63
         /// </summary>
-        /// <param name="cnpj">Sequencia numérica de 14 dígitos. Exemplo: 00000000000000</param>
+        /// <param name="cnpj">Sequencia numï¿½rica de 14 dï¿½gitos. Exemplo: 00000000000000</param>
         /// <returns>CNPJ formatado</returns>
         internal static string FormataCNPJ(string cnpj)
         {
             try
             {
-                return cnpj != null && cnpj.Length == 14 ? $"{cnpj.Substring(0, 2)}.{cnpj.Substring(2, 3)}.{cnpj.Substring(5, 3)}/{cnpj.Substring(8, 4)}-{cnpj.Substring(12, 2)}" : cnpj;
+                if (cnpj == null || cnpj.Length != 14)
+                    return cnpj;
+                
+                // Otimizado: usa array ao invÃ©s de mÃºltiplos Substring
+                char[] result = new char[18];
+                cnpj.CopyTo(0, result, 0, 2);         // 00
+                result[2] = '.';
+                cnpj.CopyTo(2, result, 3, 3);         // 000
+                result[6] = '.';
+                cnpj.CopyTo(5, result, 7, 3);         // 000
+                result[10] = '/';
+                cnpj.CopyTo(8, result, 11, 4);        // 0000
+                result[15] = '-';
+                cnpj.CopyTo(12, result, 16, 2);       // 00
+                
+                return new string(result);
             }
             catch
             {
@@ -175,13 +203,22 @@ namespace BoletoNetCore
         /// <summary>
         /// Formato o CEP em 00000-000
         /// </summary>
-        /// <param name="cep">Sequencia numérica de 8 dígitos. Exemplo: 00000000</param>
+        /// <param name="cep">Sequencia numï¿½rica de 8 dï¿½gitos. Exemplo: 00000000</param>
         /// <returns>CEP formatado</returns>
         internal static string FormataCEP(string cep)
         {
             try
             {
-                return cep != null && cep.Length == 8 ? $"{cep.Substring(0, 2)}{cep.Substring(2, 3)}-{cep.Substring(5, 3)}" : cep;
+                if (cep == null || cep.Length != 8)
+                    return cep;
+                
+                // Otimizado: usa array ao invÃ©s de mÃºltiplos Substring
+                char[] result = new char[9];
+                cep.CopyTo(0, result, 0, 5);         // 00000
+                result[5] = '-';
+                cep.CopyTo(5, result, 6, 3);         // 000
+                
+                return new string(result);
             }
             catch
             {
@@ -199,35 +236,35 @@ namespace BoletoNetCore
         {
             try
             {
-                strline = strline.Replace("ã", "a");
-                strline = strline.Replace('Ã', 'A');
-                strline = strline.Replace('â', 'a');
-                strline = strline.Replace('Â', 'A');
-                strline = strline.Replace('á', 'a');
-                strline = strline.Replace('Á', 'A');
-                strline = strline.Replace('à', 'a');
-                strline = strline.Replace('À', 'A');
-                strline = strline.Replace('ç', 'c');
-                strline = strline.Replace('Ç', 'C');
-                strline = strline.Replace('é', 'e');
-                strline = strline.Replace('É', 'E');
-                strline = strline.Replace('Ê', 'E');
-                strline = strline.Replace('ê', 'e');
-                strline = strline.Replace('õ', 'o');
-                strline = strline.Replace('Õ', 'O');
-                strline = strline.Replace('ó', 'o');
-                strline = strline.Replace('Ó', 'O');
-                strline = strline.Replace('ô', 'o');
-                strline = strline.Replace('Ô', 'O');
-                strline = strline.Replace('ú', 'u');
-                strline = strline.Replace('Ú', 'U');
-                strline = strline.Replace('ü', 'u');
-                strline = strline.Replace('Ü', 'U');
-                strline = strline.Replace('í', 'i');
-                strline = strline.Replace('Í', 'I');
-                strline = strline.Replace('ª', 'a');
-                strline = strline.Replace('º', 'o');
-                strline = strline.Replace('°', 'o');
+                strline = strline.Replace("ï¿½", "a");
+                strline = strline.Replace('ï¿½', 'A');
+                strline = strline.Replace('ï¿½', 'a');
+                strline = strline.Replace('ï¿½', 'A');
+                strline = strline.Replace('ï¿½', 'a');
+                strline = strline.Replace('ï¿½', 'A');
+                strline = strline.Replace('ï¿½', 'a');
+                strline = strline.Replace('ï¿½', 'A');
+                strline = strline.Replace('ï¿½', 'c');
+                strline = strline.Replace('ï¿½', 'C');
+                strline = strline.Replace('ï¿½', 'e');
+                strline = strline.Replace('ï¿½', 'E');
+                strline = strline.Replace('ï¿½', 'E');
+                strline = strline.Replace('ï¿½', 'e');
+                strline = strline.Replace('ï¿½', 'o');
+                strline = strline.Replace('ï¿½', 'O');
+                strline = strline.Replace('ï¿½', 'o');
+                strline = strline.Replace('ï¿½', 'O');
+                strline = strline.Replace('ï¿½', 'o');
+                strline = strline.Replace('ï¿½', 'O');
+                strline = strline.Replace('ï¿½', 'u');
+                strline = strline.Replace('ï¿½', 'U');
+                strline = strline.Replace('ï¿½', 'u');
+                strline = strline.Replace('ï¿½', 'U');
+                strline = strline.Replace('ï¿½', 'i');
+                strline = strline.Replace('ï¿½', 'I');
+                strline = strline.Replace('ï¿½', 'a');
+                strline = strline.Replace('ï¿½', 'o');
+                strline = strline.Replace('ï¿½', 'o');
                 strline = strline.Replace('&', 'e');
                 return strline;
             }
