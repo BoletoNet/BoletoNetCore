@@ -28,12 +28,12 @@ namespace BoletoNetCore
             if (!CarteiraFactory<BancoCresol>.CarteiraEstaImplementada(contaBancaria.CarteiraComVariacaoPadrao))
                 throw BoletoNetCoreException.CarteiraNaoImplementada(contaBancaria.CarteiraComVariacaoPadrao);
 
-            contaBancaria.FormatarDados("PAGÁVEL PREFERENCIALMENTE NA REDE BRADESCO OU BRADESCO EXPRESSO.", "", "", 7);
+            contaBancaria.FormatarDados("PAGÁVEL PREFERENCIALMENTE NA COOPERATIVA CRESOL.", "", "", 7);
 
             var codigoBeneficiario = Beneficiario.Codigo;
             Beneficiario.Codigo = codigoBeneficiario.Length <= 20 ? codigoBeneficiario.PadLeft(20, '0') : throw BoletoNetCoreException.CodigoBeneficiarioInvalido(codigoBeneficiario, 20);
 
-            Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia}-{contaBancaria.DigitoAgencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
+            Beneficiario.CodigoFormatado = $"{contaBancaria.Agencia} / {contaBancaria.Conta}-{contaBancaria.DigitoConta}";
         }
 
         public string GerarMensagemRemessa(TipoArquivo tipoArquivo, Boleto boleto, ref int numeroRegistro)
