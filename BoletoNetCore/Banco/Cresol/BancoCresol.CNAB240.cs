@@ -204,8 +204,7 @@ namespace BoletoNetCore
                 }
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0225, 003, 0, boleto.DiasBaixaDevolucao, '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0228, 002, 0, "09", '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0230, 010, 2, "0", '0');
-                //reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0240, 001, 0, Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0230, 011, 2, "0", '0');
                 reg.CodificarLinha();
                 var vLinha = reg.LinhaRegistro;
                 return vLinha;
