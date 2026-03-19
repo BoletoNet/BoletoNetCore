@@ -1,8 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
 using BoletoNetCore.Exceptions;
 using BoletoNetCore.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Numerics;
+using System.Runtime.ConstrainedExecution;
 using static System.String;
 
 namespace BoletoNetCore
@@ -28,8 +29,10 @@ namespace BoletoNetCore
                 //Nº Controle do Participante
                 boleto.NumeroControleParticipante = registro.Substring(37, 25);
 
-                //Carteira (no arquivo retorno, vem com 1 caracter. Ajustamos para 2 caracteres, como no manual do Bradesco.
-                boleto.Carteira = registro.Substring(107, 1).PadLeft(2, '0');
+                //O Bradesco reconhece implicitamente a limitação do campo 108 (com 1 caracter apenas) e fornece a carteira completa com 3 dígitos dentro do campo 021 - 037, que ele garante ser confirmação idêntica à remessa
+                //Campo 021-037: "0" + Carteira(3) + Agência(5) + Conta(7) + Dígito(1)
+                //Considera a posição 23 e 24 para termos 2 dígitos na carteira e diferenciar a Carteira 09 da 19
+                boleto.Carteira = registro.Substring(22, 2);
                 boleto.TipoCarteira = TipoCarteira.CarteiraCobrancaSimples;
 
                 //Identificação do Título no Banco
