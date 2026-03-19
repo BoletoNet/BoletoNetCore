@@ -4,7 +4,7 @@ namespace BoletoNetCore
 {
     public class TCampoRegistroEDI
     {
-        #region Variáveis Privadas
+        #region Variï¿½veis Privadas
         private string _DescricaoCampo;
         private TTiposDadoEDI _TipoCampo;
         private int _TamanhoCampo;
@@ -21,7 +21,7 @@ namespace BoletoNetCore
 
         #region Propriedades
         /// <summary>
-        /// Descrição do campo no registro EDI (meramente descritivo)
+        /// Descriï¿½ï¿½o do campo no registro EDI (meramente descritivo)
         /// </summary>
         public string DescricaoCampo
         {
@@ -30,7 +30,7 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Tipo de dado de ORIGEM das informações do campo EDI.
+        /// Tipo de dado de ORIGEM das informaï¿½ï¿½es do campo EDI.
         /// </summary>
         public TTiposDadoEDI TipoCampo
         {
@@ -48,8 +48,8 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Quantidade de casas decimais do campo, caso ele seja do tipo numérico sem decimais. Caso
-        /// não se aplique ao tipo de dado, o valor da propriedade será ignorado nas funções de formatação.
+        /// Quantidade de casas decimais do campo, caso ele seja do tipo numï¿½rico sem decimais. Caso
+        /// nï¿½o se aplique ao tipo de dado, o valor da propriedade serï¿½ ignorado nas funï¿½ï¿½es de formataï¿½ï¿½o.
         /// </summary>
         public int QtdDecimais
         {
@@ -58,7 +58,7 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Valor de ORIGEM do campo, sem formatação, no tipo de dado adequado ao campo. O valor deve ser atribuido
+        /// Valor de ORIGEM do campo, sem formataï¿½ï¿½o, no tipo de dado adequado ao campo. O valor deve ser atribuido
         /// com o tipo de dado adequado ao seu proposto, por exemplo, Double para representar valor, DateTime para
         /// representar datas e/ou horas, etc.
         /// </summary>
@@ -69,10 +69,10 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Valor formatado do campo, pronto para ser utilizado no arquivo EDI. A formatação será de acordo
-        /// com a especificada na propriedade TipoCampo, com numéricos alinhados à direita e zeros à esquerda
-        /// e campos alfanuméricos alinhados à esquerda e com brancos à direita.
-        /// Também pode receber o valor vindo do arquivo EDI, para ser decodificado e o resultado da decodificação na propriedade
+        /// Valor formatado do campo, pronto para ser utilizado no arquivo EDI. A formataï¿½ï¿½o serï¿½ de acordo
+        /// com a especificada na propriedade TipoCampo, com numï¿½ricos alinhados ï¿½ direita e zeros ï¿½ esquerda
+        /// e campos alfanumï¿½ricos alinhados ï¿½ esquerda e com brancos ï¿½ direita.
+        /// Tambï¿½m pode receber o valor vindo do arquivo EDI, para ser decodificado e o resultado da decodificaï¿½ï¿½o na propriedade
         /// ValorNatural
         /// </summary>
         public string ValorFormatado
@@ -82,7 +82,7 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Número de ordem do campo no registro EDI
+        /// Nï¿½mero de ordem do campo no registro EDI
         /// </summary>
         public int OrdemNoRegistroEDI
         {
@@ -92,7 +92,7 @@ namespace BoletoNetCore
 
         /// <summary>
         /// Caractere separador dos elementos de campos com o tipo DATA. Colocar null caso esta propriedade
-        /// não se aplique ao tipo de dado.
+        /// nï¿½o se aplique ao tipo de dado.
         /// </summary>
         public string SeparadorDatas
         {
@@ -102,7 +102,7 @@ namespace BoletoNetCore
 
         /// <summary>
         /// Caractere separador dos elementos de campos com o tipo HORA. Colocar null caso esta propriedade
-        /// não se aplique ao tipo de dado.
+        /// nï¿½o se aplique ao tipo de dado.
         /// </summary>
         public string SeparadorHora
         {
@@ -111,7 +111,7 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Posição do caracter inicial do campo no arquivo EDI
+        /// Posiï¿½ï¿½o do caracter inicial do campo no arquivo EDI
         /// </summary>
         public int PosicaoInicial
         {
@@ -125,7 +125,7 @@ namespace BoletoNetCore
             set { _PosicaoFinal = value; }
         }
         /// <summary>
-        /// Caractere de Preenchimento do campo da posição inicial até a posição final
+        /// Caractere de Preenchimento do campo da posiï¿½ï¿½o inicial atï¿½ a posiï¿½ï¿½o final
         /// </summary>
         public char Preenchimento
         {
@@ -143,16 +143,16 @@ namespace BoletoNetCore
         }
 
         /// <summary>
-        /// Cria um objeto do tipo TCampoRegistroEDI inicializando as propriedades básicas.
+        /// Cria um objeto do tipo TCampoRegistroEDI inicializando as propriedades bï¿½sicas.
         /// </summary>
         /// <param name="pTipoCampo">Tipo de dado de origem dos dados</param>
-        /// <param name="pPosicaoInicial">Posição Inicial do Campo no Arquivo</param>
+        /// <param name="pPosicaoInicial">Posiï¿½ï¿½o Inicial do Campo no Arquivo</param>
         /// <param name="pTamanho">Tamanho em caracteres do campo (destino)</param>
         /// <param name="pDecimais">Quantidade de decimais do campo (destino)</param>
-        /// <param name="pValor">Valor do campo (Origem), no tipo de dado adequado ao propósito do campo</param>
-        /// <param name="pPreenchimento">Caractere de Preenchimento do campo caso o valor não ocupe todo o tamanho</param>
-        /// <param name="pSeparadorHora">Separador de hora padrão; null para sem separador</param>
-        /// <param name="pSeparadorData">Separador de data padrão; null para sem separador</param>
+        /// <param name="pValor">Valor do campo (Origem), no tipo de dado adequado ao propï¿½sito do campo</param>
+        /// <param name="pPreenchimento">Caractere de Preenchimento do campo caso o valor nï¿½o ocupe todo o tamanho</param>
+        /// <param name="pSeparadorHora">Separador de hora padrï¿½o; null para sem separador</param>
+        /// <param name="pSeparadorData">Separador de data padrï¿½o; null para sem separador</param>
         public TCampoRegistroEDI(TTiposDadoEDI pTipoCampo, int pPosicaoInicial, int pTamanho, int pDecimais, object pValor, char pPreenchimento, string pSeparadorHora, string pSeparadorData)
         {
             this._TipoCampo = pTipoCampo;
@@ -163,19 +163,19 @@ namespace BoletoNetCore
             this._SeparadorDatas = pSeparadorData;
             this._OrdemNoRegistroEDI = 0;
             this._DescricaoCampo = "";
-            this._PosicaoInicial = pPosicaoInicial - 1; //Compensa a indexação com base em zero
+            this._PosicaoInicial = pPosicaoInicial - 1; //Compensa a indexaï¿½ï¿½o com base em zero
             this._PosicaoFinal = pPosicaoInicial + this._TamanhoCampo;
             this._Preenchimento = pPreenchimento;
         }
         /// <summary>
-        /// Cria um objeto do tipo TCampoRegistroEDI inicializando as propriedades básicas.
+        /// Cria um objeto do tipo TCampoRegistroEDI inicializando as propriedades bï¿½sicas.
         /// </summary>
         /// <param name="pTipoCampo">Tipo de dado de origem dos dados</param>
-        /// <param name="pPosicaoInicial">Posição Inicial do Campo no Arquivo</param>
+        /// <param name="pPosicaoInicial">Posiï¿½ï¿½o Inicial do Campo no Arquivo</param>
         /// <param name="pTamanho">Tamanho em caracteres do campo (destino)</param>
         /// <param name="pDecimais">Quantidade de decimais do campo (destino)</param>
-        /// <param name="pValor">Valor do campo (Origem), no tipo de dado adequado ao propósito do campo</param>
-        /// <param name="pPreenchimento">Caractere de Preenchimento do campo caso o valor não ocupe todo o tamanho</param>
+        /// <param name="pValor">Valor do campo (Origem), no tipo de dado adequado ao propï¿½sito do campo</param>
+        /// <param name="pPreenchimento">Caractere de Preenchimento do campo caso o valor nï¿½o ocupe todo o tamanho</param>
         public TCampoRegistroEDI(TTiposDadoEDI pTipoCampo, int pPosicaoInicial, int pTamanho, int pDecimais, object pValor, char pPreenchimento)
         {
             this._TipoCampo = pTipoCampo;
@@ -186,15 +186,15 @@ namespace BoletoNetCore
             this._SeparadorDatas = null;
             this._OrdemNoRegistroEDI = 0;
             this._DescricaoCampo = "";
-            this._PosicaoInicial = pPosicaoInicial - 1; //Compensa a indexação com base em zero
+            this._PosicaoInicial = pPosicaoInicial - 1; //Compensa a indexaï¿½ï¿½o com base em zero
             this._PosicaoFinal = pPosicaoInicial + this._TamanhoCampo;
             this._Preenchimento = pPreenchimento;
         }
         #endregion
 
-        #region Métodos Públicos
+        #region Mï¿½todos Pï¿½blicos
         /// <summary>
-        /// Aplica formatação ao valor do campo em ValorNatural, colocando o resultado na propriedade ValorFormatado
+        /// Aplica formataï¿½ï¿½o ao valor do campo em ValorNatural, colocando o resultado na propriedade ValorFormatado
         /// </summary>
         public void CodificarNaturalParaEDI()
         {
@@ -202,59 +202,32 @@ namespace BoletoNetCore
             {
                 case TTiposDadoEDI.ediAlphaAliEsquerda_____:
                 {
-                    if (this._ValorNatural != null)
-                    {
-                        if (this._ValorNatural.ToString().Trim().Length >= this._TamanhoCampo)
-                            this._ValorFormatado = this._ValorNatural.ToString().Trim().Substring(0, this._TamanhoCampo);
-                        else
-                            this._ValorFormatado = this._ValorNatural.ToString().Trim().PadRight(this._TamanhoCampo, this._Preenchimento); //' '
-                    }
-                    else
-                        this._ValorFormatado = string.Empty.PadRight(this._TamanhoCampo, this._Preenchimento); //' '
+                    this._ValorFormatado = FormatarAlphaEsquerda(this._ValorNatural, this._TamanhoCampo, this._Preenchimento);
                     break;
                 }
                 case TTiposDadoEDI.ediAlphaAliDireita______:
                 {
-                    if (this._ValorNatural != null)
-                    {
-                        if (this._ValorNatural.ToString().Trim().Length >= this._TamanhoCampo)
-                            this._ValorFormatado = this._ValorNatural.ToString().Trim().Substring(0, this._TamanhoCampo);
-                        else
-                            this._ValorFormatado = this._ValorNatural.ToString().Trim().PadLeft(this._TamanhoCampo, this._Preenchimento); //' '
-                    }
-                    else
-                        this._ValorFormatado = string.Empty.PadLeft(this._TamanhoCampo, this._Preenchimento); //' '
+                    this._ValorFormatado = FormatarAlphaDireita(this._ValorNatural, this._TamanhoCampo, this._Preenchimento);
                     break;
                 }
                 case TTiposDadoEDI.ediInteiro______________:
                 {
-                    this._ValorFormatado = this._ValorNatural.ToString().Trim().PadLeft(this._TamanhoCampo, this._Preenchimento); //'0'
+                    this._ValorFormatado = FormatarInteiro(this._ValorNatural, this._TamanhoCampo, this._Preenchimento);
                     break;
                 }
                 case TTiposDadoEDI.ediNumericoSemSeparador_:
                 {
-                    if (this._ValorNatural == null)
-                    {
-                        string aux = "";
-                        this._ValorFormatado = aux.Trim().PadLeft(this._TamanhoCampo, ' ');//Se o Número for NULL, preenche com espaços em branco
-                    }
-                    else
-                    {
-                        string Formatacao = "{0:f" + this._QtdDecimais.ToString() + "}";
-                        this._ValorFormatado = String.Format(Formatacao, this._ValorNatural).Replace(",", "").Replace(".", "").Trim().PadLeft(this._TamanhoCampo, this._Preenchimento); //'0'
-                    }
+                    this._ValorFormatado = FormatarNumericoSemSeparador(this._ValorNatural, this._TamanhoCampo, this._QtdDecimais, this._Preenchimento);
                     break;
                 }
                 case TTiposDadoEDI.ediNumericoComPonto_____:
                 {
-                    string Formatacao = "{0:f" + this._QtdDecimais.ToString() + "}";
-                    this._ValorFormatado = String.Format(Formatacao, this._ValorNatural).Replace(",", ".").Trim().PadLeft(this._TamanhoCampo, this._Preenchimento); //'0'
+                    this._ValorFormatado = FormatarNumericoComPonto(this._ValorNatural, this._TamanhoCampo, this._QtdDecimais, this._Preenchimento);
                     break;
                 }
                 case TTiposDadoEDI.ediNumericoComVirgula___:
                 {
-                    string Formatacao = "{0:f" + this._QtdDecimais.ToString() + "}";
-                    this._ValorFormatado = String.Format(Formatacao, this._ValorNatural).Replace(".", ",").Trim().PadLeft(this._TamanhoCampo, this._Preenchimento); //'0'
+                    this._ValorFormatado = FormatarNumericoComVirgula(this._ValorNatural, this._TamanhoCampo, this._QtdDecimais, this._Preenchimento);
                     break;
                 }
                 case TTiposDadoEDI.ediDataAAAAMMDD_________:
@@ -441,29 +414,30 @@ namespace BoletoNetCore
                     {
                         if (!this._ValorFormatado.Trim().Equals(""))
                         {
-                            string cAno = "";
-                            string cMes = "";
-                            string cDia = "";
+                            ReadOnlySpan<char> texto = this._ValorFormatado.AsSpan().Trim();
+                            int ano, mes, dia;
+                            
                             if (this._SeparadorDatas != null)
                             {
-                                string[] split = this._ValorFormatado.Split(this._SeparadorDatas.ToCharArray());
-                                cAno = split[0];
-                                cMes = split[1];
-                                cDia = split[2];
+                                SplitDataHora(texto, this._SeparadorDatas[0], out var p1, out var p2, out var p3);
+                                ano = int.Parse(p1.ToString());
+                                mes = int.Parse(p2.ToString());
+                                dia = int.Parse(p3.ToString());
                             }
                             else
                             {
-                                cAno = this._ValorFormatado.Substring(0, 4);
-                                cMes = this._ValorFormatado.Substring(4, 2);
-                                cDia = this._ValorFormatado.Substring(6, 2);
+                                ano = int.Parse(texto.Slice(0, 4).ToString());
+                                mes = int.Parse(texto.Slice(4, 2).ToString());
+                                dia = int.Parse(texto.Slice(6, 2).ToString());
                             }
-                            if ((cDia.Equals("00") && cMes.Equals("00") && cAno.Equals("0000")))
+                            
+                            if (dia == 0 && mes == 0 && ano == 0)
                             {
                                 this._ValorNatural = null;
                             }
                             else
                             {
-                                this._ValorNatural = DateTime.Parse(cDia + "/" + cMes + "/" + cAno);
+                                this._ValorNatural = new DateTime(ano, mes, dia);
                             }
                         }
                         else
@@ -476,21 +450,22 @@ namespace BoletoNetCore
                     {
                         if (!this._ValorFormatado.Trim().Equals(""))
                         {
-                            string cAno = "1900";
-                            string cMes = "";
-                            string cDia = "";
+                            ReadOnlySpan<char> texto = this._ValorFormatado.AsSpan().Trim();
+                            int dia, mes;
+                            
                             if (this._SeparadorDatas != null)
                             {
-                                string[] split = this._ValorFormatado.Split(this._SeparadorDatas.ToCharArray());
-                                cMes = split[1];
-                                cDia = split[0];
+                                SplitDataHora(texto, this._SeparadorDatas[0], out var p1, out var p2, out _);
+                                dia = int.Parse(p1.ToString());
+                                mes = int.Parse(p2.ToString());
                             }
                             else
                             {
-                                cMes = this._ValorFormatado.Substring(2, 2);
-                                cDia = this._ValorFormatado.Substring(0, 2);
+                                dia = int.Parse(texto.Slice(0, 2).ToString());
+                                mes = int.Parse(texto.Slice(2, 2).ToString());
                             }
-                            this._ValorNatural = DateTime.Parse(cDia + "/" + cMes + "/" + cAno);
+                            
+                            this._ValorNatural = new DateTime(1900, mes, dia);
                         }
                         else
                         {
@@ -500,128 +475,147 @@ namespace BoletoNetCore
                     }
                     case TTiposDadoEDI.ediDataDDMMAAAA_________:
                     {
-                        string cDia = "";
-                        string cMes = "";
-                        string cAno = "";
-                        if (this._SeparadorDatas != null)
+                        ReadOnlySpan<char> texto = this._ValorFormatado.AsSpan().Trim();
+                        
+                        if (texto.IsEmpty)
                         {
-                            string[] split = this._ValorFormatado.Split(this._SeparadorDatas.ToCharArray());
-                            cAno = split[2];
-                            cMes = split[1];
-                            cDia = split[0];
+                            this._ValorNatural = new DateTime(1900, 1, 1); //data start
                         }
                         else
                         {
-                            cDia = this._ValorFormatado.Substring(0, 2);
-                            cMes = this._ValorFormatado.Substring(2, 2);
-                            cAno = this._ValorFormatado.Substring(4, 4);
-                        }
-                        if ((cDia.Equals("00") && cMes.Equals("00") && cAno.Equals("0000")) || this._ValorFormatado.Trim().Equals(""))
-                        {
-                            this._ValorNatural = DateTime.Parse("01/01/1900"); //data start
-                        }
-                        else
-                        {
-                            this._ValorNatural = DateTime.Parse(cDia + "/" + cMes + "/" + cAno);
+                            int dia, mes, ano;
+                            
+                            if (this._SeparadorDatas != null)
+                            {
+                                SplitDataHora(texto, this._SeparadorDatas[0], out var p1, out var p2, out var p3);
+                                dia = int.Parse(p1.ToString());
+                                mes = int.Parse(p2.ToString());
+                                ano = int.Parse(p3.ToString());
+                            }
+                            else
+                            {
+                                dia = int.Parse(texto.Slice(0, 2).ToString());
+                                mes = int.Parse(texto.Slice(2, 2).ToString());
+                                ano = int.Parse(texto.Slice(4, 4).ToString());
+                            }
+                            
+                            if (dia == 0 && mes == 0 && ano == 0)
+                            {
+                                this._ValorNatural = new DateTime(1900, 1, 1); //data start
+                            }
+                            else
+                            {
+                                this._ValorNatural = new DateTime(ano, mes, dia);
+                            }
                         }
                         break;
                     }
                     case TTiposDadoEDI.ediDataDDMMAA___________:
                     {
-                        string cDia = "";
-                        string cMes = "";
-                        string cAno = "";
+                        ReadOnlySpan<char> texto = this._ValorFormatado.AsSpan().Trim();
+                        int dia, mes, ano;
+                        
                         if (this._SeparadorDatas != null)
                         {
-                            string[] split = this._ValorFormatado.Split(this._SeparadorDatas.ToCharArray());
-                            cAno = split[2];
-                            cMes = split[1];
-                            cDia = split[0];
+                            SplitDataHora(texto, this._SeparadorDatas[0], out var p1, out var p2, out var p3);
+                            dia = int.Parse(p1.ToString());
+                            mes = int.Parse(p2.ToString());
+                            ano = int.Parse(p3.ToString());
                         }
                         else
                         {
-                            cDia = this._ValorFormatado.Substring(0, 2);
-                            cMes = this._ValorFormatado.Substring(2, 2);
-                            cAno = this._ValorFormatado.Substring(4, 2);
+                            dia = int.Parse(texto.Slice(0, 2).ToString());
+                            mes = int.Parse(texto.Slice(2, 2).ToString());
+                            ano = int.Parse(texto.Slice(4, 2).ToString());
                         }
-                        this._ValorNatural = DateTime.Parse(cDia + "/" + cMes + "/" + cAno);
+                        
+                        // Ajusta ano de 2 dÃ­gitos para 4 dÃ­gitos
+                        if (ano < 100)
+                            ano += ano < 50 ? 2000 : 1900;
+                        
+                        this._ValorNatural = new DateTime(ano, mes, dia);
                         break;
                     }
                     case TTiposDadoEDI.ediDataMMAAAA___________:
                     {
-                        string cDia = "01";
-                        string cMes = "";
-                        string cAno = "";
+                        ReadOnlySpan<char> texto = this._ValorFormatado.AsSpan().Trim();
+                        int mes, ano;
+                        
                         if (this._SeparadorDatas != null)
                         {
-                            string[] split = this._ValorFormatado.Split(this._SeparadorDatas.ToCharArray());
-                            cAno = split[1];
-                            cMes = split[0];
+                            SplitDataHora(texto, this._SeparadorDatas[0], out var p1, out var p2, out _);
+                            mes = int.Parse(p1.ToString());
+                            ano = int.Parse(p2.ToString());
                         }
                         else
                         {
-                            cMes = this._ValorFormatado.Substring(0, 2);
-                            cAno = this._ValorFormatado.Substring(2, 4);
+                            mes = int.Parse(texto.Slice(0, 2).ToString());
+                            ano = int.Parse(texto.Slice(2, 4).ToString());
                         }
-                        this._ValorNatural = DateTime.Parse(cDia + "/" + cMes + "/" + cAno);
+                        
+                        this._ValorNatural = new DateTime(ano, mes, 1);
                         break;
                     }
                     case TTiposDadoEDI.ediDataMMDD_____________:
                     {
-                        string cDia = "";
-                        string cMes = "";
-                        string cAno = "1900";
+                        ReadOnlySpan<char> texto = this._ValorFormatado.AsSpan().Trim();
+                        int mes, dia;
+                        
                         if (this._SeparadorDatas != null)
                         {
-                            string[] split = this._ValorFormatado.Split(this._SeparadorDatas.ToCharArray());
-                            cMes = split[0];
-                            cDia = split[1];
+                            SplitDataHora(texto, this._SeparadorDatas[0], out var p1, out var p2, out _);
+                            mes = int.Parse(p1.ToString());
+                            dia = int.Parse(p2.ToString());
                         }
                         else
                         {
-                            cDia = this._ValorFormatado.Substring(2, 2);
-                            cMes = this._ValorFormatado.Substring(0, 2);
+                            mes = int.Parse(texto.Slice(0, 2).ToString());
+                            dia = int.Parse(texto.Slice(2, 2).ToString());
                         }
-                        this._ValorNatural = DateTime.Parse(cDia + "/" + cMes + "/" + cAno);
+                        
+                        this._ValorNatural = new DateTime(1900, mes, dia);
                         break;
                     }
                     case TTiposDadoEDI.ediHoraHHMM_____________:
                     {
-                        string cHora = "";
-                        string cMinuto = "";
+                        ReadOnlySpan<char> texto = this._ValorFormatado.AsSpan().Trim();
+                        int hora, minuto;
+                        
                         if (this._SeparadorHora != null)
                         {
-                            string[] split = this._ValorFormatado.Split(this._SeparadorHora.ToCharArray());
-                            cHora = split[0];
-                            cMinuto = split[1];
+                            SplitDataHora(texto, this._SeparadorHora[0], out var p1, out var p2, out _);
+                            hora = int.Parse(p1.ToString());
+                            minuto = int.Parse(p2.ToString());
                         }
                         else
                         {
-                            cHora = this._ValorFormatado.Substring(0, 2);
-                            cMinuto = this._ValorFormatado.Substring(2, 2);
+                            hora = int.Parse(texto.Slice(0, 2).ToString());
+                            minuto = int.Parse(texto.Slice(2, 2).ToString());
                         }
-                        this._ValorNatural = DateTime.Parse(cHora + ":" + cMinuto + ":00");
+                        
+                        this._ValorNatural = new DateTime(1, 1, 1, hora, minuto, 0);
                         break;
                     }
                     case TTiposDadoEDI.ediHoraHHMMSS___________:
                     {
-                        string cHora = "";
-                        string cMinuto = "";
-                        string cSegundo = "";
+                        ReadOnlySpan<char> texto = this._ValorFormatado.AsSpan().Trim();
+                        int hora, minuto, segundo;
+                        
                         if (this._SeparadorHora != null)
                         {
-                            string[] split = this._ValorFormatado.Split(this._SeparadorHora.ToCharArray());
-                            cHora = split[0];
-                            cMinuto = split[1];
-                            cSegundo = split[2];
+                            SplitDataHora(texto, this._SeparadorHora[0], out var p1, out var p2, out var p3);
+                            hora = int.Parse(p1.ToString());
+                            minuto = int.Parse(p2.ToString());
+                            segundo = int.Parse(p3.ToString());
                         }
                         else
                         {
-                            cHora = this._ValorFormatado.Substring(0, 2);
-                            cMinuto = this._ValorFormatado.Substring(2, 2);
-                            cSegundo = this._ValorFormatado.Substring(4, 2);
+                            hora = int.Parse(texto.Slice(0, 2).ToString());
+                            minuto = int.Parse(texto.Slice(2, 2).ToString());
+                            segundo = int.Parse(texto.Slice(4, 2).ToString());
                         }
-                        this._ValorNatural = DateTime.Parse(cHora + ":" + cMinuto + ":00");
+                        
+                        this._ValorNatural = new DateTime(1, 1, 1, hora, minuto, segundo);
                         break;
                     }
                     case TTiposDadoEDI.ediDataDDMMAAAAWithZeros:
@@ -638,7 +632,140 @@ namespace BoletoNetCore
 
         #endregion
 
-        #region Métodos Privados e Protegidos
+        #region Mï¿½todos Privados e Protegidos
+
+        /// <summary>        /// Divide uma string de data/hora em 3 partes usando um separador (compatÃ­vel com .NET Standard 2.0)
+        /// </summary>
+        private static void SplitDataHora(ReadOnlySpan<char> texto, char separador, out ReadOnlySpan<char> parte1, out ReadOnlySpan<char> parte2, out ReadOnlySpan<char> parte3)
+        {
+            int firstSep = texto.IndexOf(separador);
+            if (firstSep < 0)
+            {
+                // Sem separador, retorna vazio
+                parte1 = ReadOnlySpan<char>.Empty;
+                parte2 = ReadOnlySpan<char>.Empty;
+                parte3 = ReadOnlySpan<char>.Empty;
+                return;
+            }
+            
+            parte1 = texto.Slice(0, firstSep);
+            
+            int secondSep = texto.Slice(firstSep + 1).IndexOf(separador);
+            if (secondSep < 0)
+            {
+                // Apenas 2 partes
+                parte2 = texto.Slice(firstSep + 1);
+                parte3 = ReadOnlySpan<char>.Empty;
+                return;
+            }
+            
+            secondSep += firstSep + 1; // Ajusta para posiÃ§Ã£o absoluta
+            parte2 = texto.Slice(firstSep + 1, secondSep - firstSep - 1);
+            parte3 = texto.Slice(secondSep + 1);
+        }
+
+        /// <summary>        /// Formata valor alpha alinhado ï¿½ esquerda com padding ï¿½ direita
+        /// </summary>
+        private static string FormatarAlphaEsquerda(object valor, int tamanho, char preenchimento)
+        {
+            if (valor == null)
+                return new string(preenchimento, tamanho);
+            
+            string textoOriginal = valor.ToString().Trim();
+            
+            if (textoOriginal.Length >= tamanho)
+                return textoOriginal.Substring(0, tamanho);
+            
+            // Usa PadRight otimizado
+            return textoOriginal.PadRight(tamanho, preenchimento);
+        }
+
+        /// <summary>
+        /// Formata valor alpha alinhado ï¿½ direita com padding ï¿½ esquerda
+        /// </summary>
+        private static string FormatarAlphaDireita(object valor, int tamanho, char preenchimento)
+        {
+            if (valor == null)
+                return new string(preenchimento, tamanho);
+            
+            string textoOriginal = valor.ToString().Trim();
+            
+            if (textoOriginal.Length >= tamanho)
+                return textoOriginal.Substring(0, tamanho);
+            
+            // Usa PadLeft otimizado
+            return textoOriginal.PadLeft(tamanho, preenchimento);
+        }
+
+        /// <summary>
+        /// Formata valor inteiro com padding ï¿½ esquerda
+        /// </summary>
+        private static string FormatarInteiro(object valor, int tamanho, char preenchimento)
+        {
+            if (valor == null)
+                return new string(preenchimento, tamanho);
+            
+            string textoOriginal = valor.ToString().Trim();
+            
+            if (textoOriginal.Length >= tamanho)
+                return textoOriginal.Substring(0, tamanho);
+            
+            return textoOriginal.PadLeft(tamanho, preenchimento);
+        }
+
+        /// <summary>
+        /// Formata valor numï¿½rico sem separador decimal
+        /// </summary>
+        private static string FormatarNumericoSemSeparador(object valor, int tamanho, int decimais, char preenchimento)
+        {
+            if (valor == null)
+                return new string(' ', tamanho); // Regra especï¿½fica: NULL = espaï¿½os
+
+            // Formata e remove separadores
+            string formatacao = $"{{0:f{decimais}}}";
+            string resultado = string.Format(formatacao, valor)
+                .Replace(",", "")
+                .Replace(".", "")
+                .Trim();
+            
+            if (resultado.Length >= tamanho)
+                return resultado.Substring(0, tamanho);
+            
+            return resultado.PadLeft(tamanho, preenchimento);
+        }
+
+        /// <summary>
+        /// Formata valor numï¿½rico com ponto decimal
+        /// </summary>
+        private static string FormatarNumericoComPonto(object valor, int tamanho, int decimais, char preenchimento)
+        {
+            string formatacao = $"{{0:f{decimais}}}";
+            string resultado = string.Format(formatacao, valor)
+                .Replace(",", ".")
+                .Trim();
+            
+            if (resultado.Length >= tamanho)
+                return resultado.Substring(0, tamanho);
+            
+            return resultado.PadLeft(tamanho, preenchimento);
+        }
+
+        /// <summary>
+        /// Formata valor numï¿½rico com vï¿½rgula decimal
+        /// </summary>
+        private static string FormatarNumericoComVirgula(object valor, int tamanho, int decimais, char preenchimento)
+        {
+            string formatacao = $"{{0:f{decimais}}}";
+            string resultado = string.Format(formatacao, valor)
+                .Replace(".", ",")
+                .Trim();
+            
+            if (resultado.Length >= tamanho)
+                return resultado.Substring(0, tamanho);
+            
+            return resultado.PadLeft(tamanho, preenchimento);
+        }
+
 
         #endregion
 
