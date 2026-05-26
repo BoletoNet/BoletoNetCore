@@ -30,20 +30,54 @@ namespace BoletoNetCore.Extensions
         ///     ...
         ///     05/03/2025 = 1011
         /// </remarks>
+        //public static long FatorVencimento(this DateTime data)
+        //{
+        //    var dateBase = new DateTime(1997, 10, 7, 0, 0, 0);
+
+        //    // Verifica se a data esta dentro do range utilizavel
+        //    var rangeUtilizavel = DateTime.Now.Date.DateDiff(data, DateInterval.Day);
+
+        //    if (rangeUtilizavel > 5500 || rangeUtilizavel < -5000)
+        //        throw new Exception("Data do vencimento ("+data.ToString()+") fora do range de utilização proposto pela CENEGESC. Comunicado FEBRABAN de n° 082/2012 de 14/06/2012");
+
+        //    while (data > dateBase.AddDays(9999))
+        //        dateBase = data.AddDays(-(dateBase.DateDiff(data, DateInterval.Day) - 9999 - 1 + 1000));
+
+        //    return dateBase.DateDiff(data, DateInterval.Day);
+        //}
         public static long FatorVencimento(this DateTime data)
         {
-            var dateBase = new DateTime(1997, 10, 7, 0, 0, 0);
+            if (data == null)
+                throw new ArgumentNullException(nameof(data), "A data de vencimento não pode ser nula.");
 
-            // Verifica se a data esta dentro do range utilizavel
-            var rangeUtilizavel = DateTime.Now.Date.DateDiff(data, DateInterval.Day);
+            // Remove informações de hora para garantir o cálculo exato de dias
+            DateTime dataVencimento = data.Date;
+            DateTime dataDivisor = new DateTime(2025, 2, 21);
 
-            if (rangeUtilizavel > 5500 || rangeUtilizavel < -5000)
-                throw new Exception("Data do vencimento ("+data.ToString()+") fora do range de utilização proposto pela CENEGESC. Comunicado FEBRABAN de n° 082/2012 de 14/06/2012");
+            if (dataVencimento <= dataDivisor)
+            {
+                // Regra Antiga (Vencimentos até 21/02/2025)
+                DateTime dateBaseAntiga = new DateTime(1997, 10, 7);
+                long fator = (long)(dataVencimento - dateBaseAntiga).TotalDays;
 
-            while (data > dateBase.AddDays(9999))
-                dateBase = data.AddDays(-(dateBase.DateDiff(data, DateInterval.Day) - 9999 - 1 + 1000));
+                if (fator < 0)
+                    throw new Exception("Data de vencimento anterior à data base de 1997.");
 
-            return dateBase.DateDiff(data, DateInterval.Day);
+                return fator;
+            }
+            else
+            {
+                // Nova Regra FEBRABAN (Vencimentos a partir de 22/02/2025)
+                // O fator reinicia em 1000 no dia 22/02/2025.
+                DateTime dateBaseNova = new DateTime(2025, 2, 22);
+                long fator = 1000 + (long)(dataVencimento - dateBaseNova).TotalDays;
+
+                // O novo teto é 9999 (acontecerá em 13/10/2049)
+                if (fator > 9999)
+                    throw new Exception("Data de vencimento além do limite permitido pela nova regra da FEBRABAN (Fator > 9999).");
+
+                return fator;
+            }
         }
 
         internal static long DateDiff(this DateTime startDate, DateTime endDate, DateInterval interval)
