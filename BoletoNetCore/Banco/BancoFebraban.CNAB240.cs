@@ -147,5 +147,53 @@ namespace BoletoNetCore
         public virtual void LerDetalheRetornoCNAB240SegmentoA(ref Boleto boleto, string registro)
         {
         }
+
+        /// <summary>
+        /// Segmento G - Varredura DDA (Débito Direto Autorizado). Diferente do retorno de cobrança
+        /// (segmentos T/U), a varredura traz os boletos registrados a pagar contra o sacado, com layout
+        /// padrão CNAB240 FEBRABAN do segmento G. Cada segmento G representa um título a pagar.
+        /// </summary>
+        public virtual void LerDetalheRetornoCNAB240SegmentoG(ref Boleto boleto, string registro)
+        {
+            try
+            {
+                // Código de movimento (situação do título no DDA)
+                boleto.CodigoMovimentoRetorno = registro.Substring(15, 2);
+                boleto.DescricaoMovimentoRetorno = Cnab.MovimentoVarreduraDDACnab240(boleto.CodigoMovimentoRetorno);
+
+                // Código de barras (campo livre do segmento G - 44 posições)
+                var codigoBarras = registro.Substring(17, 44).Trim();
+                if (codigoBarras.Length == 44)
+                {
+                    boleto.CodigoBarra.CodigoDeBarras = codigoBarras;
+
+                    // Linha digitável derivada do código de barras. Boletos de cobrança usam o layout
+                    // padrão (campo livre nas posições 20-44); arrecadação (inicia em 8) tem outro layout.
+                    if (!codigoBarras.StartsWith("8"))
+                    {
+                        boleto.CodigoBarra.CampoLivre = codigoBarras.Substring(19, 25);
+                        Banco.FormataLinhaDigitavel(boleto);
+                    }
+                }
+
+                // Número do documento de cobrança (DP, NF...) - posições 148-162 do segmento G.
+                boleto.NumeroDocumento = registro.Substring(147, 15).Trim();
+
+                // Data de vencimento (DDMMAAAA)
+                var vencimento = Utils.ToInt32(registro.Substring(107, 8));
+                if (vencimento > 0)
+                    boleto.DataVencimento = Utils.ToDateTime(vencimento.ToString("##-##-####"));
+
+                // Valor do título
+                boleto.ValorTitulo = Convert.ToDecimal(registro.Substring(115, 15)) / 100;
+
+                // Registro Retorno
+                boleto.RegistroArquivoRetorno = boleto.RegistroArquivoRetorno + registro + Environment.NewLine;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Erro ao ler detalhe do arquivo de RETORNO / CNAB 240 / G (Varredura DDA).", ex);
+            }
+        }
     }
 }

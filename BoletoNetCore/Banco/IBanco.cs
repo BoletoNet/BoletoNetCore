@@ -146,6 +146,7 @@ namespace BoletoNetCore
         void LerDetalheRetornoCNAB240SegmentoT(ref Boleto boleto, string registro);
         void LerDetalheRetornoCNAB240SegmentoU(ref Boleto boleto, string registro);
         void LerDetalheRetornoCNAB240SegmentoA(ref Boleto boleto, string regitro);
+        void LerDetalheRetornoCNAB240SegmentoG(ref Boleto boleto, string registro);
     }
 
 
