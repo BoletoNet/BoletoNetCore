@@ -159,6 +159,15 @@ namespace BoletoNetCore
                     Boletos.Add(boleto);
                     return;
                 }
+
+                if (tipoSegmento == 'G')
+                {
+                    // Segmento G - Varredura DDA (Débito Direto Autorizado): cada G indica um boleto a pagar
+                    var boleto = new Boleto(this.Banco, _ignorarCarteiraBoleto);
+                    b.LerDetalheRetornoCNAB240SegmentoG(ref boleto, registro);
+                    Boletos.Add(boleto);
+                    return;
+                }
             }
         }
 

@@ -89,6 +89,55 @@ namespace BoletoNetCore
         }
 
         /// <summary>
+        /// Descrição do código de movimento do segmento G da Varredura DDA (Débito Direto Autorizado).
+        /// Difere do retorno de cobrança (MovimentoRetornoCnab240): o domínio aqui é o de
+        /// movimento/comando do título, conforme o manual de Varredura DDA (CNAB240, nota "Código de Movimento").
+        /// </summary>
+        public static string MovimentoVarreduraDDACnab240(string codigo)
+        {
+            switch (codigo)
+            {
+                case "01": return "Entrada de Títulos";
+                case "02": return "Pedido de Baixa";
+                case "03": return "Protesto para Fins Falimentares";
+                case "04": return "Concessão de Abatimento";
+                case "05": return "Cancelamento de Abatimento";
+                case "06": return "Alteração de Vencimento";
+                case "07": return "Concessão de Desconto";
+                case "08": return "Cancelamento de Desconto";
+                case "09": return "Protestar";
+                case "10": return "Sustar Protesto e Baixar Título";
+                case "11": return "Sustar Protesto e Manter em Carteira";
+                case "12": return "Alteração de Juros de Mora";
+                case "13": return "Dispensar Cobrança de Juros de Mora";
+                case "14": return "Alteração de Valor/Percentual de Multa";
+                case "15": return "Dispensar Cobrança de Multa";
+                case "16": return "Alteração do Valor de Desconto";
+                case "17": return "Não conceder Desconto";
+                case "18": return "Alteração do Valor de Abatimento";
+                case "19": return "Prazo Limite de Recebimento - Alterar";
+                case "20": return "Prazo Limite de Recebimento - Dispensar";
+                case "21": return "Alterar número do título dado pelo cedente";
+                case "22": return "Alterar número controle do Participante";
+                case "23": return "Alterar dados do Sacado";
+                case "24": return "Alterar dados do Sacador/Avalista";
+                case "30": return "Recusa da Alegação do Sacado";
+                case "31": return "Alteração de Outros Dados";
+                case "33": return "Alteração dos Dados do Rateio de Crédito";
+                case "34": return "Pedido de Cancelamento dos Dados do Rateio de Crédito";
+                case "35": return "Pedido de Desagendamento do Débito Automático";
+                case "40": return "Alteração de Carteira";
+                case "41": return "Cancelar protesto";
+                case "42": return "Alteração de Espécie de Título";
+                case "43": return "Transferência de carteira/modalidade de cobrança";
+                case "44": return "Alteração de contrato de cobrança";
+                case "45": return "Negativação Sem Protesto";
+                case "46": return "Solicitação de Baixa de Título Negativado Sem Protesto";
+                default: return "";
+            }
+        }
+
+        /// <summary>
         /// Recupera a Lista dos Motivos de Ocorrência na Cobrança conforme C047
         /// </summary>
         /// <remarks> Poderão ser
