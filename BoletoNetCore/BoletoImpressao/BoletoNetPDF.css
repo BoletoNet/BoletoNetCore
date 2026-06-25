@@ -1,13 +1,13 @@
 ﻿body {
-	color: #000000;
-	background-color: #ffffff;
-	margin-top: 0;
-	margin-right: 0;
+    color: #000000;
+    background-color: #ffffff;
+    margin-top: 0;
+    margin-right: 0;
 }
 
 * {
-	margin: 0px;
-	padding: 0px;
+    margin: 0px;
+    padding: 0px;
 }
 
 table {
@@ -17,69 +17,75 @@ table {
 }
 
 img {
-	border: 0;
+    border: 0;
 }
 
 .cp {
-	font: bold 10px Arial, "Liberation Sans", sans-serif;
-	color: black;
+    font: bold 10px Arial, "Liberation Sans", sans-serif;
+    color: #000000;
 }
 
 .ti {
-	font: 9px Arial, "Liberation Sans", Helvetica, sans-serif;
+    font: 9px Arial, "Liberation Sans", Helvetica, sans-serif;
 }
 
 .ld {
-	font: bold 15px Arial, "Liberation Sans", sans-serif;
-	color: #000000;
+    font: bold 15px Arial, "Liberation Sans", sans-serif;
+    color: #000000;
 }
 
 .w150:empty {
-	display: none;
+    display: none;
 }
 
 .ct {
-	font: 9px "Arial Narrow", "Liberation Sans Narrow", sans-serif;
-	color: #000033;
+    font: 9px "Arial Narrow", "Liberation Sans Narrow", sans-serif;
+    color: #000000;
 }
 
 .cn {
-	font: 9px Arial, "Liberation Sans", sans-serif;
-	color: black;
+    font: 9px Arial, "Liberation Sans", sans-serif;
+    color: #000000;
+}
+
+.cn8 {
+    font: 8px Arial, "Liberation Sans", sans-serif;
+    color: #000000;
 }
 
 .bc {
-	font: bold 22px Arial, "Liberation Sans", sans-serif;
-	color: #000000;
+    font: bold 22px Arial, "Liberation Sans", sans-serif;
+    color: #000000;
 }
 
 .cut {
-	width: 665px;
-	height: 1px;
-	border-top: dashed 1px #000;
+    width: 665px;
+    height: 1px;
+    border-top: dashed 1px #000;
 }
 
 .Ac {
-	text-align: center;
+    text-align: center;
 }
 
 .Ar {
-	text-align: right;
+    text-align: right;
 }
 
 .Al {
-	text-align: left;
+    text-align: left;
 }
 
 .At {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 .Ab {
-	vertical-align: bottom;
+    vertical-align: bottom;
 }
 
 .ct td, .cp td {
+    padding-top: 2px;
     padding-left: 3px;
     border-left: solid 1px #000;
     padding-right: 3px;
@@ -87,69 +93,70 @@ img {
 }
 
 .cpN {
-	font: bold 10px Arial, "Liberation Sans", sans-serif;
-	color: black;
+    font: bold 10px Arial, "Liberation Sans", sans-serif;
+    color: #000000;
 }
 
 .ctN {
-	font: 9px "Arial Narrow", "Liberation Sans Narrow", sans-serif;
-	color: #000033;
+    font: 9px "Arial Narrow", "Liberation Sans Narrow", sans-serif;
+    color: #000000;
 }
 
 .pL0 {
-	padding-left: 0px;
+    padding-left: 0px;
 }
 
 .pL6 {
-	padding-left: 6px;
+    padding-left: 6px;
 }
 
 .pL10 {
-	padding-left: 10px;
+    padding-left: 10px;
 }
 
 .imgLogo {
-	width: 150px;
+    width: 150px;
 }
 
-	.imgLogo img {
-		width: 150px;
-		height: 40px;
-	}
+.imgLogo img {
+    width: auto;
+    height: 40px;
+    margin-bottom: 1px;
+}
 
 .barra {
-	width: 3px;
-	height: 22px;
-	vertical-align: bottom;
+    width: 3px;
+    height: 22px;
+    vertical-align: bottom;
 }
 
-	.barra img {
-		width: 2px;
-		height: 22px;
-	}
+.barra img {
+    width: 2px;
+    height: 22px;
+}
 
 .rBb td {
-	border-bottom: solid 1px #000;
+    border-bottom: solid 1px #000;
 }
 
 .BB {
-	border-bottom: solid 1px #000;
+    border-bottom: solid 1px #000;
 }
 
 .BL {
-	border-left: solid 1px #000;
+    border-left: solid 1px #000;
 }
 
 .BR {
-	border-right: solid 1px #000;
+    border-right: solid 1px #000;
 }
 
 .BT1 {
-	border-top: dashed 1px #000;
+    border-top: dashed 1px #000;
 }
 
 .BT2 {
-	border-top: solid 2px #000;
+    border-top: solid 2px #000;
 }
 
 .bgcGray {
@@ -161,191 +168,200 @@ img {
 }
 
 .h13 {
-	height: 13px;
+    height: 13px;
 }
 
 .h12 {
-	height: 12px;
+    height: 12px;
 }
 
 .h13 td {
-	vertical-align: top;
+    vertical-align: top;
 }
 
 .h12 td {
-	vertical-align: top;
+    vertical-align: top;
+}
+
+.h25 {
+    height: 25px;
 }
 
 .w6 {
-	width: 6px;
+    width: 6px;
 }
 
 .w7 {
-	width: 7px;
+    width: 7px;
 }
 
 .w34 {
-	width: 34px;
+    width: 34px;
 }
 
 .w40 {
-	width: 40px;
+    width: 40px;
 }
 
 .w45 {
-	width: 45px;
+    width: 45px;
 }
 
 .w53 {
-	width: 53px;
+    width: 53px;
 }
 
 .w62 {
-	width: 62px;
+    width: 62px;
 }
 
 .w65 {
-	width: 65px;
+    width: 65px;
 }
 
 .w72 {
-	width: 72px;
+    width: 72px;
 }
 
 .w83 {
-	width: 83px;
+    width: 83px;
 }
 
 .w88 {
-	width: 88px;
+    width: 88px;
 }
 
 .w104 {
-	width: 104px;
+    width: 104px;
 }
 
 .w105 {
-	width: 105px;
+    width: 105px;
 }
 
 .w106 {
-	width: 106px;
-}
-
-.w113 {
-	width: 113px;
+    width: 106px;
 }
 
 .w112 {
-	width: 112px;
+    width: 112px;
+}
+
+.w113 {
+    width: 113px;
 }
 
 .w123 {
-	width: 123px;
+    width: 123px;
 }
 
 .w126 {
-	width: 126px;
+    width: 126px;
 }
 
 .w128 {
-	width: 128px;
+    width: 128px;
 }
 
 .w132 {
-	width: 132px;
+    width: 132px;
 }
 
 .w134 {
-	width: 134px;
+    width: 134px;
 }
 
 .w150 {
-	width: 150px;
+    width: 150px;
 }
 
 .w163 {
-	width: 163px;
+    width: 163px;
 }
 
 .w164 {
-	width: 164px;
+    width: 164px;
 }
 
 .w180 {
-	width: 180px;
+    width: 180px;
 }
 
 .w182 {
-	width: 182px;
+    width: 182px;
 }
 
 .w186 {
-	width: 186px;
+    width: 186px;
 }
 
 .w192 {
-	width: 192px;
+    width: 192px;
 }
 
 .w250 {
-	width: 250px;
+    width: 250px;
+}
+
+.w286 {
+    width: 286px;
 }
 
 .w298 {
-	width: 298px;
+    width: 298px;
 }
 
 .w409 {
-	width: 409px;
+    width: 409px;
 }
 
 .w450 {
-	width: 450px;
+    width: 450px;
 }
 
 .w472 {
-	width: 472px;
+    width: 472px;
 }
 
 .w478 {
-	width: 478px;
+    width: 478px;
 }
 
 .w500 {
-	width: 500px;
+    width: 500px;
 }
 
 .w544 {
-	width: 544px;
+    width: 544px;
 }
 
 .w564 {
-	width: 564px;
+    width: 564px;
 }
 
 .w659 {
-	width: 659px;
+    width: 659px;
 }
 
 .w666 {
-	width: 100%;
+    width: 100%;
 }
 
 .w667 {
-	width: 667px;
+    width: 667px;
 }
 
 .w900 {
-	width: 900px;
+    width: 900px;
 }
+
 .BHead td {
-	border-bottom: solid 2px #000;
+    border-bottom: solid 2px #000;
 }
 
 .EcdBar {
-	height: 50px;
-	vertical-align: bottom;
+    height: 50px;
+    vertical-align: bottom;
 }
 
 .rc6 td {
@@ -353,35 +369,33 @@ img {
     border-bottom: solid 1px #000;
     border-left: solid 1px #000;
     border-right: solid 1px #000;
-}
-
-.rc6 div {
-	padding-left: 6px;
-}
-
-.rc6 .t {
-	font: 9px "Arial Narrow", "Liberation Sans Narrow", sans-serif;
-	color: #000033;
-	height: 13px;
-}
-
-.rc6 .c {
-	font: bold 10px Arial, "Liberation Sans", sans-serif;
-	color: black;
-	height: 12px;
+    padding-top: 2px;
+    padding-left: 3px;
+    padding-right: 3px;
 }
 
 .mt23 {
-	margin-top: 23px;
+    margin-top: 23px;
 }
 
 .pb4 {
-	padding-bottom: 14px;
+    padding-bottom: 14px;
 }
 
 .ebc {
-	width: 4px;
-	height: 440px;
-	border-right: dotted 1px #000000;
-	margin-right: 4px;
+    width: 4px;
+    height: 440px;
+    border-right: dotted 1px #000000;
+    margin-right: 4px;
+}
+
+.diL {
+    float: left;
+    width: calc(100% - 135px);
+}
+
+.diR {
+    float: right;
+    width: 125px;
+    padding: 5px;
 }

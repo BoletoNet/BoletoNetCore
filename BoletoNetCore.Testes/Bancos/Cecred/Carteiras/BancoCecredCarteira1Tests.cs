@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using NUnit.Framework;
 
 namespace BoletoNetCore.Testes
@@ -38,6 +39,58 @@ namespace BoletoNetCore.Testes
         public void Cecred_1_REM400()
         {
             TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB400, nameof(BancoCecredCarteira1Tests), 5, true, "?", 1);
+        }
+
+        [Test]
+        public void Cecred_1_GerarHtmlBoleto()
+        {
+            var boleto = new Boleto(_banco)
+            {
+                DataVencimento = new DateTime(2021, 9, 28),
+                ValorTitulo = 80.21m,
+                NossoNumero = "74644",
+                NumeroDocumento = "02315602/74644",
+                EspecieDocumento = TipoEspecieDocumento.DM,
+                Pagador = TestUtils.GerarPagador(),
+                ImprimirValoresAuxiliares = true,
+                ImprimirMensagemInstrucao = true,
+                MensagemInstrucoesCaixa = "Instruções de teste para layout Cecred/Ailos."
+            };
+
+            boleto.ValidarDados();
+
+            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo("08591875700000080211011040231560200007464401"));
+            Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo("08591.01107 40231.560208 00074.644014 1 87570000008021"));
+
+            const string pixQrCodeBase64 = "iVBORw0KGgoAAAANSUhEUgAAA/8AAAP/AQAAAAC+eUH7AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAd2KE6QAAAAHdElNRQfqBgwSGigkp/1jAAAE0ElEQVR42u3dTXLiMBAGUKeyyJIjcBSOBkfjKByBZRZTeOIZqyIUtWzDTMWQ9234aav97J1sGbr+e3PpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA1gL41cXJym/j5seP97uP16z8WmnfaLoDAAAAAAAAAAAAAAAAAAC4DTBkUwdE5QWA6Biy8nncQ5EJX5kjAAAAAAAAAAAAAAAAAMCaAees1a4P59/LAFH53wImzh8AAAAAAAAAAAAAAAAAwDMBhmw/vjt8vO4/Rw9p3N2/EzDkPQakMgAAAAAAAAAAAAAAAADADwLk6b/O3rv/CkgtAAAAAAAAAAAAAAAAAAB+FqDW4v8AyhQtgisQ6QQ1ynkAAAAAAAAAAAAAAAAAAFYLiNLHE+wZ5SA3ANLlgwAQlQEAAAAAAAAAAAAAAAAAnghQa1H5+kbARBYC5gcAAAAAAAAAAAAAAAAAYH2Ac2UPywBDtv3fZ+PHvATNFwLy5QXHa8BLVjoBAAAAAAAAAAAAAAAAADwvYMhbG5CPnkgECLIAsBnLQTbZaAAAAAAAAAAAAAAAAACA1QHS4+uneHgD8N7Nyo2Al/768fqUALDtwwsUm+sGAAAAAAAAAAAAAAAAAADrAeQXAGYAjt3SpGfjk68FCBIB+vri+6KcVh+cAAAAAAAAAAAAAAAAAAAeAXAa3+/65uL2mYAx+fQ8Ne+D9QMBoLa8P+OXh3jo/vwx/KVbtrwfAAAAAAAAAAAAAAAAAODbALUJdgEYUs7eA8CMtACbrydlAlA7fynt0QAAAAAAAAAAAAAAAAAA6wR0cYs8u6++iUwBXqePIZ2gYwxI5SwvfRgAAAAAAAAAAAAAAAAAgHUBogTlAdAoV/I2E7CJwedxk+34eQKwv24OAAAAAAAAAAAAAAAAAPBQgGN3Nf8eUv743HJAnl0AqP02fAOQjX7tv/52/f5zk3cAAAAAAAAAAAAAAAAAgEcBlNuMgMb8+zK+DQCXYGQNkFoU20QnqALIcwAAAAAAAAAAAAAAAAAAeAJAkE0MOHfV1fVLAUGLvJwdYjR62ENjdA8AAAAAAAAAAAAAAAAAsGbARHLAkL69NL4yOpVrgCGnrvj3t/Y/v1cAeTlLuTgBAAAAAAAAAAAAAAAAAGCVgPO47QA4fA5NgHwPqdzXp+cTaQEqe+gDwL4+egJwdXoBAAAAAAAAAAAAAAAAAB4EEM2/K4CZ2RWAiUQLBPoYUJSHtP7ZDQAAAAAAAAAAAAAAAADg2wH5/LtMG9B6uj0bfSegTAHI7+4HgNe+GgAAAAAAAAAAAAAAAACAhwScstJ+8fS8Bagh5wNmXqAAAAAAAAAAAAAAAAAAAFg9oGwxAnJfDliezf2AlMO42fgxfzj/CAAAAAAAAAAAAAAAAADwvIBU3saAU9fMPwbsP1vVAPv2T+sBAAAAAAAAAAAAAAAAADwaoJZiDxNJvu19gE0/a3l/kfzmPwAAAAAAAAAAAAAAAADAowNuz5zpeZkR0DcOcXr0LwAAAAAAAAAAAAAAAACARwF08R5agIlUmt8J2IyfD92s2/fZCTp37dX1AAAAAAAAAAAAAAAAAAA/G/BdAQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAuPwGKG6RCIiB0wMAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjYtMDYtMTJUMTg6MjY6NDArMDA6MDD1gywmAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDI2LTA2LTEyVDE4OjI2OjQwKzAwOjAwhN6UmgAAAABJRU5ErkJggg==";
+            var boletoParaImpressao = new BoletoBancario
+            {
+                Boleto = boleto,
+                OcultarInstrucoes = false,
+                MostrarComprovanteEntrega = false,
+                MostrarEnderecoBeneficiario = true,
+                ExibirDemonstrativo = false
+            };
+
+            var html = boletoParaImpressao.MontaHtmlEmbedded(
+                pixString: pixQrCodeBase64,
+                pixInstrucoes: true //true para habilitar o QRCode de pagamento PIX na instrução de pagamento
+            );
+
+            Assert.That(html, Does.Contain("Instruções (Texto de responsabilidade do beneficiário)"));
+            Assert.That(html, Does.Contain("Instruções de teste para layout Cecred/Ailos."));
+            Assert.That(html, Does.Contain("data:image/jpg;base64,"));
+            Assert.That(html, Does.Contain(pixQrCodeBase64));
+            Assert.That(html, Does.Contain("08591.01107 40231.560208 00074.644014 1 87570000008021"));
+            Assert.That(html, Does.Not.Contain("@PIXINSTRUCOES"));
+            Assert.That(html, Does.Not.Contain("@INSTRUCOES"));
+
+            var nomeArquivoHtml = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nameof(BancoCecredCarteira1Tests)}_{boleto.NossoNumero}.html");
+            Directory.CreateDirectory(Path.GetDirectoryName(nomeArquivoHtml) ?? "");
+            File.WriteAllText(nomeArquivoHtml, html, Encoding.UTF8);
+
+            Assert.That(File.Exists(nomeArquivoHtml), Is.True);
+            TestContext.WriteLine($"Boleto Cecred/Ailos gerado em: {nomeArquivoHtml}");
         }
 
         [TestCase(80.21, "74644", "02315602/74644", "1", "02315602000074644", "08591875700000080211011040231560200007464401", "08591.01107 40231.560208 00074.644014 1 87570000008021", 2021, 9, 28)]
@@ -164,8 +217,8 @@ namespace BoletoNetCore.Testes
             TestUtils.TestarHomologacao(_banco, TipoArquivo.CNAB240, nameof(BancoCecredCarteira1Tests), 5, true, "?", 1);
 
             //Ação
-            var nomeArquivoREM = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nameof(BancoCecredCarteira1Tests)}_{TipoArquivo.CNAB240}.REM");
-            var linhas = File.ReadAllLines(nomeArquivoREM);
+            var nomeArquivoRem = Path.Combine(Path.GetTempPath(), "BoletoNetCore", $"{nameof(BancoCecredCarteira1Tests)}_{TipoArquivo.CNAB240}.REM");
+            var linhas = File.ReadAllLines(nomeArquivoRem);
             var convenio = linhas[1].Substring(33, 20).TrimEnd();
             //Assert
             Assert.AreEqual("23156489", convenio);
