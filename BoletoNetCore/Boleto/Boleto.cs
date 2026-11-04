@@ -277,11 +277,15 @@ namespace BoletoNetCore
             if ((Aceite != "A") & (Aceite != "N") & (Aceite != "S"))
                 throw new Exception("Aceite do Boleto deve ser definido com A, S ou N");
 
+            // Algumas carteiras (ex.: Caixa SIG14) alteram ImprimirValoresAuxiliares em FormataNossoNumero,
+            // mas as mensagens de juros, multa e desconto devem respeitar o valor informado pelo usuário.
+            var imprimirValoresAuxiliares = ImprimirValoresAuxiliares;
+
             Banco.ValidaBoleto(this);
             Banco.FormataNossoNumero(this);
             BoletoNetCore.Banco.FormataCodigoBarra(this);
             BoletoNetCore.Banco.FormataLinhaDigitavel(this);
-            BoletoNetCore.Banco.FormataMensagemInstrucao(this);
+            BoletoNetCore.Banco.FormataMensagemInstrucao(this, imprimirValoresAuxiliares);
 
         }
     }
