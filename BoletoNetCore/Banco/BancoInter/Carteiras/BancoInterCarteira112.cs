@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Linq;
 using BoletoNetCore.Exceptions;
 using BoletoNetCore.Extensions;
 using static System.String;
@@ -18,7 +19,7 @@ namespace BoletoNetCore
         public void FormataNossoNumero(Boleto boleto)
         {
 
-            // Nosso número não pode ter mais de 11 dígitos
+            // Nosso número: 10 dígitos (DV calculado pela biblioteca) ou 11 dígitos já completos (último dígito é o DV, informado pelo Inter)
 
             if (IsNullOrWhiteSpace(boleto.NossoNumero) || boleto.NossoNumero == "0000000000")
             {
@@ -31,10 +32,22 @@ namespace BoletoNetCore
             {
                 var agencia = boleto.Banco.Beneficiario.ContaBancaria.Agencia.PadLeft(4, '0');
                 var carteira = boleto.Carteira.PadLeft(3, '0');
-                boleto.NossoNumero = boleto.NossoNumero.PadLeft(10, '0');
-                boleto.NossoNumeroDV = (agencia + carteira + boleto.NossoNumero).CalcularDVBancoInter();
                 var contaBancaria = boleto.Banco.Beneficiario.ContaBancaria;
-                boleto.NossoNumeroFormatado = $"{contaBancaria.Agencia}{contaBancaria.DigitoAgencia}/{contaBancaria.CarteiraPadrao}/{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
+
+                string numeroBase;
+                if (boleto.NossoNumero.Length == 11)
+                {
+                    numeroBase = boleto.NossoNumero.Substring(0, 10);
+                    boleto.NossoNumeroDV = boleto.NossoNumero.Substring(10, 1);
+                }
+                else
+                {
+                    numeroBase = boleto.NossoNumero.PadLeft(10, '0');
+                    boleto.NossoNumero = numeroBase;
+                    boleto.NossoNumeroDV = (agencia + carteira + numeroBase).CalcularDVBancoInter();
+                }
+
+                boleto.NossoNumeroFormatado = $"{contaBancaria.Agencia}{contaBancaria.DigitoAgencia}/{contaBancaria.CarteiraPadrao}/{numeroBase}-{boleto.NossoNumeroDV}";
             }
             
 
@@ -43,7 +56,17 @@ namespace BoletoNetCore
         public virtual string FormataCodigoBarraCampoLivre(Boleto boleto)
         {
             var contaBancaria = boleto.Banco.Beneficiario.ContaBancaria;
-            return $"{contaBancaria.Agencia}{contaBancaria.CarteiraPadrao}{boleto.Banco.Beneficiario.CodigoTransmissao}{boleto.NossoNumero}{boleto.NossoNumeroDV}";
+            var codigoEmpresa = boleto.Banco.Beneficiario.CodigoTransmissao;
+
+            if (codigoEmpresa is null || codigoEmpresa.Length != 7 || !codigoEmpresa.All(char.IsDigit))
+                throw new InvalidOperationException("O código da empresa (CodigoTransmissao) do beneficiário Inter deve conter 7 dígitos numéricos.");
+
+            // Nosso número de 11 dígitos já inclui o DV; nos demais casos o DV é acrescentado ao número de 10 dígitos.
+            var nossoNumeroCampo = boleto.NossoNumero.Length == 11
+                ? boleto.NossoNumero
+                : boleto.NossoNumero + boleto.NossoNumeroDV;
+
+            return $"{contaBancaria.Agencia}{contaBancaria.CarteiraPadrao}{codigoEmpresa}{nossoNumeroCampo}";
         }
     }
 }
