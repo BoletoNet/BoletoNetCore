@@ -68,40 +68,51 @@ namespace BoletoNetCore
         /// <param name="boleto"></param>
         public static void FormataMensagemInstrucao(Boleto boleto)
         {
+            FormataMensagemInstrucao(boleto, boleto.ImprimirValoresAuxiliares);
+        }
+
+        /// <summary>
+        /// Formata Mensagens de Juros e Multa e Desconto nas instruções do Caixa
+        /// </summary>
+        /// <param name="boleto"></param>
+        /// <param name="imprimirValoresAuxiliares">Define se as mensagens de juros, multa e desconto devem ser geradas.
+        /// Permite usar o valor informado pelo usuário mesmo quando a carteira altera boleto.ImprimirValoresAuxiliares (ex.: Caixa SIG14)</param>
+        internal static void FormataMensagemInstrucao(Boleto boleto, bool imprimirValoresAuxiliares)
+        {
             boleto.MensagemInstrucoesCaixaFormatado = "";
 
             //JUROS
-            if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorJurosDia > 0)
+            if (imprimirValoresAuxiliares && boleto.ValorJurosDia > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar juros de R$ {boleto.ValorJurosDia.ToString("N2")} por dia de atraso após {boleto.DataJuros.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
-            else if (boleto.ImprimirValoresAuxiliares == true && boleto.PercentualJurosDia > 0)
+            else if (imprimirValoresAuxiliares && boleto.PercentualJurosDia > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar juros de {boleto.PercentualJurosDia.ToString("N2")}% por dia de atraso após {boleto.DataJuros.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
 
             //MULTA
-            if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorMulta > 0)
+            if (imprimirValoresAuxiliares && boleto.ValorMulta > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar multa de R$ {boleto.ValorMulta.ToString("N2")} a partir de {boleto.DataMulta.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
-            else if (boleto.ImprimirValoresAuxiliares == true && boleto.PercentualMulta > 0)
+            else if (imprimirValoresAuxiliares && boleto.PercentualMulta > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Cobrar multa de {boleto.PercentualMulta.ToString("N2")}% a partir de {boleto.DataMulta.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
 
             //DESCONTO
-            if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorDesconto > 0)
+            if (imprimirValoresAuxiliares && boleto.ValorDesconto > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Conceder desconto de R$ {boleto.ValorDesconto.ToString("N2")} até {boleto.DataDesconto.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
             //DESCONTO 2
-            if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorDesconto2 > 0)
+            if (imprimirValoresAuxiliares && boleto.ValorDesconto2 > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Conceder desconto de R$ {boleto.ValorDesconto2.ToString("N2")} até {boleto.DataDesconto2.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }
             //DESCONTO 3
-            if (boleto.ImprimirValoresAuxiliares == true && boleto.ValorDesconto3 > 0)
+            if (imprimirValoresAuxiliares && boleto.ValorDesconto3 > 0)
             {
                 boleto.MensagemInstrucoesCaixaFormatado += $"Conceder desconto de R$ {boleto.ValorDesconto3.ToString("N2")} até {boleto.DataDesconto3.ToString("dd/MM/yyyy")}{Environment.NewLine}";
             }

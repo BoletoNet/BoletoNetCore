@@ -160,6 +160,38 @@ namespace BoletoNetCore.Testes
             Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
         }
 
+        [Test]
+        public void Deve_gerar_mensagem_instrucao_com_juros_multa_e_desconto_caixa_sig14()
+        {
+            //Ambiente
+            var boleto = new Boleto(_banco)
+            {
+                DataVencimento = new DateTime(2017, 01, 05),
+                ValorTitulo = 500,
+                NossoNumero = "6",
+                NumeroDocumento = "BO123456F",
+                EspecieDocumento = TipoEspecieDocumento.DM,
+                Pagador = TestUtils.GerarPagador(),
+                ImprimirValoresAuxiliares = true,
+                DataJuros = new DateTime(2017, 01, 06),
+                ValorJurosDia = 0.17m,
+                DataMulta = new DateTime(2017, 01, 06),
+                ValorMulta = 10,
+                DataDesconto = new DateTime(2017, 01, 05),
+                ValorDesconto = 5,
+                MensagemInstrucoesCaixa = "Mensagem do beneficiario"
+            };
+
+            //Ação
+            boleto.ValidarDados();
+
+            //Assertivas
+            Assert.That(boleto.MensagemInstrucoesCaixaFormatado, Does.Contain($"Cobrar juros de R$ {boleto.ValorJurosDia.ToString("N2")} por dia de atraso após {boleto.DataJuros.ToString("dd/MM/yyyy")}"));
+            Assert.That(boleto.MensagemInstrucoesCaixaFormatado, Does.Contain($"Cobrar multa de R$ {boleto.ValorMulta.ToString("N2")} a partir de {boleto.DataMulta.ToString("dd/MM/yyyy")}"));
+            Assert.That(boleto.MensagemInstrucoesCaixaFormatado, Does.Contain($"Conceder desconto de R$ {boleto.ValorDesconto.ToString("N2")} até {boleto.DataDesconto.ToString("dd/MM/yyyy")}"));
+            Assert.That(boleto.MensagemInstrucoesCaixaFormatado, Does.Contain("Mensagem do beneficiario"));
+            Assert.That(boleto.ImprimirValoresAuxiliares, Is.False);
+        }
 
     }
 }
