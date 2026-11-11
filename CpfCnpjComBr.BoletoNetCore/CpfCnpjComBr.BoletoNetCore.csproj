@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <PackageId>CpfCnpjComBr.BoletoNetCore</PackageId>
+    <Version>0.1.0</Version>
+    <Authors>cpfcnpj.com.br</Authors>
+    <Description>Autopreenchimento de Pagador/Beneficiario do BoletoNetCore a partir de CPF/CNPJ, usando a API cpfcnpj.com.br. Pacote aditivo, nao altera o core do BoletoNetCore.</Description>
+    <PackageTags>boleto;cnab;cpf;cnpj;cpfcnpj;pagador</PackageTags>
+    <PackageProjectUrl>https://www.cpfcnpj.com.br/dev/</PackageProjectUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>CpfCnpjComBr.BoletoNetCore.Testes</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BoletoNetCore\BoletoNetCore.csproj" />
+  </ItemGroup>
+
+</Project>

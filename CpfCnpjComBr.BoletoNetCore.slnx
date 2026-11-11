@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="BoletoNetCore/BoletoNetCore.csproj" />
+  <Project Path="CpfCnpjComBr.BoletoNetCore.Testes/CpfCnpjComBr.BoletoNetCore.Testes.csproj" />
+  <Project Path="CpfCnpjComBr.BoletoNetCore/CpfCnpjComBr.BoletoNetCore.csproj" />
+</Solution>
