@@ -18,5 +18,6 @@ namespace BoletoNetCore
         BancoInter = 077,
         BancoDaycoval = 707,
         BancoCresol = 133,
+        Banese = 047,
     }
 }

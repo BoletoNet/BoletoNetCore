@@ -18,6 +18,7 @@ R: [Live sobre o entendimento do projeto](https://www.youtube.com/watch?v=ci8u2c
 
 | Banco | Código do banco | Carteira |
 | :-------- | :------- | :-----------|
+| Banese | 047 | CS |
 | Banrisul | 041 | 1  |
 | Bradesco | 237 | 09 |
 | Bradesco | 237 | 09 |

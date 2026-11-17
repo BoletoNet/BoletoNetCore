@@ -296,6 +296,59 @@ namespace BoletoNetCore.Extensions
             return resto == 0 ? "0" : (10 - resto).ToString();
         }
 
+        /// <summary>
+        /// DV do Nosso Número do Banese: Módulo 11 (pesos 2 a 9) sobre Agência + Nosso Número. Resto 0 ou 1 resulta em DV 0.
+        /// </summary>
+        public static string CalcularDVBanese(this string texto)
+        {
+            return CalcularDVBanese(texto.AsSpan());
+        }
+
+        public static string CalcularDVBanese(this ReadOnlySpan<char> texto)
+        {
+            var resto = Mod11Banese(texto, 9);
+            return (resto <= 1 ? 0 : 11 - resto).ToString();
+        }
+
+        /// <summary>
+        /// Dígitos NC1 e NC2 do campo livre do Banese (NC1 = Módulo 10; NC2 = Módulo 11 com pesos 2 a 7).
+        /// Se o resto do Módulo 11 for 1, NC1 é incrementado (9 vira 0) e o NC2 recalculado.
+        /// </summary>
+        public static string CalcularNCsBanese(this string texto)
+        {
+            return CalcularNCsBanese(texto.AsSpan());
+        }
+
+        public static string CalcularNCsBanese(this ReadOnlySpan<char> texto)
+        {
+            int soma = 0, peso = 2;
+            for (var i = texto.Length - 1; i >= 0; i--)
+            {
+                var produto = (texto[i] - '0') * peso;
+                soma += produto > 9 ? produto - 9 : produto;
+                peso = peso == 2 ? 1 : 2;
+            }
+            var nc1 = (10 - soma % 10) % 10;
+
+            int resto;
+            while ((resto = Mod11Banese((texto.ToString() + nc1).AsSpan(), 7)) == 1)
+                nc1 = nc1 == 9 ? 0 : nc1 + 1;
+
+            var nc2 = resto == 0 ? 0 : 11 - resto;
+            return $"{nc1}{nc2}";
+        }
+
+        private static int Mod11Banese(ReadOnlySpan<char> texto, int pesoMaximo)
+        {
+            int soma = 0, peso = 2;
+            for (var i = texto.Length - 1; i >= 0; i--)
+            {
+                soma += (texto[i] - '0') * peso;
+                peso = peso == pesoMaximo ? 2 : peso + 1;
+            }
+            return soma % 11;
+        }
+
     }
 
 
