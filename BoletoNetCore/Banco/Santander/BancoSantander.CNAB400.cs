@@ -146,10 +146,10 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0127, 013, 2, boleto.ValorTitulo, '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0140, 003, 0, "033", '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0143, 005, 0, string.Empty, '0');
-                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0148, 002, 0, boleto.EspecieDocumento.GetHashCode(), '0');
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0148, 002, 0, AjustaEspecieCnab400(boleto.EspecieDocumento), '0');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0150, 001, 0, boleto.Aceite, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediDataDDMMAA___________, 0151, 006, 0, boleto.DataEmissao, ' ');
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0157, 002, 0, boleto.CodigoInstrucao1, '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0157, 002, 0, PrimeiraInstrucaoCNAB400(boleto), '0');
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0159, 002, 0, "00", '0');
                 if (boleto.ValorJurosDia > 0)
                 {
@@ -193,7 +193,10 @@ namespace BoletoNetCore
                 reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0383, 001, 0, 'I', ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0384, 002, 0, boleto.Banco.Beneficiario.ContaBancaria.Conta.Right(1) + boleto.Banco.Beneficiario.ContaBancaria.DigitoConta, '0');
 
-                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0386, 009, 0, string.Empty, ' ');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0386, 006, 0, string.Empty, ' ');
+                // Posições 392-393: Número de dias para protesto ("00" quando a 1ª instrução não é "06") - Manual H7800 CNAB400 Santander
+                reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0392, 002, 0, DiasProtestoCNAB400(boleto), '0');
+                reg.Adicionar(TTiposDadoEDI.ediAlphaAliEsquerda_____, 0394, 001, 0, string.Empty, ' ');
                 reg.Adicionar(TTiposDadoEDI.ediNumericoSemSeparador_, 0395, 006, 0, numeroRegistroGeral, '0');
                 reg.CodificarLinha();
                 return reg.LinhaRegistro;
@@ -202,6 +205,53 @@ namespace BoletoNetCore
             {
                 throw new Exception("Erro ao gerar DETALHE do arquivo CNAB400.", ex);
             }
+        }
+
+        // Espécie do documento (posições 148-149) - Manual H7800 CNAB400 Santander. Os códigos do banco
+        // não seguem o valor de TipoEspecieDocumento (ex.: DM = 01 aqui e 02 no enum).
+        private static string AjustaEspecieCnab400(TipoEspecieDocumento especieDocumento)
+        {
+            switch (especieDocumento)
+            {
+                case TipoEspecieDocumento.DM:
+                    return "01";
+                case TipoEspecieDocumento.NP:
+                    return "02";
+                case TipoEspecieDocumento.NS:
+                    return "03";
+                case TipoEspecieDocumento.RC:
+                    return "05";
+                case TipoEspecieDocumento.DS:
+                    return "06";
+                case TipoEspecieDocumento.LC:
+                    return "07";
+                default:
+                    return ((int)especieDocumento).ToString("00");
+            }
+        }
+
+        private const string InstrucaoProtestarCNAB400 = "06";
+        private const int MaximoDiasProtestoCNAB400 = 99;
+
+        // Instrução informada pelo chamador tem precedência; sem ela, o protesto vem de CodigoProtesto/DiasProtesto.
+        private static string PrimeiraInstrucaoCNAB400(Boleto boleto)
+        {
+            if (!string.IsNullOrEmpty(boleto.CodigoInstrucao1))
+                return boleto.CodigoInstrucao1;
+
+            var deveProtestar = boleto.CodigoProtesto == TipoCodigoProtesto.ProtestarDiasCorridos && boleto.DiasProtesto > 0;
+            return deveProtestar ? InstrucaoProtestarCNAB400 : string.Empty;
+        }
+
+        private static string DiasProtestoCNAB400(Boleto boleto)
+        {
+            if (PrimeiraInstrucaoCNAB400(boleto) != InstrucaoProtestarCNAB400 || boleto.DiasProtesto <= 0)
+                return "00";
+
+            if (boleto.DiasProtesto > MaximoDiasProtestoCNAB400)
+                throw new Exception($"Dias para protesto ({boleto.DiasProtesto}) acima do máximo do CNAB400 Santander ({MaximoDiasProtestoCNAB400}).");
+
+            return boleto.DiasProtesto.ToString("00");
         }
 
         private static int ConvertTipoCarteira(TipoCarteira tipoCarteira)
