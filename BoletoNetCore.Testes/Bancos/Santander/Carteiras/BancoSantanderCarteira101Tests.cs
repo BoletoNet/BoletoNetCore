@@ -214,6 +214,52 @@ namespace BoletoNetCore.Testes
             }
         }
 
+        [TestCase(TipoCodigoProtesto.ProtestarDiasCorridos, 10, null, "06", "10")]
+        [TestCase(TipoCodigoProtesto.ProtestarDiasCorridos, 5, "06", "06", "05")]
+        [TestCase(TipoCodigoProtesto.NaoProtestar, 10, null, "00", "00")]
+        [TestCase(TipoCodigoProtesto.ProtestarDiasCorridos, 0, null, "00", "00")]
+        [TestCase(TipoCodigoProtesto.ProtestarDiasCorridos, 10, "11", "11", "00")]
+        public void Deve_informar_dias_de_protesto_na_remessa_CNAB400(TipoCodigoProtesto codigoProtesto, int diasProtesto, string codigoInstrucao1, string primeiraInstrucaoEsperada, string diasProtestoEsperado)
+        {
+            var boletos = TestUtils.GerarBoletos(_banco, 1, "N", 223344);
+            var boleto = boletos[0];
+            boleto.CodigoInstrucao1 = codigoInstrucao1;
+            boleto.CodigoProtesto = codigoProtesto;
+            boleto.DiasProtesto = diasProtesto;
+
+            var linhaDetalhe = GerarLinhaDetalheCNAB400(boletos);
+
+            Assert.That(linhaDetalhe.Substring(156, 2), Is.EqualTo(primeiraInstrucaoEsperada), "1ª instrução (157-158)");
+            Assert.That(linhaDetalhe.Substring(391, 2), Is.EqualTo(diasProtestoEsperado), "Dias para protesto (392-393)");
+            Assert.That(linhaDetalhe.Length, Is.EqualTo(400));
+        }
+
+        [TestCase(TipoEspecieDocumento.DM, "01")]
+        [TestCase(TipoEspecieDocumento.NP, "02")]
+        [TestCase(TipoEspecieDocumento.NS, "03")]
+        [TestCase(TipoEspecieDocumento.RC, "05")]
+        [TestCase(TipoEspecieDocumento.DS, "06")]
+        [TestCase(TipoEspecieDocumento.LC, "07")]
+        public void Deve_informar_especie_do_documento_no_codigo_do_Santander_na_remessa_CNAB400(TipoEspecieDocumento especie, string codigoEsperado)
+        {
+            var boletos = TestUtils.GerarBoletos(_banco, 1, "N", 223344);
+            boletos[0].EspecieDocumento = especie;
+
+            var linhaDetalhe = GerarLinhaDetalheCNAB400(boletos);
+
+            Assert.That(linhaDetalhe.Substring(147, 2), Is.EqualTo(codigoEsperado), "Espécie do documento (148-149)");
+        }
+
+        private static string GerarLinhaDetalheCNAB400(Boletos boletos)
+        {
+            using (var stream = new MemoryStream())
+            {
+                new ArquivoRemessa(boletos.Banco, TipoArquivo.CNAB400, 1).GerarArquivoRemessa(boletos, stream);
+                var linhas = Encoding.GetEncoding("ISO-8859-1").GetString(stream.ToArray()).Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                return Array.Find(linhas, linha => linha.StartsWith("1"));
+            }
+        }
+
         private static void CriarPathArquivoRemessa(string nomeArquivoREM)
         {
             if (!Directory.Exists(Path.GetDirectoryName(nomeArquivoREM)))
