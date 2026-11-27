@@ -152,5 +152,70 @@ namespace BoletoNetCore.Testes
             Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
         }
 
+        // API de Cobrança Safra: o número do boleto chega com 9 dígitos (nosso número + DV) e deve gerar o mesmo boleto do número sem DV.
+        [TestCase(141.50, "000004537", "BB943A", "00000453-7", "42291690400000141507123450012345670000045372", "42297.12346 50012.345679 00000.453720 1 69040000014150", 2016, 9, 1)]
+        [TestCase(2711.12, "000004561", "BB874A", "00000456-1", "42292693400002711127123450012345670000045612", "42297.12346 50012.345679 00000.456129 2 69340000271112", 2016, 10, 1)]
+        [TestCase(276, "000005614", "BB932A", "00000561-4", "42299702600000276007123450012345670000056142", "42297.12346 50012.345679 00000.561423 9 70260000027600", 2017, 1, 1)]
+        public void Deve_criar_boleto_safra_01_com_nosso_numero_de_9_digitos_com_dv(decimal valorTitulo, string nossoNumero, string numeroDocumento, string nossoNumeroFormatado, string codigoDeBarras, string linhaDigitavel, params int[] anoMesDia)
+        {
+            //Ambiente
+            var boleto = new Boleto(_banco)
+            {
+                DataVencimento = new DateTime(anoMesDia[0], anoMesDia[1], anoMesDia[2]),
+                ValorTitulo = valorTitulo,
+                NossoNumero = nossoNumero,
+                NumeroDocumento = numeroDocumento,
+                EspecieDocumento = TipoEspecieDocumento.DM,
+                Pagador = TestUtils.GerarPagador()
+            };
+
+            //Ação
+            boleto.ValidarDados();
+
+            //Assertivas
+            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo(nossoNumeroFormatado), "Nosso número inválido");
+            Assert.That(boleto.CodigoBarra.CodigoDeBarras, Is.EqualTo(codigoDeBarras), "Código de Barra inválido");
+            Assert.That(boleto.CodigoBarra.LinhaDigitavel, Is.EqualTo(linhaDigitavel), "Linha digitável inválida");
+        }
+
+        [Test]
+        public void Deve_manter_dv_informado_pelo_banco_no_nosso_numero_de_9_digitos()
+        {
+            //Ambiente: DV diferente do calculado (o DV calculado para 00000453 é 7), deve prevalecer o informado
+            var boleto = new Boleto(_banco)
+            {
+                DataVencimento = new DateTime(2016, 9, 1),
+                ValorTitulo = 141.50m,
+                NossoNumero = "000004539",
+                NumeroDocumento = "BB943A",
+                EspecieDocumento = TipoEspecieDocumento.DM,
+                Pagador = TestUtils.GerarPagador()
+            };
+
+            //Ação
+            boleto.ValidarDados();
+
+            //Assertivas
+            Assert.That(boleto.NossoNumero, Is.EqualTo("00000453"));
+            Assert.That(boleto.NossoNumeroDV, Is.EqualTo("9"));
+            Assert.That(boleto.NossoNumeroFormatado, Is.EqualTo("00000453-9"));
+        }
+
+        [Test]
+        public void Deve_rejeitar_nosso_numero_com_mais_de_9_digitos()
+        {
+            var boleto = new Boleto(_banco)
+            {
+                DataVencimento = new DateTime(2016, 9, 1),
+                ValorTitulo = 141.50m,
+                NossoNumero = "1234567890",
+                NumeroDocumento = "BB943A",
+                EspecieDocumento = TipoEspecieDocumento.DM,
+                Pagador = TestUtils.GerarPagador()
+            };
+
+            Assert.Throws<Exception>(() => boleto.ValidarDados());
+        }
+
     }
 }

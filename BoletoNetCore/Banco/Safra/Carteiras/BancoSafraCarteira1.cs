@@ -20,12 +20,22 @@ namespace BoletoNetCore
             if (IsNullOrWhiteSpace(boleto.NossoNumero))
                 throw new Exception("Nosso Número não informado.");
 
-            // Nosso número não pode ter mais de 8 dígitos
-            if (boleto.NossoNumero.Length > 8)
-                throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 8 dígitos.");
+            // API de Cobrança Safra (V3.0): o número do boleto tem 9 dígitos = nosso número (8) + DV, já informado pelo banco.
+            if (boleto.NossoNumero.Length == 9)
+            {
+                boleto.NossoNumeroDV = boleto.NossoNumero.Substring(8, 1);
+                boleto.NossoNumero = boleto.NossoNumero.Substring(0, 8);
+            }
+            else
+            {
+                // Nosso número sem DV não pode ter mais de 8 dígitos
+                if (boleto.NossoNumero.Length > 8)
+                    throw new Exception($"Nosso Número ({boleto.NossoNumero}) deve conter 8 dígitos, ou 9 com o DV.");
 
-            boleto.NossoNumero = boleto.NossoNumero.PadLeft(8, '0');
-            boleto.NossoNumeroDV = boleto.NossoNumero.CalcularDVSafra();
+                boleto.NossoNumero = boleto.NossoNumero.PadLeft(8, '0');
+                boleto.NossoNumeroDV = boleto.NossoNumero.CalcularDVSafra();
+            }
+
             boleto.NossoNumeroFormatado = $"{boleto.NossoNumero}-{boleto.NossoNumeroDV}";
         }
 
